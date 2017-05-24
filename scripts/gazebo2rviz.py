@@ -7,18 +7,26 @@ import rospy
 import tf
 from gazebo_msgs.msg import ModelStates
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Quaternion, Pose
 from gazebo_msgs.msg import LinkStates
 import tf_conversions.posemath as pm
 from tf.transformations import *
+from nav_msgs.msg import Odometry
 
 from conversions import link2marker_msg
 import pysdf
+import time
 
 class Gazebo2Rviz:
     def __init__(self):
         self.rate = rospy.get_param('~rate', 10.0)  # the rate at which to publish the transform
         self.submodelsToBeIgnored = rospy.get_param('~ignore_submodels_of', '').split(';')
+
+        # publish odometry
+        self.link_odometry = rospy.get_param('~link_odometry', "")
+        self.topic_odometry = rospy.get_param('~topic_odometry', "odom")
+        self.pub_odom = rospy.Publisher(self.topic_odometry, Odometry, queue_size=1)
+        self.seq = 0
 
         self.tfBroadcaster = tf.TransformBroadcaster()
         self.link_states_msg = None
@@ -40,7 +48,8 @@ class Gazebo2Rviz:
                 self.publish_tf()
                 self.publish_marker()
 
-            rate_sleep.sleep()
+            time.sleep(1/self.rate)
+            # rate_sleep.sleep()
 
     def publish_marker(self):
         for (model_idx, modelinstance_name) in enumerate(self.model_states_msg.name):
@@ -64,7 +73,7 @@ class Gazebo2Rviz:
         if 'model_name' in kwargs and 'instance_name' in kwargs:
             full_linkinstancename = full_linkinstancename.replace(kwargs['model_name'], kwargs['instance_name'], 1)
 
-        marker_msgs = link2marker_msg(link, full_linkinstancename, False, rospy.Duration(10 * self.updatePeriod))
+        marker_msgs = link2marker_msg(link, full_linkinstancename, False, rospy.Duration())
         if len(marker_msgs) > 0:
             for marker_msg in marker_msgs:
                 self.markerPub.publish(marker_msg)
@@ -119,6 +128,33 @@ class Gazebo2Rviz:
             # print('Publishing TF %s -> %s: t=%s q=%s' % (pysdf.sdf2tfname(parentinstance_link_name), pysdf.sdf2tfname(link_name), translation, quaternion))
             self.tfBroadcaster.sendTransform(translation, quaternion, rospy.get_rostime(), pysdf.sdf2tfname(link_name),
                                         pysdf.sdf2tfname(parentinstance_link_name))
+
+            if self.link_odometry == pysdf.sdf2tfname(link_name):
+                self.publish_odometry(translation, quaternion, pysdf.sdf2tfname(link_name), pysdf.sdf2tfname(parentinstance_link_name))
+
+    def publish_odometry(self, translation, quaternion, child, parent):
+        odom = Odometry()
+        odom.header.stamp = rospy.Time.now()
+
+        odom.header.frame_id = parent
+        odom.child_frame_id = child
+
+        odom.header.seq = self.seq
+
+        odom.pose.pose.position.x = translation[0]
+        odom.pose.pose.position.y = translation[1]
+        odom.pose.pose.position.z = translation[2]
+
+        quat = Quaternion()
+        quat.x = quaternion[0]
+        quat.y = quaternion[1]
+        quat.z = quaternion[2]
+        quat.w = quaternion[3]
+        odom.pose.pose.orientation = quat
+
+        self.pub_odom.publish(odom)
+
+        self.seq += 1
 
 # Main function.
 if __name__ == '__main__':

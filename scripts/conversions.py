@@ -45,7 +45,7 @@ def link2marker_msg(link, full_linkname, use_collision=False, lifetime=rospy.Dur
 
         marker_msg = copy.deepcopy(protoMarkerMsg)
         marker_msg.header.frame_id = pysdf.sdf2tfname(full_linkname)
-        marker_msg.header.stamp = rospy.get_rostime()
+        marker_msg.header.stamp = rospy.Time.now()  # rospy.get_rostime()
         marker_msg.lifetime = lifetime
         marker_msg.ns = pysdf.sdf2tfname(full_linkname + "::" + linkpart.name)
         marker_msg.pose = pysdf.homogeneous2pose_msg(linkpart.pose)
@@ -81,6 +81,7 @@ def link2marker_msg(link, full_linkname, use_collision=False, lifetime=rospy.Dur
 
             scale = (float(val) for val in linkpart.geometry_data['scale'].split())
             marker_msg.scale.x, marker_msg.scale.y, marker_msg.scale.z = scale
+
         else:
             marker_msg.color.a = 1
             marker_msg.color.r = marker_msg.color.g = marker_msg.color.b = 0.5
@@ -98,5 +99,13 @@ def link2marker_msg(link, full_linkname, use_collision=False, lifetime=rospy.Dur
             marker_msg.scale.z = float(linkpart.geometry_data['length'])
 
         # print(marker_msg)
+
+        if marker_msg.scale.x <= 0:
+            marker_msg.scale.x = 0.0001
+        if marker_msg.scale.y <= 0:
+            marker_msg.scale.y = 0.0001
+        if marker_msg.scale.z <= 0:
+            marker_msg.scale.z = 0.0001
+
         msgs.append(marker_msg)
     return msgs

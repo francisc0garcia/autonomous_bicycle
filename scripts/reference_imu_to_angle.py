@@ -41,10 +41,7 @@ class TwoImu2Angles:
         self.sub = rospy.Subscriber(self.topic_name_angle, Imu, self.process_imu_message_angle, queue_size=1)
         self.sub = rospy.Subscriber(self.topic_name_reference, Imu, self.process_imu_message_reference, queue_size=1)
 
-        rate = rospy.Rate(self.rate)
-
-        while not rospy.is_shutdown():
-            rate.sleep()
+        rospy.spin()
 
     def process_imu_message_angle(self, imuMsg):
         quaternion = (

@@ -1533,30 +1533,36 @@
             <plugin name='gps_front_sim' filename='libhector_gazebo_ros_gps.so'>
                 <referenceLatitude>49.424774</referenceLatitude>
                 <referenceLongitude>7.754394</referenceLongitude>
-                <frameId>link_gps_front</frameId>
+                <frameId>bikes_design__link_gps_front</frameId>
                 <bodyName>link_gps_front</bodyName>
                 <alwaysOn>1</alwaysOn>
-                <updateRate>10.0</updateRate>
-                <topicName>gps_front</topicName>
-                <velocityTopicName>gps_front_velocity</velocityTopicName>
-                <drift>5.0 5.0 5.0</drift>
-                <gaussianNoise>0.1 0.1 0.1</gaussianNoise>
+                <updateRate>5.0</updateRate>
+                <topicName>/bicycle/gps_front</topicName>
+                <velocityTopicName>/bicycle/gps_front_velocity</velocityTopicName>
+
+                <referenceAltitude>0</referenceAltitude>
+                <referenceHeading>90</referenceHeading>
+
+                <drift>1.0 1.0 1.0</drift>
+                <gaussianNoise>0.01 0.01 0.01</gaussianNoise>
                 <velocityDrift>0 0 0</velocityDrift>
-                <velocityGaussianNoise>0.1 0.1 0.1</velocityGaussianNoise>
+                <velocityGaussianNoise>0.01 0.01 0.01</velocityGaussianNoise>
             </plugin>
             <plugin name='gps_rear_sim' filename='libhector_gazebo_ros_gps.so'>
                 <referenceLatitude>49.424774</referenceLatitude>
                 <referenceLongitude>7.754394</referenceLongitude>
-                <frameId>link_gps_rear</frameId>
+                <frameId>bikes_design__link_gps_rear</frameId>
                 <bodyName>link_gps_rear</bodyName>
                 <alwaysOn>1</alwaysOn>
-                <updateRate>10.0</updateRate>
-                <topicName>gps_rear</topicName>
-                <velocityTopicName>gps_rear_velocity</velocityTopicName>
-                <drift>5.0 5.0 5.0</drift>
-                <gaussianNoise>0.1 0.1 0.1</gaussianNoise>
+                <updateRate>5.0</updateRate>
+                <topicName>/bicycle/gps_rear</topicName>
+                <velocityTopicName>/bicycle/gps_rear_velocity</velocityTopicName>
+                <referenceAltitude>0</referenceAltitude>
+                <referenceHeading>90</referenceHeading>
+                <drift>1.0 1.0 1.0</drift>
+                <gaussianNoise>0.01 0.01 0.01</gaussianNoise>
                 <velocityDrift>0 0 0</velocityDrift>
-                <velocityGaussianNoise>0.1 0.1 0.1</velocityGaussianNoise>
+                <velocityGaussianNoise>0.01 0.01 0.01</velocityGaussianNoise>
             </plugin>
 
             <plugin name='imu_1_sim' filename='libhector_gazebo_ros_imu.so'>
@@ -1565,7 +1571,7 @@
                 <bodyName>link_imu_1</bodyName>
                 <frameId>bikes_design__link_imu_1</frameId>
                 <topicName>/bicycle/imu_1</topicName>
-                <rpyOffsets>0 0 0</rpyOffsets>
+                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
                 <gaussianNoise>0</gaussianNoise>
                 <accelDrift>0.5 0.5 0.5</accelDrift>
                 <accelGaussianNoise>0.35 0.35 0.3</accelGaussianNoise>
@@ -1617,8 +1623,10 @@
             </plugin>
             <plugin name='link_odometry' filename='liblink_odometry.so'>
                 <updateRate>100</updateRate>
-                <frame_name>bikes_design__main_frame</frame_name>
-                <odometry_topic>/autonomous_bicycle/odom</odometry_topic>
+                <child_frame_name>bikes_design__main_frame</child_frame_name>
+                <parent_frame_name>gazebo_world</parent_frame_name>
+                <odometry_topic>/bicycle/odom</odometry_topic>
+                <link_name>wheel_rear</link_name>
             </plugin>
         </model>
     </world>
