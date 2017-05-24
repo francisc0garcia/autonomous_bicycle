@@ -6,9 +6,15 @@ Current available features:
 - Simulation of bicycle in gazebo and synchronized with RVIZ (model + tf)
 - RQT interface: control bicycle speed and plot lean and steering angles for stability analysis
 
-A short introductory video:
+Dynamic simulation of bicycle:
 
 [![Autonomous bicycle](http://img.youtube.com/vi/t7ZZPeML2Fw/0.jpg)](https://www.youtube.com/watch?v=t7ZZPeML2Fw "Autonomous bicycle")
+
+Sensor board on real bike:
+
+[![Autonomous bicycle prototype](http://img.youtube.com/vi/9oQhyyu41Hg/0.jpg)](https://www.youtube.com/watch?v=9oQhyyu41Hg "Autonomous bicycle prototype")
+
+## How to use 
 
 Install dependencies:
 
