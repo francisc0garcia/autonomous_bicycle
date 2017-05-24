@@ -6,7 +6,10 @@ Panels:
       Expanded:
         - /TF1/Frames1
         - /Imu_21/Box properties1
-      Splitter Ratio: 0.722070873
+        - /odom_GPS_11
+        - /odom_gps_21
+        - /Odometry1
+      Splitter Ratio: 0.457765669
     Tree Height: 832
   - Class: rviz/Selection
     Name: Selection
@@ -31,7 +34,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.5
-      Cell Size: 1
+      Cell Size: 10
       Class: rviz/Grid
       Color: 160; 160; 164
       Enabled: true
@@ -155,6 +158,59 @@ Visualization Manager:
       Radius: 0.0299999993
       Reference Frame: <Fixed Frame>
       Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Color: 255; 25; 0
+      Enabled: true
+      Keep: 1
+      Length: 0.5
+      Name: odom_real
+      Position Tolerance: 0.100000001
+      Topic: /bicycle/odom
+      Value: true
+    - Alpha: 0.699999988
+      Blocks: 3
+      Class: rviz_plugins/AerialMapDisplay
+      Draw Behind: false
+      Dynamically reload: true
+      Enabled: false
+      Frame Convention: XYZ -> ENU
+      Name: GPS_1
+      Object URI: http://a.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token=pk.eyJ1IjoiZnJhbmNpc2MwZ2FyY2lhIiwiYSI6ImNpemg1cDdiczAwMTIyd245OHJmMjgyeDAifQ.5W8LrvRDooubk8tMXsDvtw
+      Robot frame: bikes_design__main_frame
+      Topic: /bicycle/gps_front
+      Value: false
+      Zoom: 19
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Color: 0; 255; 0
+      Enabled: true
+      Keep: 1
+      Length: 0.5
+      Name: odom_GPS_1
+      Position Tolerance: 0.100000001
+      Topic: /bicycle/odom_gps_1
+      Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Color: 0; 255; 0
+      Enabled: true
+      Keep: 1
+      Length: 0.5
+      Name: odom_gps_2
+      Position Tolerance: 0.100000001
+      Topic: /bicycle/odom_gps_2
+      Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Color: 255; 170; 0
+      Enabled: true
+      Keep: 1
+      Length: 0.699999988
+      Name: Odometry
+      Position Tolerance: 0.100000001
+      Topic: /bicycle/odom_filter
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -179,24 +235,24 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 9.2768898
+      Distance: 6.65174675
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.256518841
-        Y: 0.0484393798
-        Z: -0.0370396785
+        X: 1.82480383
+        Y: -1.9406836
+        Z: -0.601045847
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.594795108
+      Pitch: 0.799795985
       Target Frame: bikes_design__main_frame
       Value: Orbit (rviz)
-      Yaw: 4.0321846
+      Yaw: 4.23719931
     Saved: ~
 Window Geometry:
   Displays:

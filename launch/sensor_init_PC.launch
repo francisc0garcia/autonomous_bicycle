@@ -1,0 +1,9 @@
+<launch>
+    <!-- Launch RQT and RVIZ -->
+    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false"
+          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_sensor_init.perspective" />
+
+    <node name="rviz" pkg="rviz" type="rviz" required="false"
+          args="-d $(find autonomous_bicycle)/config/rviz_sensor_init.rviz"     />
+
+</launch>

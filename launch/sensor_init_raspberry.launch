@@ -1,15 +1,19 @@
 <launch>
+
     <arg name="IMU_1_port" default="/dev/ttyUSB0"/>
     <arg name="IMU_1_enable" default="true"/>
     <arg name="IMU_2_port" default="/dev/ttyUSB1"/>
     <arg name="IMU_2_enable" default="true"/>
     <arg name="IMU_3_port" default="/dev/ttyUSB2"/>
-    <arg name="IMU_3_enable" default="true"/>
+    <arg name="IMU_3_enable" default="false"/>
 
-    <arg name="GPS_1_port" default="/dev/ttyUSB3"/>
+    <arg name="GPS_1_port" default="/dev/ttyUSB2"/>
     <arg name="GPS_1_enable" default="true"/>
-    <arg name="GPS_2_port" default="/dev/ttyUSB4"/>
+    <arg name="GPS_2_port" default="/dev/ttyUSB3"/>
     <arg name="GPS_2_enable" default="true"/>
+
+    <arg name="arduino_port" default="/dev/ttyACM0"/>
+    <arg name="arduino_enable" default="true"/>
 
     <!-- Publish imu 1 data -->
     <node if="$(arg IMU_1_enable)" pkg="autonomous_bicycle"
@@ -75,21 +79,10 @@
         <param name="useRMC" type="bool" value="false" />
     </node>
 
-<!-- Publish GPS GNSS3 click data
-    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver_gps_2" required="false" ns="GPS_2" >
-        <param name="port" type="string" value="/dev/ttyUSB3" />
-        <param name="baud" type="int" value="115200" />
-
-        <param name="frame_id" type="string" value="gps" />
-        <param name="time_ref_source" type="string" value="gps" />
-        <param name="useRMC" type="bool" value="false" />
+    <!-- Publish Arduino data -->
+    <node if="$(arg arduino_enable)" pkg="rosserial_python"
+          type="serial_node.py" name="serial_node" respawn="true" >
+        <param name="port" type="string" value="$(arg arduino_port)" />
     </node>
--->
-    <!-- Launch RQT and RVIZ -->
-    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false"
-          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_sensor_init.perspective" />
-
-    <node name="rviz" pkg="rviz" type="rviz" required="false"
-          args="-d $(find autonomous_bicycle)/config/rviz_sensor_init.rviz"     />
 
 </launch>
