@@ -50,13 +50,14 @@ namespace gazebo {
         // Update Rate
         double update_rate_, update_period_, temp_x, temp_y, temp_z, prev_temp_x, prev_temp_y, prev_temp_z;
         double temp_vel_x, temp_vel_y, temp_vel_z;
+        double offset_rotation_yaw;
         bool alive_;
-        std::string odometry_topic_, frame_name_;
+        std::string odometry_topic_, child_frame_name, parent_frame_name, link_name_;
 
         GazeboRosPtr gazebo_ros_;
         physics::ModelPtr parent;
         event::ConnectionPtr update_connection_, create_connection_;
-        physics::JointPtr joint_motor_left, joint_motor_right, joint_motor_center;
+        physics::LinkPtr link_ref;
 
         // ROS STUFF
         ros::Publisher odometry_publisher_;

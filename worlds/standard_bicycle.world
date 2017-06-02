@@ -1101,7 +1101,7 @@
                 </collision>
             </link>
             <link name='link_gps_front'>
-                <pose frame=''>0 1.05 0.85 0 -0 0</pose>
+                <pose frame=''>0 1.05 0.85 0 0 -1.571</pose>
                 <inertial>
                     <mass>0.1</mass>
                     <inertia>
@@ -1198,7 +1198,7 @@
                 </collision>
             </link>
             <link name='link_gps_rear'>
-                <pose frame=''>0 0.48 0.78 0 -0 0</pose>
+                <pose frame=''>0 0.48 0.78 0 -0  -1.571</pose>
                 <inertial>
                     <mass>0.1</mass>
                     <inertia>
@@ -1539,12 +1539,10 @@
                 <updateRate>5.0</updateRate>
                 <topicName>/bicycle/gps_front</topicName>
                 <velocityTopicName>/bicycle/gps_front_velocity</velocityTopicName>
-
                 <referenceAltitude>0</referenceAltitude>
-                <referenceHeading>90</referenceHeading>
-
-                <drift>1.0 1.0 1.0</drift>
-                <gaussianNoise>0.01 0.01 0.01</gaussianNoise>
+                <referenceHeading>0</referenceHeading>
+                <drift>0.2 0.2 0.2</drift>
+                <gaussianNoise>0.2 0.2 0.2</gaussianNoise>
                 <velocityDrift>0 0 0</velocityDrift>
                 <velocityGaussianNoise>0.01 0.01 0.01</velocityGaussianNoise>
             </plugin>
@@ -1558,57 +1556,103 @@
                 <topicName>/bicycle/gps_rear</topicName>
                 <velocityTopicName>/bicycle/gps_rear_velocity</velocityTopicName>
                 <referenceAltitude>0</referenceAltitude>
-                <referenceHeading>90</referenceHeading>
-                <drift>1.0 1.0 1.0</drift>
-                <gaussianNoise>0.01 0.01 0.01</gaussianNoise>
+                <referenceHeading>0</referenceHeading>
+                <drift>0.2 0.2 0.2</drift>
+                <gaussianNoise>0.2 0.2 0.2</gaussianNoise>
                 <velocityDrift>0 0 0</velocityDrift>
                 <velocityGaussianNoise>0.01 0.01 0.01</velocityGaussianNoise>
             </plugin>
 
             <plugin name='imu_1_sim' filename='libhector_gazebo_ros_imu.so'>
                 <alwaysOn>true</alwaysOn>
-                <updateRate>100.0</updateRate>
+                <updateRate>80.0</updateRate>
                 <bodyName>link_imu_1</bodyName>
                 <frameId>bikes_design__link_imu_1</frameId>
                 <topicName>/bicycle/imu_1</topicName>
                 <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
                 <gaussianNoise>0</gaussianNoise>
-                <accelDrift>0.5 0.5 0.5</accelDrift>
-                <accelGaussianNoise>0.35 0.35 0.3</accelGaussianNoise>
+                <accelDrift>0.0 0.0 0.0</accelDrift>
+                <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
                 <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.00 0.00 0.00</rateGaussianNoise>
+                <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
                 <headingDrift>0.0</headingDrift>
-                <headingGaussianNoise>0.00</headingGaussianNoise>
+                <headingGaussianNoise>0.0</headingGaussianNoise>
             </plugin>
             <plugin name='imu_2_sim' filename='libhector_gazebo_ros_imu.so'>
                 <alwaysOn>true</alwaysOn>
-                <updateRate>100.0</updateRate>
+                <updateRate>80.0</updateRate>
                 <bodyName>link_imu_2</bodyName>
                 <frameId>bikes_design__link_imu_2</frameId>
                 <topicName>/bicycle/imu_2</topicName>
-                <rpyOffsets>0 0 0</rpyOffsets>
+                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
                 <gaussianNoise>0</gaussianNoise>
-                <accelDrift>0.5 0.5 0.5</accelDrift>
-                <accelGaussianNoise>0.35 0.35 0.3</accelGaussianNoise>
+                <accelDrift>0.0 0.0 0.0</accelDrift>
+                <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
                 <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.00 0.00 0.00</rateGaussianNoise>
+                <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
                 <headingDrift>0.0</headingDrift>
-                <headingGaussianNoise>0.00</headingGaussianNoise>
+                <headingGaussianNoise>0.0</headingGaussianNoise>
             </plugin>
             <plugin name='imu_steering_sim' filename='libhector_gazebo_ros_imu.so'>
                 <alwaysOn>true</alwaysOn>
-                <updateRate>100.0</updateRate>
+                <updateRate>80.0</updateRate>
                 <bodyName>link_imu_steering</bodyName>
                 <frameId>bikes_design__link_imu_steering</frameId>
                 <topicName>/bicycle/imu_steering</topicName>
-                <rpyOffsets>0 0 0</rpyOffsets>
+                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
                 <gaussianNoise>0</gaussianNoise>
-                <accelDrift>0.5 0.5 0.5</accelDrift>
-                <accelGaussianNoise>0.35 0.35 0.3</accelGaussianNoise>
+                <accelDrift>0.0 0.0 0.0</accelDrift>
+                <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
                 <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.00 0.00 0.00</rateGaussianNoise>
+                <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
                 <headingDrift>0.0</headingDrift>
-                <headingGaussianNoise>0.00</headingGaussianNoise>
+                <headingGaussianNoise>0.0</headingGaussianNoise>
+            </plugin>
+
+            <plugin name='imu_1_noise' filename='libhector_gazebo_ros_imu.so'>
+                <alwaysOn>true</alwaysOn>
+                <updateRate>80.0</updateRate>
+                <bodyName>link_imu_1</bodyName>
+                <frameId>bikes_design__link_imu_1</frameId>
+                <topicName>/bicycle/imu_1_noise</topicName>
+                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
+                <gaussianNoise>5.5</gaussianNoise>
+                <accelDrift>0.5 0.5 0.5</accelDrift>
+                <accelGaussianNoise>0.35 0.35 0.35</accelGaussianNoise>
+                <rateDrift>0.0 0.0 0.0</rateDrift>
+                <rateGaussianNoise>0.2 0.2 0.2</rateGaussianNoise>
+                <headingDrift>0.01</headingDrift>
+                <headingGaussianNoise>0.01</headingGaussianNoise>
+            </plugin>
+            <plugin name='imu_2_noise' filename='libhector_gazebo_ros_imu.so'>
+                <alwaysOn>true</alwaysOn>
+                <updateRate>80.0</updateRate>
+                <bodyName>link_imu_2</bodyName>
+                <frameId>bikes_design__link_imu_2</frameId>
+                <topicName>/bicycle/imu_2_noise</topicName>
+                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
+                <gaussianNoise>5.5</gaussianNoise>
+                <accelDrift>0.5 0.5 0.5</accelDrift>
+                <accelGaussianNoise>0.35 0.35 0.35</accelGaussianNoise>
+                <rateDrift>0.0 0.0 0.0</rateDrift>
+                <rateGaussianNoise>0.2 0.2 0.2</rateGaussianNoise>
+                <headingDrift>0.01</headingDrift>
+                <headingGaussianNoise>0.01</headingGaussianNoise>
+            </plugin>
+            <plugin name='imu_steering_noise' filename='libhector_gazebo_ros_imu.so'>
+                <alwaysOn>true</alwaysOn>
+                <updateRate>80.0</updateRate>
+                <bodyName>link_imu_steering</bodyName>
+                <frameId>bikes_design__link_imu_steering</frameId>
+                <topicName>/bicycle/imu_steering_noise</topicName>
+                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
+                <gaussianNoise>5.5</gaussianNoise>
+                <accelDrift>0.5 0.5 0.5</accelDrift>
+                <accelGaussianNoise>0.35 0.35 0.35</accelGaussianNoise>
+                <rateDrift>0.0 0.0 0.0</rateDrift>
+                <rateGaussianNoise>0.2 0.2 0.2</rateGaussianNoise>
+                <headingDrift>0.01</headingDrift>
+                <headingGaussianNoise>0.01</headingGaussianNoise>
             </plugin>
 
             <plugin name='bicycle_interaction' filename='libbicycle_interaction.so'>
@@ -1621,11 +1665,22 @@
 
                 <topic_velocity>/bycycle_interaction/vel_wheel</topic_velocity>
             </plugin>
-            <plugin name='link_odometry' filename='liblink_odometry.so'>
-                <updateRate>100</updateRate>
+            <plugin name='link_odometry_main_frame' filename='liblink_odometry.so'>
+                <updateRate>300</updateRate>
+                <offset_rotation_yaw>1.571</offset_rotation_yaw>
+
                 <child_frame_name>bikes_design__main_frame</child_frame_name>
                 <parent_frame_name>gazebo_world</parent_frame_name>
-                <odometry_topic>/bicycle/odom</odometry_topic>
+                <odometry_topic>/bicycle/odom_main_frame</odometry_topic>
+                <link_name>main_frame</link_name>
+            </plugin>
+            <plugin name='link_odometry_rear_frame' filename='liblink_odometry.so'>
+                <updateRate>300</updateRate>
+                <offset_rotation_yaw>1.571</offset_rotation_yaw>
+
+                <child_frame_name>bikes_design__wheel_rear</child_frame_name>
+                <parent_frame_name>gazebo_world</parent_frame_name>
+                <odometry_topic>/bicycle/odom_rear_wheel</odometry_topic>
                 <link_name>wheel_rear</link_name>
             </plugin>
         </model>

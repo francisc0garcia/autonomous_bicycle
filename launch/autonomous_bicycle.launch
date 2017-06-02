@@ -18,8 +18,10 @@
 
     <!-- interaction with simulated bicycle -->
     <node pkg="autonomous_bicycle" type="bicycle_interaction.py" name="bicycle_interaction" required="false" >
-        <param name="rate" type="int" value="10" />
+        <param name="rate" type="int" value="100" />
         <param name="wheel_radius" type="double" value="0.335" />
+        <param name="angle_limit" type="double" value="70" />
+        <param name="imu_angle" type="string" value="/bicycle/imu_1" />
     </node>
 
     <!-- convert IMU to angles for visualization -->
@@ -30,10 +32,23 @@
         <param name="topic_name_reference" type="string" value="/bicycle/imu_1" />
     </node>
 
+    <node pkg="autonomous_bicycle" type="reference_imu_to_angle.py" name="reference_imu_to_angle_noise" required="false" >
+        <param name="rate" type="int" value="100" />
+        <param name="imu_name" type="string" value="imu_steering_noise" />
+        <param name="topic_name_angle" type="string" value="/bicycle/imu_steering_noise" />
+        <param name="topic_name_reference" type="string" value="/bicycle/imu_1" />
+    </node>
+
     <node pkg="autonomous_bicycle" type="imu_to_angles.py" name="imu_to_angles_lean" required="false" >
         <param name="rate" type="int" value="100" />
         <param name="imu_name" type="string" value="imu_lean" />
         <param name="topic_name" type="string" value="/bicycle/imu_1" />
+    </node>
+
+    <node pkg="autonomous_bicycle" type="imu_to_angles.py" name="imu_to_angles_lean_noise" required="false" >
+        <param name="rate" type="int" value="100" />
+        <param name="imu_name" type="string" value="imu_lean_noise" />
+        <param name="topic_name" type="string" value="/bicycle/imu_1_noise" />
     </node>
 
     <!-- Launch RQT and RVIZ -->
@@ -43,14 +58,51 @@
     <node name="rviz" pkg="rviz" type="rviz" required="false"
           args="-d $(find autonomous_bicycle)/config/rviz_imu_gps_camera.rviz"     />
 
-
     <!-- Visualize model into RVIZ -->
     <arg name="frequency" default="5" />
-    <node name="static_tf_pub_world_to_gazebo_world" pkg="tf" type="static_transform_publisher" args="0 0 0  0 0 0 1 world gazebo_world 100" />
+    <node name="static_tf_pub_world_to_gazebo_world" pkg="tf" type="static_transform_publisher" args="0 0 0  0 0 0 1 world gazebo_world 200" />
 
     <node name="gazebo2rviz" pkg="autonomous_bicycle" type="gazebo2rviz.py"  output="screen">
         <param name="ignore_submodels_of" value="" type="str" />
-        <param name="rate" value="20" />
+        <param name="rate" value="300" />
     </node>
 
+    <!-- Launch the conversion from sensor_msgs/NavSatFix to nav_msgs/Odometry -->
+    <node name="gps_conv_front" pkg="gps_common" type="utm_odometry_node">
+        <remap from="/fix" to="/bicycle/gps_front" />
+        <remap from="odom" to="/bicycle/odom_utm_global_gps_front"/>
+        <param name="rot_covariance" value="99999" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_global_gps_front" />
+    </node>
+
+    <node name="OdometryUtmToLocal_gps_front" pkg="autonomous_bicycle" type="OdometryUtmToLocal">
+        <param name="input_topic_UTM" value="/bicycle/odom_utm_global_gps_front" />
+        <param name="output_topic_odom" value="/bicycle/odom_gps_front" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_gps_front" />
+        <param name="offset_x" value="0.0" />
+        <param name="offset_y" value="1.0" />
+        <param name="offset_z" value="0.0" />
+        <param name="orientation" value="1.571" />
+    </node>
+
+    <node name="gps_conv_rear" pkg="gps_common" type="utm_odometry_node">
+        <remap from="/fix" to="/bicycle/gps_rear" />
+        <remap from="odom" to="/bicycle/odom_utm_global_gps_rear"/>
+        <param name="rot_covariance" value="99999" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_global_gps_rear" />
+    </node>
+
+    <node name="OdometryUtmToLocal_gps_rear" pkg="autonomous_bicycle" type="OdometryUtmToLocal">
+        <param name="input_topic_UTM" value="/bicycle/odom_utm_global_gps_rear" />
+        <param name="output_topic_odom" value="/bicycle/odom_gps_rear" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_gps_rear" />
+        <param name="offset_x" value="0.0" />
+        <param name="offset_y" value="0.0" />
+        <param name="offset_z" value="0.0" />
+        <param name="orientation" value="1.571" />
+    </node>
 </launch>

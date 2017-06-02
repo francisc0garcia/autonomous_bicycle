@@ -12,6 +12,7 @@ from tf.transformations import euler_from_quaternion
 rad2degrees = 180.0/math.pi
 degrees2rad = math.pi / 180.0
 
+
 class Imu2Angles:
     def __init__(self):
         self.rate = rospy.get_param('~rate', 100.0)

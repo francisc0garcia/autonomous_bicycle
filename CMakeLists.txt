@@ -4,6 +4,7 @@ project(autonomous_bicycle)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
+
 find_package(catkin REQUIRED COMPONENTS
         roscpp
         rospy
@@ -16,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
         gazebo_ros
         dynamic_reconfigure
         )
+
 
 generate_dynamic_reconfigure_options(cfg/bicycle_interaction.cfg)
 catkin_package(DEPENDS CATKIN DEPENDS dynamic_reconfigure)
@@ -49,6 +51,9 @@ target_link_libraries(link_odometry gazebo_ros_utils ${catkin_LIBRARIES} ${GAZEB
 
 add_library(gazebo_ros_utils src/gazebo_plugins/gazebo_ros_utils.cpp)
 target_link_libraries(gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(OdometryUtmToLocal src/OdometryUtmToLocal.cpp)
+target_link_libraries(OdometryUtmToLocal ${Boost_LIBRARIES}  ${catkin_LIBRARIES})
 
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
 

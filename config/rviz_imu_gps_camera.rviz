@@ -6,9 +6,7 @@ Panels:
       Expanded:
         - /TF1/Frames1
         - /Imu_21/Box properties1
-        - /odom_GPS_11
-        - /odom_gps_21
-        - /Odometry1
+        - /odom_imu_steer1
       Splitter Ratio: 0.457765669
     Tree Height: 832
   - Class: rviz/Selection
@@ -102,11 +100,11 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: false
+      Enabled: true
       Name: Imu_1
-      Topic: /bicycle/imu_1
+      Topic: /bicycle/imu_1_noise
       Unreliable: false
-      Value: false
+      Value: true
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
@@ -124,11 +122,11 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: false
+      Enabled: true
       Name: Imu_2
-      Topic: /bicycle/imu_2
+      Topic: /bicycle/imu_2_noise
       Unreliable: false
-      Value: false
+      Value: true
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
@@ -146,11 +144,11 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: false
+      Enabled: true
       Name: Imu_steering
-      Topic: /bicycle/imu_steering
+      Topic: /bicycle/imu_steering_noise
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Axes
       Enabled: true
       Length: 0.300000012
@@ -163,10 +161,20 @@ Visualization Manager:
       Color: 255; 25; 0
       Enabled: true
       Keep: 1
-      Length: 0.5
-      Name: odom_real
+      Length: 0.400000006
+      Name: odom_rear_wheel
       Position Tolerance: 0.100000001
-      Topic: /bicycle/odom
+      Topic: /bicycle/odom_rear_wheel
+      Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Color: 255; 25; 0
+      Enabled: true
+      Keep: 1
+      Length: 0.400000006
+      Name: odom_main_frame
+      Position Tolerance: 0.100000001
+      Topic: /bicycle/odom_main_frame
       Value: true
     - Alpha: 0.699999988
       Blocks: 3
@@ -186,30 +194,30 @@ Visualization Manager:
       Color: 0; 255; 0
       Enabled: true
       Keep: 1
-      Length: 0.5
+      Length: 0.400000006
       Name: odom_GPS_1
       Position Tolerance: 0.100000001
-      Topic: /bicycle/odom_gps_1
+      Topic: /bicycle/odom_gps_front
       Value: true
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
       Color: 0; 255; 0
       Enabled: true
       Keep: 1
-      Length: 0.5
+      Length: 0.400000006
       Name: odom_gps_2
       Position Tolerance: 0.100000001
-      Topic: /bicycle/odom_gps_2
+      Topic: /bicycle/odom_gps_rear
       Value: true
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
-      Color: 255; 170; 0
+      Color: 255; 25; 0
       Enabled: true
       Keep: 1
-      Length: 0.699999988
-      Name: Odometry
+      Length: 0.400000006
+      Name: odom_imu_steer
       Position Tolerance: 0.100000001
-      Topic: /bicycle/odom_filter
+      Topic: /bicycle/odom_imu_steering
       Value: true
   Enabled: true
   Global Options:
@@ -235,24 +243,24 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.65174675
+      Distance: 1.34276962
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.82480383
-        Y: -1.9406836
-        Z: -0.601045847
+        X: 0.167080358
+        Y: -0.146243021
+        Z: 0.366366744
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.799795985
+      Pitch: 1.03479695
       Target Frame: bikes_design__main_frame
       Value: Orbit (rviz)
-      Yaw: 4.23719931
+      Yaw: 3.99902844
     Saved: ~
 Window Geometry:
   Displays:

@@ -17,8 +17,13 @@ namespace gazebo {
         gazebo_ros_->isInitialized();
 
         gazebo_ros_->getParameter<std::string>(odometry_topic_, "odometry_topic", "odom");
-        gazebo_ros_->getParameter<std::string>(frame_name_, "frame_name", "frame_name");
+        gazebo_ros_->getParameter<std::string>(child_frame_name, "child_frame_name", "frame_name");
+        gazebo_ros_->getParameter<std::string>(parent_frame_name, "parent_frame_name", "frame_name");
         gazebo_ros_->getParameter<double>(update_rate_, "updateRate", 100.0);
+        gazebo_ros_->getParameter<double>(offset_rotation_yaw, "offset_rotation_yaw", 0.0);
+
+        gazebo_ros_->getParameter<std::string>(link_name_, "link_name", "");
+        link_ref = parent->GetLink(link_name_);
 
         // creates a publisher for sending odometry data
         odometry_publisher_ = gazebo_ros_->node()->advertise<nav_msgs::Odometry>(odometry_topic_, 1);
@@ -49,22 +54,32 @@ namespace gazebo {
 
     void LinkOdometry::UpdateChild() {
         common::Time current_time = parent->GetWorld()->GetSimTime();
+
         double seconds_since_last_update = (current_time - last_update_time_).Double();
 
         if (seconds_since_last_update > update_period_) {
-            temp_x = this->parent->GetWorldPose().pos.x;
-            temp_y = this->parent->GetWorldPose().pos.y;
-            temp_z = this->parent->GetWorldPose().pos.z;
+            math::Pose pose = link_ref->GetWorldPose();
+            tf::Quaternion qt(pose.rot.x, pose.rot.y, pose.rot.z, pose.rot.w);
+
+            // Rotate quaternion
+            tf::Vector3 rot_angle(0, 0, 1);
+            qt.setRotation(rot_angle, offset_rotation_yaw);
+
+            tf::Vector3 vt (pose.pos.x, pose.pos.y, pose.pos.z);
+
+            temp_x = vt.x();
+            temp_y = vt.y();
+            temp_z = vt.z();
 
             // Compute odometry
-            odom_.pose.pose.position.x = temp_x;
-            odom_.pose.pose.position.y = temp_y;
-            odom_.pose.pose.position.z = temp_y;
+            odom_.pose.pose.position.x = vt.x();
+            odom_.pose.pose.position.y = vt.y();
+            odom_.pose.pose.position.z = vt.z();
 
-            odom_.pose.pose.orientation.x = this->parent->GetWorldPose().rot.x;
-            odom_.pose.pose.orientation.y = this->parent->GetWorldPose().rot.y;
-            odom_.pose.pose.orientation.z = this->parent->GetWorldPose().rot.z;
-            odom_.pose.pose.orientation.w = this->parent->GetWorldPose().rot.w;
+            odom_.pose.pose.orientation.x = qt.x();
+            odom_.pose.pose.orientation.y = qt.y();
+            odom_.pose.pose.orientation.z = qt.z();
+            odom_.pose.pose.orientation.w = qt.w();
 
             temp_vel_x = (temp_x - prev_temp_x) / seconds_since_last_update;
             temp_vel_y = (temp_y - prev_temp_y) / seconds_since_last_update;
@@ -75,12 +90,13 @@ namespace gazebo {
 
             // set header
             odom_.header.stamp = ros::Time::now();
-            odom_.header.frame_id = frame_name_;
-            odom_.child_frame_id = frame_name_;
+            odom_.header.frame_id = parent_frame_name;
+            odom_.child_frame_id = child_frame_name;
 
             odometry_publisher_.publish(odom_);
 
             last_update_time_ += common::Time(update_period_);
+
             prev_temp_x = temp_x;
             prev_temp_y = temp_y;
             prev_temp_z = temp_z;

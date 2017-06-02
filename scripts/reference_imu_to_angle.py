@@ -12,6 +12,7 @@ from tf.transformations import euler_from_quaternion
 rad2degrees = 180.0/math.pi
 degrees2rad = math.pi / 180.0
 
+
 class TwoImu2Angles:
     def __init__(self):
         self.rate = rospy.get_param('~rate', 100.0)
@@ -78,7 +79,7 @@ class TwoImu2Angles:
         self.publish_angles()
 
     def publish_angles(self):
-        if  self.enable_reference and self.enable_angle:
+        if self.enable_reference and self.enable_angle:
             self.pub_imu_roll_msg = Float32()
             self.pub_imu_roll_msg.data = self.roll_frame - self.roll_steer
             self.pub_imu_roll.publish(self.pub_imu_roll_msg)

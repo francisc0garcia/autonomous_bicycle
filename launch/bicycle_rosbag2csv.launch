@@ -1,0 +1,18 @@
+<launch>
+    <!--
+    Convert BAG file $(arg bag_file) into several csv files, save them into $(arg csv_path)
+    Additionally merge all data-sets into one file $(arg bag_file).csv for further processing
+     -->
+    <param name="use_sim_time" value="true" />
+
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/" />
+    <arg name="bag_file" default="test_velocity_8" />
+    <arg name="csv_path" default="$(find autonomous_bicycle)/bags/csv/" />
+
+    <!-- Convert ROSBAG into CSV -->
+    <node pkg="autonomous_bicycle" type="rosbag2csv.py" name="rosbag2csv" output="screen">
+        <param name="input_filename" type="string" value="$(arg bag_file).bag" />
+        <param name="input_path" type="string" value="$(arg bag_path)" />
+        <param name="output_path" type="string" value="$(arg csv_path)" />
+    </node>
+</launch>

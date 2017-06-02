@@ -4,18 +4,14 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Grid1/Line Style1
         - /TF1/Frames1
         - /Imu_21/Box properties1
-      Splitter Ratio: 0.585831046
+      Splitter Ratio: 0.457765669
     Tree Height: 832
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
-    Expanded:
-      - /2D Pose Estimate1
-      - /2D Nav Goal1
-      - /Publish Point1
+    Expanded: ~
     Name: Tool Properties
     Splitter Ratio: 0.588679016
   - Class: rviz/Views
@@ -34,7 +30,7 @@ Visualization Manager:
     - Alpha: 0.5
       Cell Size: 10
       Class: rviz/Grid
-      Color: 98; 98; 98
+      Color: 160; 160; 164
       Enabled: true
       Line Style:
         Line Width: 0.0299999993
@@ -100,11 +96,11 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu_1
       Topic: /bicycle/imu_1
       Unreliable: false
-      Value: true
+      Value: false
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
@@ -122,11 +118,11 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu_2
       Topic: /bicycle/imu_2
       Unreliable: false
-      Value: true
+      Value: false
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
@@ -144,18 +140,18 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu_steering
       Topic: /bicycle/imu_steering
       Unreliable: false
-      Value: true
+      Value: false
     - Class: rviz/Axes
-      Enabled: true
+      Enabled: false
       Length: 0.300000012
       Name: Axes
       Radius: 0.0299999993
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
       Color: 255; 25; 0
@@ -166,6 +162,100 @@ Visualization Manager:
       Position Tolerance: 0.100000001
       Topic: /bicycle/odom
       Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Color: 0; 255; 0
+      Enabled: true
+      Keep: 1
+      Length: 0.5
+      Name: odom_GPS_1
+      Position Tolerance: 0.100000001
+      Topic: /bicycle/odom_gps_front
+      Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Color: 0; 255; 0
+      Enabled: true
+      Keep: 1
+      Length: 0.5
+      Name: odom_gps_2
+      Position Tolerance: 0.100000001
+      Topic: /bicycle/odom_gps_rear
+      Value: true
+    - Class: jsk_rviz_plugin/TFTrajectory
+      Enabled: true
+      Name: TF_gps_front
+      Value: true
+      color: 255; 85; 0
+      duration: 10
+      frame: odom_gps_front
+      line_width: 0.00999999978
+    - Class: jsk_rviz_plugin/TFTrajectory
+      Enabled: true
+      Name: TF_main_frame
+      Value: true
+      color: 25; 255; 240
+      duration: 10
+      frame: bikes_design__main_frame
+      line_width: 0.00999999978
+    - Class: jsk_rviz_plugin/TFTrajectory
+      Enabled: true
+      Name: TF_gps_rear
+      Value: true
+      color: 255; 0; 127
+      duration: 10
+      frame: odom_gps_rear
+      line_width: 0.00999999978
+    - Buffer length: 100
+      Class: jsk_rviz_plugin/Plotter2D
+      Enabled: true
+      Name: steering
+      Show Value: true
+      Topic: /imu_steering/yaw
+      Value: true
+      auto color change: false
+      auto scale: true
+      background color: 0; 0; 0
+      backround alpha: 0
+      border: true
+      foreground alpha: 0.699999988
+      foreground color: 25; 255; 240
+      height: 100
+      left: 100
+      linewidth: 1
+      max color: 255; 0; 0
+      max value: 1
+      min value: -1
+      show caption: true
+      text size: 12
+      top: 50
+      update interval: 0.0399999991
+      width: 100
+    - Buffer length: 100
+      Class: jsk_rviz_plugin/Plotter2D
+      Enabled: true
+      Name: lean
+      Show Value: true
+      Topic: /imu_lean/pitch
+      Value: true
+      auto color change: false
+      auto scale: true
+      background color: 0; 0; 0
+      backround alpha: 0
+      border: true
+      foreground alpha: 0.699999988
+      foreground color: 25; 255; 240
+      height: 100
+      left: 100
+      linewidth: 1
+      max color: 255; 0; 0
+      max value: 1
+      min value: -1
+      show caption: true
+      text size: 12
+      top: 200
+      update interval: 0.0399999991
+      width: 100
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -179,35 +269,29 @@ Visualization Manager:
     - Class: rviz/Select
     - Class: rviz/FocusCamera
     - Class: rviz/Measure
-    - Class: rviz/SetInitialPose
-      Topic: /initialpose
-    - Class: rviz/SetGoal
-      Topic: /move_base_simple/goal
-    - Class: rviz/PublishPoint
-      Single click: true
-      Topic: /clicked_point
+    - Class: jsk_rviz_plugin/OverlayPicker
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 17.4060688
+      Class: rviz/ThirdPersonFollower
+      Distance: 12.9613466
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.23246908
-        Y: -0.657304585
-        Z: 0.103566825
+        X: 5.01936674
+        Y: 2.58148336
+        Z: -9.53674316e-07
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.384795815
+      Pitch: 0.706886649
       Target Frame: bikes_design__main_frame
-      Value: Orbit (rviz)
-      Yaw: 5.19720173
+      Value: ThirdPersonFollower (rviz)
+      Yaw: -0.661031306
     Saved: ~
 Window Geometry:
   Displays:
