@@ -1,9 +1,72 @@
 <launch>
+    <!-- loaf rosbag file -->
+    <arg name="load_rosbag" default="true"/>
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/"/>
+    <arg name="bag_file" default="ExperimentBicycleTablet"/>
+
+    <param name="use_sim_time" value="false" />
+
+    <node if="$(arg load_rosbag)" pkg="rosbag" type="play" name="player" output="screen"
+          args="--clock --loop $(arg bag_path)$(arg bag_file).bag"/>
+
+    <!-- convert IMU to angles for visualization -->
+    <node pkg="autonomous_bicycle" type="reference_imu_to_angle.py" name="reference_imu_to_angle" respawn="true" >
+        <param name="rate" type="int" value="100" />
+        <param name="imu_name" type="string" value="imu_steering" />
+        <param name="topic_name_angle" type="string" value="/bicycle/imu_steering" />
+        <param name="topic_name_reference" type="string" value="/bicycle/imu_1" />
+    </node>
+
+    <node pkg="autonomous_bicycle" type="imu_to_angles.py" name="imu_to_angles_lean" respawn="true">
+        <param name="rate" type="int" value="100" />
+        <param name="imu_name" type="string" value="imu_lean" />
+        <param name="topic_name" type="string" value="/bicycle/imu_1" />
+    </node>
+
+    <!-- Launch the conversion from sensor_msgs/NavSatFix to nav_msgs/Odometry -->
+    <node name="gps_conv_front" pkg="gps_common" type="utm_odometry_node">
+        <remap from="/fix" to="/bicycle/gps_front" />
+        <remap from="odom" to="/bicycle/odom_utm_global_gps_front"/>
+        <param name="rot_covariance" value="99999" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_global_gps_front" />
+    </node>
+
+    <node name="OdometryUtmToLocal_gps_front" pkg="autonomous_bicycle" type="OdometryUtmToLocal">
+        <param name="input_topic_UTM" value="/bicycle/odom_utm_global_gps_front" />
+        <param name="output_topic_odom" value="/bicycle/odom_gps_front" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_gps_front" />
+        <param name="offset_x" value="0.0" />
+        <param name="offset_y" value="1.0" />
+        <param name="offset_z" value="0.0" />
+        <param name="orientation" value="1.571" />
+    </node>
+
+    <node name="gps_conv_rear" pkg="gps_common" type="utm_odometry_node">
+        <remap from="/fix" to="/bicycle/gps_rear" />
+        <remap from="odom" to="/bicycle/odom_utm_global_gps_rear"/>
+        <param name="rot_covariance" value="99999" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_global_gps_rear" />
+    </node>
+
+    <node name="OdometryUtmToLocal_gps_rear" pkg="autonomous_bicycle" type="OdometryUtmToLocal">
+        <param name="input_topic_UTM" value="/bicycle/odom_utm_global_gps_rear" />
+        <param name="output_topic_odom" value="/bicycle/odom_gps_rear" />
+        <param name="frame_id" value="world" />
+        <param name="child_frame_id" value="odom_gps_rear" />
+        <param name="offset_x" value="0.0" />
+        <param name="offset_y" value="0.0" />
+        <param name="offset_z" value="0.0" />
+        <param name="orientation" value="1.571" />
+    </node>
+
     <!-- Launch RQT and RVIZ -->
-    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false"
+    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" respawn="true"
           args="--perspective-file  $(find autonomous_bicycle)/config/rqt_sensor_init.perspective" />
 
-    <node name="rviz" pkg="rviz" type="rviz" required="false"
+    <node name="rviz" pkg="rviz" type="rviz" respawn="true"
           args="-d $(find autonomous_bicycle)/config/rviz_sensor_init.rviz"     />
 
 </launch>

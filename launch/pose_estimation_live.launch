@@ -52,11 +52,11 @@
     </node>
 
     <!-- Launch RQT and RVIZ -->
-    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false"
-          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_default.perspective" />
+    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false" output="log"
+          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_pose_estimation.perspective" />
 
     <node name="rviz" pkg="rviz" type="rviz" required="false"
-          args="-d $(find autonomous_bicycle)/config/rviz_imu_gps_camera.rviz"     />
+          args="-d $(find autonomous_bicycle)/config/rviz_pose_estimation.rviz" />
 
     <!-- Visualize model into RVIZ -->
     <arg name="frequency" default="5" />
@@ -105,4 +105,10 @@
         <param name="offset_z" value="0.0" />
         <param name="orientation" value="1.571" />
     </node>
+
+    <!-- Pose estimator -->
+    <node pkg="autonomous_bicycle" type="pose_estimator.py" name="pose_estimator" respawn="false" output="screen">
+        <param name="rate" value="60"/>
+    </node>
+
 </launch>

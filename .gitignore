@@ -135,5 +135,4 @@ ENV/
 # Rope project settings
 .ropeproject
 
-/bags/csv/
-/bags/test_velocity_8.bag
+/bags/

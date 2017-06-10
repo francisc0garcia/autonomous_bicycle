@@ -3,86 +3,32 @@
 
     <param name="use_sim_time" value="true" />
 
-    <!-- Launch Gazebo simulator -->
-    <include file="$(find gazebo_ros)/launch/empty_world.launch" >
-        <arg name="world_name" value="$(find autonomous_bicycle)/worlds/standard_bicycle.world"/>
-        <arg name="paused" value="false"/>
-        <arg name="use_sim_time" value="false"/>
-        <arg name="gui" value="true"/>
-        <arg name="headless" value="false"/>
-        <arg name="debug" value="false"/>
-        <arg name="physics" default="ode"/>
-        <arg name="respawn_gazebo" default="false"/>
-        <arg name="verbose" default="false"/>
-    </include>
+    <!-- Play ROSBAG file -->
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/" />
+    <arg name="bag_file" default="test_velocity_8_new" />
 
-    <!-- interaction with simulated bicycle -->
-    <node pkg="autonomous_bicycle" type="bicycle_interaction.py" name="bicycle_interaction" required="false" >
-        <param name="rate" type="int" value="10" />
-        <param name="wheel_radius" type="double" value="0.335" />
-    </node>
-
-    <!-- convert IMU to angles for visualization -->
-    <node pkg="autonomous_bicycle" type="reference_imu_to_angle.py" name="reference_imu_to_angle" required="false" >
-        <param name="rate" type="int" value="100" />
-        <param name="imu_name" type="string" value="imu_steering" />
-        <param name="topic_name_angle" type="string" value="/bicycle/imu_steering" />
-        <param name="topic_name_reference" type="string" value="/bicycle/imu_1" />
-    </node>
-
-    <node pkg="autonomous_bicycle" type="imu_to_angles.py" name="imu_to_angles_lean" required="false" >
-        <param name="rate" type="int" value="100" />
-        <param name="imu_name" type="string" value="imu_lean" />
-        <param name="topic_name" type="string" value="/bicycle/imu_1" />
-    </node>
+    <node pkg="rosbag" type="play" name="player" output="screen"
+          args="--clock --loop $(arg bag_path)$(arg bag_file).bag"/>
 
     <!-- Launch RQT and RVIZ -->
-    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false"
-          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_default.perspective" />
+    <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false" output="log"
+          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_pose_estimation.perspective" />
 
     <node name="rviz" pkg="rviz" type="rviz" required="false"
-          args="-d $(find autonomous_bicycle)/config/rviz_imu_gps_camera.rviz"     />
+          args="-d $(find autonomous_bicycle)/config/rviz_pose_estimation.rviz"     />
 
     <!-- Visualize model into RVIZ -->
     <arg name="frequency" default="5" />
-    <node name="static_tf_pub_world_to_gazebo_world" pkg="tf" type="static_transform_publisher" args="0 0 0  0 0 0 1 world gazebo_world 200" />
+    <node name="static_tf_pub_world_to_gazebo_world" pkg="tf" type="static_transform_publisher" args="0 0 0  0 0 0 1 world gazebo_world 100" />
 
-    <node name="gazebo2rviz" pkg="autonomous_bicycle" type="gazebo2rviz.py"  output="screen">
+    <node name="gazebo2rviz" pkg="autonomous_bicycle" type="gazebo2rviz.py"  output="screen" respawn="true">
         <param name="ignore_submodels_of" value="" type="str" />
-        <param name="rate" value="30" />
+        <param name="rate" value="20" />
     </node>
 
     <!-- Pose estimator -->
     <node pkg="autonomous_bicycle" type="pose_estimator.py" name="pose_estimator" respawn="false" output="screen">
-        <param name="rate" value="100"/>
-    </node>
-
-    <!-- Convert GPS 1 to odometry -->
-    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node_GPS_1" respawn="false">
-        <param name="magnetic_declination_radians" value="0"/>
-        <param name="yaw_offset" value="1.571"/>
-        <param name="wait_for_datum" value="false"/>
-        <!--<rosparam param="datum">[49.424774, 7.754394, 1.571]</rosparam>-->
-
-        <remap from="/imu/data" to="/bicycle/imu_steering" />
-        <remap from="/gps/fix" to="/bicycle/gps_front" />
-        <remap from="/odometry/filtered" to="/bicycle/odom" />
-
-        <remap from="/odometry/gps" to="/bicycle/odom_gps_2" />
-    </node>
-
-    <!-- Convert GPS 2 to odometry -->
-    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node_GPS_2" respawn="false">
-        <param name="magnetic_declination_radians" value="0"/>
-        <param name="yaw_offset" value="1.571"/>
-        <param name="wait_for_datum" value="false"/>
-        <!--<rosparam param="datum">[49.424774, 7.754394, 1.571]</rosparam>-->
-
-        <remap from="/imu/data" to="/bicycle/imu_steering" />
-        <remap from="/gps/fix" to="/bicycle/gps_rear" />
-        <remap from="/odometry/filtered" to="/bicycle/odom" />
-
-        <remap from="/odometry/gps" to="/bicycle/odom_gps_1" />
+        <param name="rate" value="50"/>
     </node>
 
 </launch>

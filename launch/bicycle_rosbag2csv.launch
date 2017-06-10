@@ -6,7 +6,7 @@
     <param name="use_sim_time" value="true" />
 
     <arg name="bag_path" default="$(find autonomous_bicycle)/bags/" />
-    <arg name="bag_file" default="test_velocity_8" />
+    <arg name="bag_file" default="test_velocity_8_large" />
     <arg name="csv_path" default="$(find autonomous_bicycle)/bags/csv/" />
 
     <!-- Convert ROSBAG into CSV -->

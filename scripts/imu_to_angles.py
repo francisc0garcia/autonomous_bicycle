@@ -2,10 +2,8 @@
 
 import rospy
 import math
-import numpy as np
 
-from geometry_msgs.msg import Twist
-from std_msgs.msg import Float32, Float32MultiArray
+from std_msgs.msg import Float32
 from sensor_msgs.msg import Imu
 from tf.transformations import euler_from_quaternion
 
@@ -27,9 +25,9 @@ class Imu2Angles:
         self.pub_imu_pitch_msg = Float32()
         self.pub_imu_yaw_msg = Float32()
 
-        self.pub_imu_roll = rospy.Publisher('/' + self.imu_name +'/roll', Float32, queue_size=1)
-        self.pub_imu_pitch = rospy.Publisher('/' + self.imu_name +'/pitch', Float32, queue_size=1)
-        self.pub_imu_yaw = rospy.Publisher('/' + self.imu_name +'/yaw', Float32, queue_size=1)
+        self.pub_imu_roll = rospy.Publisher('/' + self.imu_name + '/roll', Float32, queue_size=1)
+        self.pub_imu_pitch = rospy.Publisher('/' + self.imu_name + '/pitch', Float32, queue_size=1)
+        self.pub_imu_yaw = rospy.Publisher('/' + self.imu_name + '/yaw', Float32, queue_size=1)
 
         self.sub = rospy.Subscriber(self.topic_name, Imu, self.process_imu_message, queue_size=1)
 

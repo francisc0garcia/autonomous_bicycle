@@ -3,7 +3,7 @@
 
     <!-- Play ROSBAG file -->
     <arg name="bag_path" default="$(find autonomous_bicycle)/bags/" />
-    <arg name="bag_file" default="test_velocity_7_new" />
+    <arg name="bag_file" default="test_velocity_8_new" />
 
     <!-- Record BAG file with specific topics -->
     <node pkg="rosbag" type="record" name="recorder" output="screen"

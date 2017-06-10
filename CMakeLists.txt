@@ -4,7 +4,6 @@ project(autonomous_bicycle)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
-
 find_package(catkin REQUIRED COMPONENTS
         roscpp
         rospy
@@ -16,11 +15,28 @@ find_package(catkin REQUIRED COMPONENTS
         visualization_msgs
         gazebo_ros
         dynamic_reconfigure
+        message_generation
         )
 
+add_service_files(
+        DIRECTORY srv
+        FILES
+        record_msg.srv
+)
 
-generate_dynamic_reconfigure_options(cfg/bicycle_interaction.cfg)
-catkin_package(DEPENDS CATKIN DEPENDS dynamic_reconfigure)
+generate_dynamic_reconfigure_options(cfg/bicycle_interaction.cfg
+        cfg/pose_estimation_interaction.cfg
+        )
+
+add_message_files(
+        DIRECTORY msg
+        FILES
+        EKF_variables.msg
+)
+
+generate_messages(DEPENDENCIES std_msgs)
+
+catkin_package(DEPENDS CATKIN DEPENDS dynamic_reconfigure message_runtime std_msgs )
 
 # Depend on system install of Gazebo
 find_package(gazebo REQUIRED)
@@ -28,7 +44,7 @@ find_package(gazebo REQUIRED)
 catkin_package(
         INCLUDE_DIRS include
         LIBRARIES autonomous_bicycle
-        CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs sensor_msgs
+        CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs sensor_msgs message_runtime
         #  DEPENDS system_lib
 )
 

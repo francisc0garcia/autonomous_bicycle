@@ -13,9 +13,25 @@ find_package(catkin REQUIRED COMPONENTS
         nav_msgs
         visualization_msgs
         dynamic_reconfigure
+        message_generation
         )
 
 generate_dynamic_reconfigure_options(cfg/bicycle_interaction.cfg)
+
+add_service_files(
+        DIRECTORY srv
+        FILES
+        record_msg.srv
+)
+
+add_message_files(
+        DIRECTORY msg
+        FILES
+        EKF_variables.msg
+)
+
+generate_messages(DEPENDENCIES std_msgs)
+
 catkin_package(DEPENDS CATKIN DEPENDS dynamic_reconfigure)
 
 catkin_package(
