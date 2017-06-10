@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    nav.navbar.navbar-default.navbar-fixed-top
+        .container
+            .navbar-header
+                .navbar-brand Autonomous bicycle
+    p
+    include robot_gui
+    include modals/alert
+    include modals/confirm
+
+block scripts
+    script(src='/vendor/jquery-2.2.3.min.js')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/vendor/bootstrap.min.js')
+    script(src='/vendor/jquery.progressbar.js')
+    script(src='/vendor/three.js')
+    script(src='/vendor/eventemitter2.js')
+    script(src='/vendor/eventemitter2.min.js')
+    script(src='/vendor/roslib.js')
+    script(src='/vendor/ros3d.js')
+
+    script(src='/js/views/home.js')
+    script(src='/js/controllers/homeController.js')
+    script(src='/js/form-validators/accountValidator.js')
+
+    script(src='/js/controllers/rosController.js')

@@ -1,0 +1,30 @@
+// preset form values if we receive a userdata object //
+- user = typeof(udata) != 'undefined' ? udata : { }
+// store the userId on the client side in a hidden input field //
+input(type='hidden', value= user._id)#userId
+
+#robot-gui-form-container.center-vertical
+    form(method="post")#robot-gui.form-horizontal.well
+        p
+        div.input-group.input-group-lg
+            span.input-group-addon Filename
+            input(id="file_name_input",
+            type="text",
+            name="file_name_input",
+            placeholder="Please add filename",
+            value="ExperimentBicycle").form-control.input-lg
+        p
+        div.btn-group.btn-group-justified.btn-group-lg
+            a#btn-imu-lean.btn.btn-warning.disabled IMU Lean
+            a#btn-imu-steer.btn.btn-warning.disabled IMU Steer
+            a#btn-gps-front.btn.btn-warning.disabled GPS Front
+            a#btn-gps-rear.btn.btn-warning.disabled GPS Rear
+            a#btn-altimeter.btn.btn-warning.disabled Altimeter
+            a#btn-camera.btn.btn-warning.disabled Camera
+        p
+        button(type='button')#btn-start-record.btn.btn-primary.btn-block.btn-lg Start recording
+        hr
+
+
+// display form errors in a custom modal window //
+include modals/form-errors
