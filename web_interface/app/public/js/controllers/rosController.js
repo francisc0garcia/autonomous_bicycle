@@ -3,7 +3,7 @@ function RosController()
     // bind event listeners to button clicks //
     var that = this;
 
-    this.url = 'ws://192.168.0.210:9090';
+    this.url = 'ws://192.168.1.201:9090';
 
     this.is_recording = false;
 
@@ -74,11 +74,31 @@ function RosController()
     /* Record ROSBAG ------------------------------------------- */
     this.filename = 'test_javascript.bag';
 
+    this.service_status = new ROSLIB.Service({
+        ros : that.ros,
+        name : '/check_bag_record_status',
+        serviceType : 'autonomous_bicycle/status_msg'
+    });
+
+    this.check_recording_status = function () {
+        var request = new ROSLIB.ServiceRequest({
+            check_status : true
+        });
+
+        that.service_status.callService(request, function(result) {
+            console.log('Recording status:' + result.status_record_bag);
+            that.is_recording = result.status_record_bag;
+            that.update_record_button();
+        });
+    };
+
     this.service_control = new ROSLIB.Service({
         ros : that.ros,
         name : '/change_bag_record',
         serviceType : 'autonomous_bicycle/record_msg'
     });
+
+    this.check_recording_status();
 
     this.start_record_bag = function () {
         console.log ('Start recording ROSBAG');
@@ -108,19 +128,23 @@ function RosController()
     };
 
     /* ------------------------------------------------------------- */
-    $("#btn-start-record").on( "mouseup", function( event ) {
-        that.is_recording = !that.is_recording;
-
+    this.update_record_button = function () {
+        var button = $("#btn-start-record");
         if (that.is_recording){
-            $(this).removeClass('btn-primary').addClass('btn-info');
-            $(this).text('Stop recording');
+            button.removeClass('btn-primary').addClass('btn-info');
+            button.text('Stop recording');
             that.start_record_bag();
         }
         else{
-            $(this).removeClass('btn-info').addClass('btn-primary');
-            $(this).text('Start recording');
+            button.removeClass('btn-info').addClass('btn-primary');
+            button.text('Start recording');
             that.stop_record_bag();
         }
+    };
+
+    $("#btn-start-record").on( "mouseup", function( event ) {
+        that.is_recording = !that.is_recording;
+        that.update_record_button()
     });
 
     $('#file_name_input').on('keyup', function(e) {

@@ -38,9 +38,9 @@
         <param name="frame_id" value="world" />
         <param name="child_frame_id" value="odom_gps_front" />
         <param name="offset_x" value="0.0" />
-        <param name="offset_y" value="1.0" />
+        <param name="offset_y" value="0.0" />
         <param name="offset_z" value="0.0" />
-        <param name="orientation" value="1.571" />
+        <param name="orientation" value="0.0" />
     </node>
 
     <node name="gps_conv_rear" pkg="gps_common" type="utm_odometry_node">
@@ -59,7 +59,7 @@
         <param name="offset_x" value="0.0" />
         <param name="offset_y" value="0.0" />
         <param name="offset_z" value="0.0" />
-        <param name="orientation" value="1.571" />
+        <param name="orientation" value="0.0" />
     </node>
 
     <!-- Launch RQT and RVIZ -->

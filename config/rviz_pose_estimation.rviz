@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /TF1/Frames1
         - /Imu_21/Box properties1
-        - /TF_gps_front1
       Splitter Ratio: 0.457765669
     Tree Height: 832
   - Class: rviz/Selection
@@ -184,9 +183,9 @@ Visualization Manager:
       Topic: /bicycle/odom_gps_rear
       Value: true
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: true
+      Enabled: false
       Name: TF_gps_front
-      Value: true
+      Value: false
       color: 255; 85; 0
       duration: 20
       frame: odom_gps_front
@@ -200,13 +199,13 @@ Visualization Manager:
       frame: bikes_design__main_frame
       line_width: 0.100000001
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: false
+      Enabled: true
       Name: TF_gps_rear
-      Value: false
+      Value: true
       color: 255; 0; 127
       duration: 10
       frame: odom_gps_rear
-      line_width: 0.00999999978
+      line_width: 0.100000001
     - Buffer length: 100
       Class: jsk_rviz_plugin/Plotter2D
       Enabled: true
@@ -297,10 +296,10 @@ Visualization Manager:
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.539797187
+      Pitch: 0.759796977
       Target Frame: bikes_design__main_frame
       Value: ThirdPersonFollower (rviz)
-      Yaw: 1.37397122
+      Yaw: 2.79897094
     Saved: ~
 Window Geometry:
   Displays:

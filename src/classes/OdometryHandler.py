@@ -34,8 +34,8 @@ class OdometryHandler(object):
             self.x = np.sum(self.buffer[:, 0]) / self.counter
             self.y = np.sum(self.buffer[:, 1]) / self.counter
             self.z = np.sum(self.buffer[:, 2]) / self.counter
-        #else:
-        #    [self.x, self.y, self.z] = [0.0, 0.0, 0.0]
+        else:
+            [self.x, self.y, self.z] = [0.0, 0.0, 0.0]
 
         self.buffer = np.zeros([self.buffer_size, 3])
         self.counter = 0

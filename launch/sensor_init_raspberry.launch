@@ -16,17 +16,18 @@
     <arg name="arduino_enable" default="true"/>
 
     <arg name="check_system_state" default="true"/>
+    <arg name="respawn_enable" default="true"/>
 
     <!-- check system state -->
     <node if="$(arg check_system_state)" pkg="autonomous_bicycle" type="ros_state_checker.py"
-          name="ros_state_checker" respawn="true">
+          name="ros_state_checker" respawn="$(arg respawn_enable)">
         <param name="rate" type="double" value="1.0" />
     </node>
 
     <!-- Publish imu 1 data -->
     <node if="$(arg IMU_1_enable)" pkg="autonomous_bicycle"
-          type="sensor_imu_publisher.py" name="sensor_imu_publisher_1" respawn="true">
-        <param name="rate" type="int" value="200" />
+          type="sensor_imu_publisher.py" name="sensor_imu_publisher_1" respawn="$(arg respawn_enable)">
+        <param name="rate" type="int" value="100" />
 
         <rosparam param="publish_transform">True</rosparam>
         <rosparam param="static_transform">[0.0, 0.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
@@ -39,8 +40,8 @@
 
     <!-- Publish imu 2 data -->
     <node if="$(arg IMU_2_enable)" pkg="autonomous_bicycle"
-          type="sensor_imu_publisher.py" name="sensor_imu_publisher_2" respawn="true" >
-        <param name="rate" type="int" value="200" />
+          type="sensor_imu_publisher.py" name="sensor_imu_publisher_2" respawn="$(arg respawn_enable)" >
+        <param name="rate" type="int" value="100" />
 
         <rosparam param="publish_transform">True</rosparam>
         <rosparam param="static_transform">[1.0, 1.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
@@ -53,8 +54,8 @@
 
     <!-- Publish imu steering data -->
     <node if="$(arg IMU_steer_enable)" pkg="autonomous_bicycle"
-          type="sensor_imu_publisher.py" name="sensor_imu_publisher_steering" respawn="true" >
-        <param name="rate" type="int" value="200" />
+          type="sensor_imu_publisher.py" name="sensor_imu_publisher_steering" respawn="$(arg respawn_enable)" >
+        <param name="rate" type="int" value="100" />
 
         <rosparam param="publish_transform">True</rosparam>
         <rosparam param="static_transform">[1.0, 0.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
@@ -68,7 +69,7 @@
     <!-- Publish GPS 1 data -->
     <node if="$(arg GPS_front_enable)" pkg="nmea_navsat_driver"
           type="nmea_serial_driver" name="nmea_serial_driver_gps_front"
-          respawn="true" ns="GPS_front" >
+          respawn="$(arg respawn_enable)" ns="GPS_front" >
 
         <remap to="/bicycle/gps_front"          from="/GPS_front/fix" />
         <remap to="/bicycle/gps_front_velocity" from="/GPS_front/vel" />
@@ -84,7 +85,7 @@
     <!-- Publish GPS 2 data -->
     <node if="$(arg GPS_rear_enable)" pkg="nmea_navsat_driver"
           type="nmea_serial_driver" name="nmea_serial_driver_gps_rear"
-          respawn="true" ns="GPS_rear" >
+          respawn="$(arg respawn_enable)" ns="GPS_rear" >
         <remap to="/bicycle/gps_rear"           from="/GPS_rear/fix" />
         <remap to="/bicycle/gps_rear_velocity"  from="/GPS_rear/vel" />
         <remap to="/bicycle/gps_rear_time_ref"  from="/GPS_rear/time_reference" />
@@ -98,7 +99,7 @@
 
     <!-- Publish Arduino data -->
     <node if="$(arg arduino_enable)" pkg="rosserial_python"
-          type="serial_node.py" name="serial_node" respawn="true" >
+          type="serial_node.py" name="serial_node" respawn="$(arg respawn_enable)" >
         <param name="port" type="string" value="$(arg arduino_port)" />
 
         <remap to="/bicycle/altitude"   from="/altitude" />
@@ -117,13 +118,12 @@
 
     <!-- launch bag recorder node -->
     <node pkg="autonomous_bicycle" type="storage_bag_recorder.py"
-          name="storage_bag_recorder" respawn="true" output="screen" >
+          name="storage_bag_recorder" respawn="$(arg respawn_enable)" output="screen" >
         <param name="default_folder" value="$(find autonomous_bicycle)/data/" />
-        <param name="rate" value="100" />
     </node>
 
     <!--  start image streaming -->
-    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" respawn="true" >
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" respawn="$(arg respawn_enable)" >
         <param name="video_device" value="/dev/video0" />
         <param name="framerate" value="10" />
         <param name="image_width" value="320" />
@@ -138,16 +138,7 @@
         <remap to="/bicycle/image_raw"      from="/usb_cam/image_raw" />
     </node>
 
-    <!-- create a web_video_server -->
-    <node pkg="web_video_server" type="web_video_server" name="web_video_server"
-          respawn="true"  output="screen" >
-        <param name="width" value="320" />
-        <param name="height" value="240" />
-        <param name="quality" value="60" />
-        <param name="invert" value="" />
-    </node>
-
     <!-- Launch nodeJS app -->
-    <node pkg="autonomous_bicycle" type="launch_node_js_app.sh" name="load_node_js"   output="screen" />
+    <node pkg="autonomous_bicycle" type="launch_node_js_app.sh" name="load_node_js" output="log" />
 
 </launch>

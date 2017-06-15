@@ -62,3 +62,18 @@ sudo modprobe i2c-bcm2708 baudrate=50000
 
 -- sytem log
 sudo nano /var/log/syslog
+
+-- Once install robor_upsatart, it is necessary to grant acces to serial and camera devices:
+
+create a udev rule file:
+sudo nano /etc/udev/rules.d/40-permissions.rules
+
+insert content:
+KERNEL=="ttyUSB0", MODE="0666"
+KERNEL=="ttyUSB1", MODE="0666"
+KERNEL=="ttyUSB2", MODE="0666"
+KERNEL=="ttyUSB3", MODE="0666"
+KERNEL=="ttyACM0", MODE="0666"
+KERNEL=="video0", MODE="0666"
+
+add more if it is necessary

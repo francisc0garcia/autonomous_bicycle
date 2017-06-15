@@ -7,7 +7,7 @@ import rosbag
 import time
 import threading
 
-from autonomous_bicycle.srv import record_msg
+from autonomous_bicycle.srv import record_msg, status_msg
 
 
 class BagRecorder:
@@ -23,8 +23,10 @@ class BagRecorder:
         self.rate = rospy.get_param('~rate', 100.0)  # the rate of recording
 
         self.service_control = rospy.Service('change_bag_record', record_msg, self.callback_service)
+        self.service_state = rospy.Service('check_bag_record_status', status_msg, self.callback_status)
 
         self.enable_recording = False
+        self.is_recording = False
 
         # TODO: add yaml config file
         self.topics = [
@@ -45,6 +47,9 @@ class BagRecorder:
 
         rospy.loginfo('Stop recording')
 
+    def callback_status(self, req):
+        return self.is_recording
+
     def callback_service(self, req):
         # print req.topics
         # print req.enable_record
@@ -54,20 +59,28 @@ class BagRecorder:
 
         if self.enable_recording:
             try:
-                self._recorder = Recorder(self.filename,
-                                          bag_lock=self._bag_lock,
-                                          all=self.all,
-                                          topics=self.topics,
-                                          regex=self.regex,
-                                          limit=self.limit)
-                self._recorder.start()
-                state = 'recording'
+                if not self.is_recording:
+                    self.is_recording = True
+
+                    self._recorder = Recorder(self.filename,
+                                              bag_lock=self._bag_lock,
+                                              all=self.all,
+                                              topics=self.topics,
+                                              regex=self.regex,
+                                              limit=self.limit)
+                    self._recorder.start()
+                    state = 'recording'
+                else:
+                    state = 'Process already running'
             except Exception as ex:
+                self.is_recording = False
                 rospy.loginfo('Error opening bag ')
                 state = 'error'
                 rospy.logerr(str(ex))
         else:
-            self._recorder.stop()
+            if self.is_recording:
+                self._recorder.stop()
+            self.is_recording = False
             state = 'stopped'
 
         rospy.loginfo('state bag recording: ' + state)

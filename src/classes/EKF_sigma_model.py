@@ -5,15 +5,36 @@ import numpy as np
 class EKF_sigma_model(object):
     """Implements an EKF to bicycle model"""
 
-    def __init__(self, xs, P, R_std, Q_std, wheel_distance=1.2, dt=0.1, alpha=None):
+    def __init__(self, wheel_distance=1.2, dt=0.1, alpha=None):
         self.w = wheel_distance  # Set the distance between the wheels
-        self.xs = xs * 0.0  # Set the initial state
-        self.P = P  # Set the initial Covariance
-        self.P_filter = P
+        self.xs = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])  # Set the initial state
         self.dt = dt
-        self.R_std = R_std
-        self.Q_std = Q_std
         self.alpha = alpha
+
+        # Initial covariance matrix
+        self.P = np.eye(6) * 100
+
+        # process noise covariance Q -----------------------------------------------------------------------
+        # Maximum change (acceleration) for given dataset
+        max_acc_v = 5.98307432024
+        max_acc_phi_dot = 0.0162655507268
+        max_acc_delta_dot = 0.0334649627124
+
+        sigma_v = (max_acc_v * self.dt) ** 2
+        sigma_phi_dot = (max_acc_phi_dot * self.dt * 1000) ** 2
+        sigma_delta_dot = (max_acc_delta_dot * self.dt * 1000) ** 2
+
+        self.Q_std = [sigma_v, sigma_phi_dot, sigma_delta_dot]  # v, phi_dot, delta_dot
+
+        # measurement noise covariance R ---------------------------------------------------------------------
+        self.R_std = [0.5 ** 2,  # x
+                      0.5 ** 2,  # y
+                      0.5 ** 2,  # z
+                      0.5 ** 2,  # sigma
+                      0.5 ** 2,  # psi
+                      0.8 ** 2]  # phi
+
+        self.P_filter = self.P
         self.K = np.zeros((6, 6))  # Kalman gain
         self.e = 0.0
         self.S = []
@@ -33,11 +54,11 @@ class EKF_sigma_model(object):
                           self.R_std[4],  # psi
                           self.R_std[5]])  # phi
 
-        self.update_R(R_std)
-        self.update_Q(Q_std)
-
         # Linear relationship H -  z = Hx
         self.H = np.eye(6)
+
+    def get_state(self):
+        return self.xs
 
     def update_R(self, R_std):
         self.R_std = R_std

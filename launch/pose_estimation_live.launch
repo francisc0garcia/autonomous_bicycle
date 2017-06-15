@@ -108,7 +108,7 @@
 
     <!-- Pose estimator -->
     <node pkg="autonomous_bicycle" type="pose_estimator.py" name="pose_estimator" respawn="false" output="screen">
-        <param name="rate" value="60"/>
+        <param name="rate" value="100"/>
     </node>
 
 </launch>

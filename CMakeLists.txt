@@ -22,6 +22,7 @@ add_service_files(
         DIRECTORY srv
         FILES
         record_msg.srv
+        status_msg.srv
 )
 
 generate_dynamic_reconfigure_options(cfg/bicycle_interaction.cfg

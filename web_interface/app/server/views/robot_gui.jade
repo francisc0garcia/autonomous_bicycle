@@ -14,7 +14,10 @@ input(type='hidden', value= user._id)#userId
             placeholder="Please add filename",
             value="ExperimentBicycle").form-control.input-lg
         p
-        div.btn-group.btn-group-justified.btn-group-lg
+        button(type='button')#btn-start-record.btn.btn-primary.btn-block.btn-lg Start recording
+        hr
+        p
+        div.btn-group.btn-group-vertical.btn-group-lg.btn-block
             a#btn-imu-lean.btn.btn-warning.disabled IMU Lean
             a#btn-imu-steer.btn.btn-warning.disabled IMU Steer
             a#btn-gps-front.btn.btn-warning.disabled GPS Front
@@ -22,7 +25,6 @@ input(type='hidden', value= user._id)#userId
             a#btn-altimeter.btn.btn-warning.disabled Altimeter
             a#btn-camera.btn.btn-warning.disabled Camera
         p
-        button(type='button')#btn-start-record.btn.btn-primary.btn-block.btn-lg Start recording
         hr
 
 

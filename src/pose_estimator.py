@@ -13,6 +13,9 @@ from autonomous_bicycle.cfg import pose_estimation_interactionConfig
 from dynamic_reconfigure.server import Server
 
 from classes.EKF_sigma_model import *
+from classes.UKF_sigma_model import *
+from classes.PF_sigma_model import *
+
 from classes.OdometryHandler import *
 from classes.ImuHandler import *
 from classes.TwistHandler import *
@@ -43,53 +46,23 @@ class RobotPoseEstimator:
         self.X = np.array([0.0, 0.0, 0.0, 0.0, np.pi, 0.0])  # [x, y, z, sigma, psi, phi]
 
         # fading memory filter ( a = 1 to disable)
-        self.alpha = 1.0
-
-        # adaptive: continuous adjustment by Bar-Shalom
-        # Disable: self.Q_scale_factor = 1 or self.eps_max  > 100
-        self.Q_scale_factor = 1.0
-        self.eps_max = 300.0
-        self.count_adap = 0
+        self.alpha = 1.01
 
         # static gains of inputs
-        self.U_v_static = 1.0
-        self.U_phi_dot_static = 1.58
-        self.U_delta_dot_static = 0.05
-
-        # Initial covariance matrix
-        self.P = np.eye(self.number_state_variables) * 100
-
-        # process noise covariance Q -----------------------------------------------------------------------
-        # Maximum change (acceleration) for given dataset
-        max_acc_v = 5.98307432024
-        max_acc_phi_dot = 0.0162655507268
-        max_acc_delta_dot = 0.0334649627124
-
-        sigma_v = (max_acc_v * self.dt) ** 2
-        sigma_phi_dot = (max_acc_phi_dot * self.dt * 1000) ** 2
-        sigma_delta_dot = (max_acc_delta_dot * self.dt * 1000) ** 2
-
-        self.Q_std = [sigma_v, sigma_phi_dot, sigma_delta_dot]  # v, phi_dot, delta_dot
-
-        # measurement noise covariance R ---------------------------------------------------------------------
-        self.R_std = [0.5 ** 2,  # x
-                      0.5 ** 2,  # y
-                      0.5 ** 2,  # z
-                      0.5 ** 2,  # sigma
-                      0.5 ** 2,  # psi
-                      0.8 ** 2]  # phi
+        self.U_v_static = 0.0  # 1.0
+        self.U_phi_dot_static = 0.0  # 1.58
+        self.U_delta_dot_static = 0.0  # 0.05
 
         self.U = [0.0, 0.0, 0.0]
 
-        self.filter = EKF_sigma_model(self.X, self.P, R_std=self.R_std, Q_std=self.Q_std,
-                                      wheel_distance=self.wheel_distance, dt=self.dt, alpha=self.alpha)
+        # Extended kalman filter
+        # self.filter = EKF_sigma_model(wheel_distance=self.wheel_distance, dt=self.dt, alpha=self.alpha)
 
-        # self.topic_phi = "/bicycle/imu_lean_noise_pitch"
-        # self.topic_psi = "/bicycle/imu_lean_noise_yaw"
-        # self.topic_delta = "/bicycle/imu_steering_noise_yaw"
-        # self.phi_angle = FloatHandler(topic_name=self.topic_phi)
-        # self.psi_angle = FloatHandler(topic_name=self.topic_psi)
-        # self.delta_angle = FloatHandler(topic_name=self.topic_delta)
+        # Uncented kalman filter
+        # self.filter = UKF_sigma_model(dt=self.dt, w=self.wheel_distance)
+
+        # Particle filter
+        self.filter = ParticleFilter_sigma_model(dt=self.dt, w=self.wheel_distance)
 
         self.topic_imu_1 = "/bicycle/imu_1"
         self.topic_imu_2 = "/bicycle/imu_2"
@@ -100,7 +73,8 @@ class RobotPoseEstimator:
         self.topic_velocity_twist = "/bicycle/gps_front_velocity"
         self.topic_velocity_vector3 = "/bicycle/gps_front_velocity"
 
-        self.srv = Server(pose_estimation_interactionConfig, self.reconfig_callback)  # define dynamic_reconfigure callback
+        # define dynamic_reconfigure callback
+        self.srv = Server(pose_estimation_interactionConfig, self.reconfig_callback)
 
         self.seq = 0
 
@@ -135,31 +109,25 @@ class RobotPoseEstimator:
             # update real dt on filter
             self.filter.dt = self.real_dt
 
+            # update variables for filter
             self.update_variables()
 
-            self.filter.prediction(self.U)
-
+            # Update H based on available GPS data
             self.H = np.eye(6)
             if abs(self.Z[0]) == 0 or abs(self.Z[1]) == 0:
                 self.H[0, 0] = 0.0  # x
                 self.H[1, 1] = 0.0  # y
                 self.H[2, 2] = 0.0  # z
-                self.filter.H = self.H
-            else:
-                self.filter.H = self.H
 
+            self.filter.H = self.H
+
+            # Prediction step
+            self.filter.prediction(self.U)
+
+            # Update step
             self.filter.update(self.Z)
 
-            # adaptive continuous adjustment Bar-Shalom
-            self.eps = self.filter.e
-            #if self.eps > self.eps_max:
-            #    self.filter.Q *= self.Q_scale_factor
-            #    self.count_adap += 1
-            #elif self.count_adap > 0:
-            #    self.filter.Q /= self.Q_scale_factor
-            #    self.count_adap -= 1
-
-            self.publish_estimated_odometry(self.filter.xs, self.current_time)
+            self.publish_estimated_odometry(self.filter.get_state(), self.current_time)
             self.publish_efk_data()
 
             if self.last_time > self.current_time:
@@ -170,6 +138,8 @@ class RobotPoseEstimator:
 
             time.sleep(self.dt)
             final_time = datetime.datetime.now()
+
+            # Compute real delta time
             self.real_dt = (final_time - init_time).seconds
 
     def reconfig_callback(self, config, level):
@@ -200,13 +170,15 @@ class RobotPoseEstimator:
         h.stamp = rospy.Time.now()
         self.variables.header = h
 
+        xs = self.filter.get_state()
+
         # Update state vector
-        self.variables.xs_x = self.filter.xs[0]
-        self.variables.xs_y = self.filter.xs[1]
-        self.variables.xs_z = self.filter.xs[2]
-        self.variables.xs_sigma = self.filter.xs[3]
-        self.variables.xs_psi = self.filter.xs[4]
-        self.variables.xs_phi = self.filter.xs[5]
+        self.variables.xs_x = xs[0]
+        self.variables.xs_y = xs[1]
+        self.variables.xs_z = xs[2]
+        self.variables.xs_sigma = xs[3]
+        self.variables.xs_psi = xs[4]
+        self.variables.xs_phi = xs[5]
 
         # Update measurement vector
         self.variables.z_x = self.Z_plot[0]
@@ -291,6 +263,7 @@ class RobotPoseEstimator:
         self.U[1] = imu_1_data[4] + self.U_phi_dot_static  # angular_y
         self.U[2] = imu_steering_data[4] + self.U_delta_dot_static  # angular_y
 
+        '''
         # update R
         s_x = self.filter.R[0, 0]
         s_y = self.filter.R[1, 1]
@@ -305,18 +278,19 @@ class RobotPoseEstimator:
         s_psi = (rho + gamma*imu_1_data[7])**2
         #s_phi = (rho + gamma*imu_1_data[7])**2
 
-        self.R_std = [s_x, s_y, s_z, s_sigma, s_psi, s_phi]
+        #self.R_std = [s_x, s_y, s_z, s_sigma, s_psi, s_phi]
 
         # rospy.loginfo("R_std: " + str(self.R_std))
         self.filter.update_R(self.R_std)
+        '''
 
     def publish_estimated_odometry(self, x, current_time):
         # since all odometry is 6DOF we'll need a quaternion created from yaw
-        odom_quat = tf.transformations.quaternion_from_euler(0, 0, x[4])
+        odom_quat = tf.transformations.quaternion_from_euler(0.0, 0.0, 0.0)
 
         # first, we'll publish the transform over tf
         self.estimated_odom_br.sendTransform(
-            (-x[0], -x[1], -x[2]),
+            (-x[0], -x[1], x[2]),
             odom_quat,
             current_time,
             self.parent_frame,
@@ -329,7 +303,7 @@ class RobotPoseEstimator:
         odom.header.frame_id = self.parent_frame
 
         # set the position
-        odom.pose.pose = Pose(Point(-x[0], -x[1], -x[2]), Quaternion(*odom_quat))
+        odom.pose.pose = Pose(Point(-x[0], -x[1], x[2]), Quaternion(*odom_quat))
 
         # set the velocity
         odom.child_frame_id = self.child_frame
