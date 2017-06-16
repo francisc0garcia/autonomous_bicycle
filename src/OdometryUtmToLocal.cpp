@@ -17,6 +17,7 @@ public:
         pnode.getParam("offset_y", offset_y);
         pnode.getParam("offset_z", offset_z);
         pnode.getParam("orientation", orientation);
+        pnode.getParam("reference_model", reference_model);
 
         odom_pub =  n.advertise<nav_msgs::Odometry>(output_topic_odom, 1);
 
@@ -24,10 +25,19 @@ public:
     ~OdometryUtmToLocal(){};
 
     void UTMCallback(const nav_msgs::Odometry::ConstPtr &msg){
-        // invert x and y
-        global_x =  -msg->pose.pose.position.y;
-        global_y =  msg->pose.pose.position.x;
-        global_z =  msg->pose.pose.position.z;
+
+        if(reference_model == "gazebo"){
+            // invert x and y
+            global_x =  -msg->pose.pose.position.y;
+            global_y =  msg->pose.pose.position.x;
+            global_z =  msg->pose.pose.position.z;
+        }
+
+        if(reference_model == "real_data"){
+            global_x =  -msg->pose.pose.position.x;
+            global_y =  -msg->pose.pose.position.y;
+            global_z =  msg->pose.pose.position.z;
+        }
 
         if(!is_init){
             initial_x = global_x;
@@ -80,7 +90,7 @@ private:
     double global_x, global_y, global_z;
     double initial_x, initial_y, initial_z;
     bool is_init = false;
-    std::string frame_id, child_frame_id;
+    std::string frame_id, child_frame_id, reference_model = "gazebo";
 };
 
 int main(int argc, char **argv) {

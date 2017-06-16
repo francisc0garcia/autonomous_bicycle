@@ -59,10 +59,10 @@ class RobotPoseEstimator:
         # self.filter = EKF_sigma_model(wheel_distance=self.wheel_distance, dt=self.dt, alpha=self.alpha)
 
         # Uncented kalman filter
-        # self.filter = UKF_sigma_model(dt=self.dt, w=self.wheel_distance)
+        self.filter = UKF_sigma_model(dt=self.dt, w=self.wheel_distance)
 
         # Particle filter
-        self.filter = ParticleFilter_sigma_model(dt=self.dt, w=self.wheel_distance)
+        # self.filter = ParticleFilter_sigma_model(dt=self.dt, w=self.wheel_distance)
 
         self.topic_imu_1 = "/bicycle/imu_1"
         self.topic_imu_2 = "/bicycle/imu_2"

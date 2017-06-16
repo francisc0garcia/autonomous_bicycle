@@ -2,9 +2,28 @@
     <!-- loaf rosbag file -->
     <arg name="load_rosbag" default="false"/>
     <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/test_15_06_2017/"/>
-    <arg name="bag_file" default="ExperimentBicycleParking2"/>
 
-    <param name="use_sim_time" value="false" />
+    <param if="$(arg load_rosbag)" name="use_sim_time" value="true" />
+
+    <!--
+    File: ExperimentBicycleUnisport - Offset: [-4 -10]
+    File: ExperimentBicycleParking2 - Offset: [10 -20]
+    File: ExperimentBicycleMensa1 - Offset: [10 -25]
+    File: ExperimentBicycleBiblio - Offset: [12 -0]
+    File: ExperimentBicycleMensa2 - Offset: [15 -27]
+    -->
+    <arg name="bag_file" default="ExperimentBicycleUnisport"/>
+    <arg name="x_offset" value="-4" />
+    <arg name="y_offset" value="-10" />
+<!--
+    <node pkg="autonomous_bicycle" type="bicycle_marker_generator.py" name="bicycle_marker_generator" respawn="true" >
+        <param name="rate" type="int" value="100" />
+        <param name="model_main_frame" type="string"  value="file://$(find autonomous_bicycle)/models/bike_rviz/main_frame.dae" />
+        <param name="model_steer_frame" type="string" value="file://$(find autonomous_bicycle)/models/bike_rviz/steering_frame.dae" />
+    </node>
+-->
+    <node name="static_tf_gps" pkg="tf" type="static_transform_publisher"
+          args="$(arg x_offset) $(arg y_offset) 0  0 0 0 1 world gps_ref 100" />
 
     <node if="$(arg load_rosbag)" pkg="rosbag" type="play" name="player" output="screen"
           args="--clock --loop $(arg bag_path)$(arg bag_file).bag"/>
@@ -41,6 +60,7 @@
         <param name="offset_y" value="0.0" />
         <param name="offset_z" value="0.0" />
         <param name="orientation" value="0.0" />
+        <param name="reference_model" value="real_data" />
     </node>
 
     <node name="gps_conv_rear" pkg="gps_common" type="utm_odometry_node">
@@ -60,6 +80,7 @@
         <param name="offset_y" value="0.0" />
         <param name="offset_z" value="0.0" />
         <param name="orientation" value="0.0" />
+        <param name="reference_model" value="real_data" />
     </node>
 
     <!-- Launch RQT and RVIZ -->
@@ -67,6 +88,6 @@
           args="--perspective-file  $(find autonomous_bicycle)/config/rqt_sensor_init.perspective" />
 
     <node name="rviz" pkg="rviz" type="rviz" respawn="true"
-          args="-d $(find autonomous_bicycle)/config/rviz_sensor_init.rviz"     />
+          args="-d $(find autonomous_bicycle)/config/rviz_sensor_init.rviz" />
 
 </launch>
