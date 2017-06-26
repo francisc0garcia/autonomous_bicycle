@@ -9,7 +9,7 @@ degrees2rad = math.pi / 180.0
 
 
 class ImuHandler(object):
-    def __init__(self, topic_name, buffer_size=500, queue_size=1):
+    def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.imu_data = Imu()
         [self.roll, self.pitch, self.yaw,
          self.angular_x, self.angular_y, self.angular_z,
@@ -30,13 +30,14 @@ class ImuHandler(object):
 
     def callback(self, msg):
         self.imu_data = msg
-        quaternion = (
+
+        quat = (
             self.imu_data.orientation.x,
             self.imu_data.orientation.y,
             self.imu_data.orientation.z,
             self.imu_data.orientation.w)
 
-        (self._roll, self._pitch, self._yaw) = euler_from_quaternion(quaternion)
+        (self._roll, self._pitch, self._yaw) = euler_from_quaternion(quat)
 
         self._angular_x = self.imu_data.angular_velocity.x
         self._angular_y = self.imu_data.angular_velocity.y

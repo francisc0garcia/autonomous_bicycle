@@ -4,7 +4,7 @@ from geometry_msgs.msg import TwistStamped
 
 
 class TwistHandler(object):
-    def __init__(self, topic_name, buffer_size=500, queue_size=1):
+    def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.twist_data = TwistStamped()
         [self.twist_x, self.twist_y, self.twist_z] = [0.0, 0.0, 0.0]
 
@@ -31,6 +31,8 @@ class TwistHandler(object):
             self.twist_x = np.sum(self.buffer[:, 0]) / self.counter
             self.twist_y = np.sum(self.buffer[:, 1]) / self.counter
             self.twist_z = np.sum(self.buffer[:, 2]) / self.counter
+        else:
+            [self.twist_x, self.twist_y, self.twist_z] = [0.0, 0.0, 0.0]
 
         self.buffer = np.zeros([self.buffer_size, 3])
         self.counter = 0

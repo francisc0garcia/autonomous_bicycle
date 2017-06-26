@@ -39,6 +39,8 @@ public:
             global_z =  msg->pose.pose.position.z;
         }
 
+        global_z = 0.0;
+
         if(!is_init){
             initial_x = global_x;
             initial_y = global_y;

@@ -1,0 +1,31 @@
+<launch>
+
+    <arg name="IMU_1_port" default="/dev/ttyUSB0"/>
+    <arg name="respawn_enable" default="false"/>
+
+    <!-- Publish imu 1 data
+    <node pkg="autonomous_bicycle" output="screen"
+          type="sensor_imu_publisher.py" name="sensor_imu_publisher_1" respawn="$(arg respawn_enable)">
+
+        <param name="rate" type="int" value="200" />
+
+        <rosparam param="publish_transform">True</rosparam>
+        <rosparam param="static_transform">[0.0, 0.0, 1.0, 45.0, 0.0, 0.0]</rosparam>
+        <rosparam param="calibration_data">[245, 255, 8, 0, 36, 0, 35, 254, 21, 1, 119, 255, 254, 255, 0, 0, 255, 255, 232, 3, 135, 1]</rosparam>
+        <param name="calibration_service" type="string" value="calibration_imu_1" />
+
+        <param name="serial_port" type="string" value="$(arg IMU_1_port)" />
+        <param name="topic_name" type="string" value="/bicycle/imu_1" />
+        <param name="fixed_frame" type="string" value="world" />
+        <param name="frame_name" type="string" value="imu_1" />
+    </node>
+-->
+
+    <!-- check system state -->
+    <node pkg="autonomous_bicycle" type="ros_state_checker.py" output="screen"
+          name="ros_state_checker" respawn="$(arg respawn_enable)">
+        <param name="rate" type="double" value="1.0" />
+        <param name="service_turn_off_script" type="string"
+               value="$(find autonomous_bicycle)/src/BASH_turn_off_system.sh" />
+    </node>
+</launch>

@@ -4,7 +4,7 @@ from std_msgs.msg import Float32
 
 
 class FloatHandler(object):
-    def __init__(self, topic_name, buffer_size=500, queue_size=1):
+    def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.data_msg = Float32()
         self.data = 0.0
 

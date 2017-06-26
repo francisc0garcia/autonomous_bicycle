@@ -23,6 +23,8 @@ add_service_files(
         FILES
         record_msg.srv
         status_msg.srv
+        calibration_msg.srv
+        turn_off_msg.srv
 )
 
 generate_dynamic_reconfigure_options(cfg/bicycle_interaction.cfg
@@ -33,6 +35,7 @@ add_message_files(
         DIRECTORY msg
         FILES
         EKF_variables.msg
+        bicycle_state.msg
 )
 
 generate_messages(DEPENDENCIES std_msgs)

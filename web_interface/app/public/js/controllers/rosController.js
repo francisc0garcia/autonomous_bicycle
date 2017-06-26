@@ -30,8 +30,8 @@ function RosController()
     this.ros.on('close', function() {
         console.log('Connection to websocket server closed.');
     });
-    /* Subscribe to ROS system state --------------------------- */
 
+    /* Subscribe to ROS system state --------------------------- */
     this.sub_system_state = new ROSLIB.Topic({
         ros : that.ros,
         name : '/bicycle/state_system',
@@ -69,6 +69,7 @@ function RosController()
 
         //console.log('Received message on ' + that.sub_system_state.name + ': ' + message.data);
     });
+    /* --------------------------------------------------------- */
 
 
     /* Record ROSBAG ------------------------------------------- */
@@ -127,7 +128,6 @@ function RosController()
         });
     };
 
-    /* ------------------------------------------------------------- */
     this.update_record_button = function () {
         var button = $("#btn-start-record");
         if (that.is_recording){
@@ -142,15 +142,83 @@ function RosController()
         }
     };
 
-    $("#btn-start-record").on( "mouseup", function( event ) {
-        that.is_recording = !that.is_recording;
-        that.update_record_button()
-    });
-
     $('#file_name_input').on('keyup', function(e) {
         var val = $(this).val();
         if (val.match(/[^a-zA-Z]/g)) {
             $(this).val(val.replace(/[^a-zA-Z0-9]/g, ''));
         }
     });
+    $("#btn-start-record").on( "mouseup", function( event ) {
+        that.is_recording = !that.is_recording;
+        that.update_record_button()
+    });
+    /* ------------------------------------------------------------- */
+
+    /* Calibration of sensors  ------------------------------------- */
+    this.service_calibration_lean = new ROSLIB.Service({
+        ros : that.ros,
+        name : '/calibration_imu_1',
+        serviceType : 'autonomous_bicycle/calibration_msg'
+    });
+
+    this.service_calibration_steer = new ROSLIB.Service({
+        ros : that.ros,
+        name : '/calibration_imu_steering',
+        serviceType : 'autonomous_bicycle/calibration_msg'
+    });
+
+    this.calibrate_sensors = function () {
+        var request = new ROSLIB.ServiceRequest({
+            calibrate : true
+        });
+
+        that.service_calibration_lean.callService(request, function(result) {
+            console.log('Calibration Lean: ' + result.is_calibrated);
+        });
+
+        that.service_calibration_steer.callService(request, function(result) {
+            console.log('Calibration steering: ' + result.is_calibrated);
+        });
+    };
+
+    $("#btn-calibrate").on("mouseup", function(event) {
+        that.calibrate_sensors()
+    });
+    /* ------------------------------------------------------------- */
+
+    /* Turn off service  ------------------------------------------- */
+    this.service_turn_off_system = new ROSLIB.Service({
+        ros : that.ros,
+        name : '/bicycle/turn_off',
+        serviceType : 'autonomous_bicycle/turn_off_msg'
+    });
+
+    this.turn_off_system = function () {
+        var request = new ROSLIB.ServiceRequest({
+            turn_off : true
+        });
+
+        that.update_turn_off_button(true);
+        console.log('Start: service turn off system');
+        that.service_turn_off_system.callService(request, function(result) {
+            console.log('Completed Turn off system: ' + result.result);
+            that.update_turn_off_button(false);
+        });
+    };
+
+    this.update_turn_off_button = function (is_turning_off) {
+        var button = $("#btn-turn-off");
+        if (is_turning_off){
+            button.removeClass('btn-danger').addClass('btn-warning');
+        }
+        else{
+            button.removeClass('btn-warning').addClass('btn-danger');
+        }
+    };
+
+    $("#btn-turn-off").on("mouseup", function(event) {
+        that.turn_off_system()
+    });
+    /* ------------------------------------------------------------- */
+
 }

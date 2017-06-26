@@ -1,0 +1,18 @@
+<launch>
+    <arg name="GPS_front_port" default="/dev/ttyUSB2"/>
+    <arg name="GPS_rear_port" default="/dev/ttyUSB3"/>
+    <arg name="init_baud" default="9600"/>
+
+    <node pkg="autonomous_bicycle" type="config_gps_sensors.py" output="screen"
+          name="config_gps_sensors_front">
+        <param name="port" type="string" value="$(arg GPS_front_port)" />
+        <param name="baud" type="int" value="$(arg init_baud)" />
+    </node>
+
+    <node pkg="autonomous_bicycle" type="config_gps_sensors.py" output="screen"
+          name="config_gps_sensors_rear">
+        <param name="port" type="string" value="$(arg GPS_rear_port)" />
+        <param name="baud" type="int" value="$(arg init_baud)" />
+    </node>
+
+</launch>

@@ -47,6 +47,7 @@ class UKF_sigma_model(object):
 
         self.kf.x = np.zeros((1, self.number_state_variables))  # Initial state
         self.kf.P = np.eye(self.number_state_variables) * 10  # Covariance matrix
+        self.P = self.kf.P
 
     def get_state(self):
         return self.kf.x
@@ -55,9 +56,11 @@ class UKF_sigma_model(object):
         self.kf.x = np.zeros((1, self.number_state_variables))
         # self.kf.k = np.zeros((6, 6))
         self.kf.P = np.eye(self.number_state_variables) * 10
+        self.P = self.kf.P
 
     def prediction(self, U):
         self.kf.predict(fx_args=U)
+        self.P = self.kf.P
 
     def update(self, Z):
         Z_t = np.zeros((1, 6))
@@ -69,7 +72,7 @@ class UKF_sigma_model(object):
         Z_t[0, 5] = Z[5]  # phi
 
         self.kf.update(Z_t[0])
-        #self.K = self.kf.k
+        self.P = self.kf.P
 
     def update_R(self, R_std):
         # TODO: Implement method

@@ -15,9 +15,11 @@ input(type='hidden', value= user._id)#userId
             value="ExperimentBicycle").form-control.input-lg
         p
         button(type='button')#btn-start-record.btn.btn-primary.btn-block.btn-lg Start recording
+        p
+        button(type='button')#btn-calibrate.btn.btn-primary.btn-block.btn-lg Calibrate Sensors
         hr
         p
-        div.btn-group.btn-group-vertical.btn-group-lg.btn-block
+        div.btn-group.btn-group-vertical.btn-group-xs.btn-block
             a#btn-imu-lean.btn.btn-warning.disabled IMU Lean
             a#btn-imu-steer.btn.btn-warning.disabled IMU Steer
             a#btn-gps-front.btn.btn-warning.disabled GPS Front
@@ -25,6 +27,9 @@ input(type='hidden', value= user._id)#userId
             a#btn-altimeter.btn.btn-warning.disabled Altimeter
             a#btn-camera.btn.btn-warning.disabled Camera
         p
+        hr
+        p
+        button(type='button')#btn-turn-off.btn.btn-danger.btn-block.btn-lg Turn off system
         hr
 
 

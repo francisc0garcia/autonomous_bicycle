@@ -1,0 +1,3 @@
+bool calibrate
+---
+bool is_calibrated

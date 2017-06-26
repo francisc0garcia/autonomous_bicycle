@@ -3,9 +3,11 @@
 import rospy
 import numpy as np
 import time
+import subprocess
 
 from std_msgs.msg import Int8MultiArray, Float32
 from sensor_msgs.msg import CompressedImage, NavSatFix, Imu
+from autonomous_bicycle.srv import turn_off_msg
 
 
 class RosStateChecker:
@@ -34,6 +36,10 @@ class RosStateChecker:
         # create publisher
         self.pub_state_system = rospy.Publisher("/bicycle/state_system", Int8MultiArray, queue_size=1)
 
+        # create service to turn-off system
+        self.service_turn_off_script = rospy.get_param('~service_turn_off_script', "/tmp")
+        self.srv_calibration = rospy.Service("/bicycle/turn_off", turn_off_msg, self.callback_service)
+
         rospy.on_shutdown(self.shutdown_node)
 
         # create subscribers
@@ -49,6 +55,18 @@ class RosStateChecker:
         while not rospy.is_shutdown():
             self.update_state_system()
             self.rate_timer.sleep()
+
+    def callback_service(self, req):
+        try:
+            if req.turn_off:
+                rospy.loginfo("Ready to execute script: " + self.service_turn_off_script)
+                rc = subprocess.call(self.service_turn_off_script)
+                rospy.loginfo("Finish execution of: " + self.service_turn_off_script)
+                return True
+            else:
+                return False
+        except:
+            return False
 
     def update_state_system(self):
         self.state_vector = []

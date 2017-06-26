@@ -1,32 +1,31 @@
 <launch>
     <!-- loaf rosbag file -->
     <arg name="load_rosbag" default="false"/>
-    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/test_15_06_2017/"/>
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/test_24_06_2017/"/>
 
     <param if="$(arg load_rosbag)" name="use_sim_time" value="true" />
 
-    <!--
+    <!-- Folder test_15_06_2017
     File: ExperimentBicycleUnisport - Offset: [-4 -10]
     File: ExperimentBicycleParking2 - Offset: [10 -20]
     File: ExperimentBicycleMensa1 - Offset: [10 -25]
     File: ExperimentBicycleBiblio - Offset: [12 -0]
     File: ExperimentBicycleMensa2 - Offset: [15 -27]
+
+    Folder test_24_06_2017
+    File: ExperimentBicycleParkingToMensa - Offset: [3 5]
+    File: ExperimentBicycleUnisportToMensa - Offset: [10 0]
     -->
-    <arg name="bag_file" default="ExperimentBicycleUnisport"/>
-    <arg name="x_offset" value="-4" />
-    <arg name="y_offset" value="-10" />
-<!--
-    <node pkg="autonomous_bicycle" type="bicycle_marker_generator.py" name="bicycle_marker_generator" respawn="true" >
-        <param name="rate" type="int" value="100" />
-        <param name="model_main_frame" type="string"  value="file://$(find autonomous_bicycle)/models/bike_rviz/main_frame.dae" />
-        <param name="model_steer_frame" type="string" value="file://$(find autonomous_bicycle)/models/bike_rviz/steering_frame.dae" />
-    </node>
--->
+    <arg name="bag_file" default="ExperimentBicycleParkingToMensa"/>
+    <arg name="x_offset" value="3" />
+    <arg name="y_offset" value="5" />
+
+
     <node name="static_tf_gps" pkg="tf" type="static_transform_publisher"
           args="$(arg x_offset) $(arg y_offset) 0  0 0 0 1 world gps_ref 100" />
 
     <node if="$(arg load_rosbag)" pkg="rosbag" type="play" name="player" output="screen"
-          args="--clock --loop $(arg bag_path)$(arg bag_file).bag"/>
+          args="--clock --loop --rate=1 $(arg bag_path)$(arg bag_file).bag"/>
 
     <!-- convert IMU to angles for visualization -->
     <node pkg="autonomous_bicycle" type="reference_imu_to_angle.py" name="reference_imu_to_angle" respawn="true" >
@@ -81,6 +80,38 @@
         <param name="offset_z" value="0.0" />
         <param name="orientation" value="0.0" />
         <param name="reference_model" value="real_data" />
+    </node>
+
+    <node name="republish" type="republish" pkg="image_transport" output="screen"
+          args="compressed in:=/bicycle/image_raw raw out:=/bicycle/camera_plot" />
+
+    <!-- Pose estimator -->
+    <node pkg="autonomous_bicycle" type="pose_estimator_real.py" name="pose_estimator_real" respawn="false" output="screen">
+        <param name="rate" value="100"/>
+        <param name="load_rosbag" value="$(arg load_rosbag)"/>
+    </node>
+
+    <!-- Marker generator -->
+    <node pkg="autonomous_bicycle" type="bicycle_pose_marker_publisher.py"
+          name="bicycle_pose_marker_publisher_measurement" respawn="true" >
+        <param name="rate" type="int" value="100" />
+        <param name="alpha" type="double" value="0.4" />
+        <param name="topic_bicycle_state" type="string" value="/bicycle/bicycle_state_measurement" />
+        <param name="model_main_frame" type="string"  value="file://$(find autonomous_bicycle)/models/bike_rviz/main_frame_centered.dae" />
+        <param name="model_steer_frame" type="string" value="file://$(find autonomous_bicycle)/models/bike_rviz/steering_frame_centered.dae" />
+        <param name="tf_steering_frame_name" type="string" value="estimated_odom_measurement" />
+        <param name="marker_name" type="string" value="/bicycle/measurement" />
+    </node>
+
+    <node pkg="autonomous_bicycle" type="bicycle_pose_marker_publisher.py"
+          name="bicycle_pose_marker_publisher_filter" respawn="true" >
+        <param name="rate" type="int" value="100" />
+        <param name="alpha" type="double" value="1.0" />
+        <param name="topic_bicycle_state" type="string" value="/bicycle/bicycle_state_filter" />
+        <param name="model_main_frame" type="string"  value="file://$(find autonomous_bicycle)/models/bike_rviz/main_frame_centered.dae" />
+        <param name="model_steer_frame" type="string" value="file://$(find autonomous_bicycle)/models/bike_rviz/steering_frame_centered.dae" />
+        <param name="tf_steering_frame_name" type="string" value="estimated_odom_filter" />
+        <param name="marker_name" type="string" value="/bicycle/filter" />
     </node>
 
     <!-- Launch RQT and RVIZ -->

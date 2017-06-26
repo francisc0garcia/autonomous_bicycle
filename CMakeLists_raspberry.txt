@@ -22,12 +22,16 @@ add_service_files(
         DIRECTORY srv
         FILES
         record_msg.srv
+        status_msg.srv
+        calibration_msg.srv
+        turn_off_msg.srv
 )
 
 add_message_files(
         DIRECTORY msg
         FILES
         EKF_variables.msg
+        bicycle_state.msg
 )
 
 generate_messages(DEPENDENCIES std_msgs)

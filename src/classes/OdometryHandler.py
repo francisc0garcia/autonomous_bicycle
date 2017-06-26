@@ -4,7 +4,7 @@ from nav_msgs.msg import Odometry
 
 
 class OdometryHandler(object):
-    def __init__(self, topic_name, buffer_size=500, queue_size=1):
+    def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.odom = Odometry()
         # mean values
         [self.x, self.y, self.z] = [0.0, 0.0, 0.0]

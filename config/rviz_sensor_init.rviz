@@ -1,14 +1,14 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 78
+    Help Height: 125
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /TF1/Frames1
-        - /Imu_11/Axes properties1
         - /Imu_21/Box properties1
-      Splitter Ratio: 0.284040987
-    Tree Height: 323
+        - /Imu_21/Acceleration properties1
+        - /Imu_steering1/Acceleration properties1
+      Splitter Ratio: 0.5667575
+    Tree Height: 801
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -24,7 +24,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: camera
+    SyncSource: ""
 Visualization Manager:
   Class: ""
   Displays:
@@ -32,7 +32,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: false
+      Enabled: true
       Line Style:
         Line Width: 0.0299999993
         Value: Lines
@@ -45,7 +45,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 100
       Reference Frame: <Fixed Frame>
-      Value: false
+      Value: true
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /model_marker
@@ -55,45 +55,23 @@ Visualization Manager:
       Queue Size: 20
       Value: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
-        All Enabled: true
-        gps_ref:
-          Value: true
-        imu_1:
-          Value: true
-        imu_steering:
-          Value: true
-        odom_gps_front:
-          Value: true
-        odom_gps_rear:
-          Value: true
-        world:
-          Value: true
-      Marker Scale: 10
+        All Enabled: false
+      Marker Scale: 5
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        world:
-          gps_ref:
-            {}
-          imu_1:
-            {}
-          imu_steering:
-            {}
-          odom_gps_front:
-            {}
-          odom_gps_rear:
-            {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
-        Acc. vector scale: 1
+        Acc. vector scale: 0.0500000007
         Derotate acceleration: true
         Enable acceleration: false
       Axes properties:
@@ -115,9 +93,9 @@ Visualization Manager:
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
-        Acc. vector scale: 1
+        Acc. vector scale: 0.0500000007
         Derotate acceleration: true
-        Enable acceleration: false
+        Enable acceleration: true
       Axes properties:
         Axes scale: 1
         Enable axes: true
@@ -129,15 +107,15 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu_2
       Topic: /bicycle/imu_2
       Unreliable: false
-      Value: true
+      Value: false
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
-        Acc. vector scale: 1
+        Acc. vector scale: 0.0500000007
         Derotate acceleration: true
         Enable acceleration: false
       Axes properties:
@@ -158,31 +136,79 @@ Visualization Manager:
       Value: true
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
-      Color: 0; 255; 0
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.300000012
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
       Enabled: false
       Keep: 1
-      Length: 0.5
       Name: odom_gps_front
       Position Tolerance: 0.100000001
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.100000001
+        Color: 255; 25; 0
+        Head Length: 0.300000012
+        Head Radius: 0.100000001
+        Shaft Length: 1
+        Shaft Radius: 0.0500000007
+        Value: Arrow
       Topic: /bicycle/odom_gps_front
+      Unreliable: false
       Value: false
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
-      Color: 0; 255; 0
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.300000012
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
       Enabled: false
       Keep: 1
-      Length: 0.5
       Name: odom_gps_rear
       Position Tolerance: 0.100000001
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.100000001
+        Color: 255; 25; 0
+        Head Length: 0.300000012
+        Head Radius: 0.100000001
+        Shaft Length: 1
+        Shaft Radius: 0.0500000007
+        Value: Arrow
       Topic: /bicycle/odom_gps_rear
+      Unreliable: false
       Value: false
     - Buffer length: 100
       Class: jsk_rviz_plugin/Plotter2D
-      Enabled: true
+      Enabled: false
       Name: steering
       Show Value: true
       Topic: /imu_steering/yaw
-      Value: true
+      Value: false
       auto color change: false
       auto scale: true
       background color: 0; 0; 0
@@ -191,7 +217,7 @@ Visualization Manager:
       foreground alpha: 0.699999988
       foreground color: 25; 255; 240
       height: 100
-      left: 100
+      left: 50
       linewidth: 1
       max color: 255; 0; 0
       max value: 1
@@ -203,11 +229,11 @@ Visualization Manager:
       width: 100
     - Buffer length: 100
       Class: jsk_rviz_plugin/Plotter2D
-      Enabled: true
-      Name: lean
+      Enabled: false
+      Name: lean_steer
       Show Value: true
-      Topic: /imu_lean/pitch
-      Value: true
+      Topic: /imu_steering/pitch
+      Value: false
       auto color change: false
       auto scale: true
       background color: 0; 0; 0
@@ -216,7 +242,7 @@ Visualization Manager:
       foreground alpha: 0.699999988
       foreground color: 25; 255; 240
       height: 100
-      left: 100
+      left: 220
       linewidth: 1
       max color: 255; 0; 0
       max value: 1
@@ -226,8 +252,58 @@ Visualization Manager:
       top: 200
       update interval: 0.0399999991
       width: 100
+    - Buffer length: 100
+      Class: jsk_rviz_plugin/Plotter2D
+      Enabled: false
+      Name: lean
+      Show Value: true
+      Topic: /imu_lean/pitch
+      Value: false
+      auto color change: false
+      auto scale: true
+      background color: 0; 0; 0
+      backround alpha: 0
+      border: true
+      foreground alpha: 0.699999988
+      foreground color: 25; 255; 240
+      height: 100
+      left: 50
+      linewidth: 1
+      max color: 255; 0; 0
+      max value: 1
+      min value: -1
+      show caption: true
+      text size: 12
+      top: 200
+      update interval: 0.0399999991
+      width: 100
+    - Buffer length: 100
+      Class: jsk_rviz_plugin/Plotter2D
+      Enabled: false
+      Name: psi
+      Show Value: true
+      Topic: /bicycle/psi
+      Value: false
+      auto color change: false
+      auto scale: true
+      background color: 0; 0; 0
+      backround alpha: 0
+      border: true
+      foreground alpha: 0.699999988
+      foreground color: 25; 255; 240
+      height: 100
+      left: 50
+      linewidth: 1
+      max color: 255; 0; 0
+      max value: 1
+      min value: -1
+      show caption: true
+      text size: 12
+      top: 350
+      update interval: 0.0399999991
+      width: 100
     - Class: rviz/Image
-      Enabled: true
+      Enabled: false
       Image Topic: /bicycle/image_raw
       Max Value: 1
       Median window: 5
@@ -237,8 +313,8 @@ Visualization Manager:
       Queue Size: 1
       Transport Hint: compressed
       Unreliable: false
-      Value: true
-    - Alpha: 0.699999988
+      Value: false
+    - Alpha: 0.300000012
       Blocks: 8
       Class: rviz_plugins/AerialMapDisplay
       Draw Behind: true
@@ -248,9 +324,17 @@ Visualization Manager:
       Name: gps_front
       Object URI: http://a.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token=pk.eyJ1IjoiZnJhbmNpc2MwZ2FyY2lhIiwiYSI6ImNpemg1cDdiczAwMTIyd245OHJmMjgyeDAifQ.5W8LrvRDooubk8tMXsDvtw
       Robot frame: gps_ref
-      Topic: /bicycle/gps_front
+      Topic: /bicycle/gps_rear
       Value: true
       Zoom: 19
+    - Class: jsk_rviz_plugin/TFTrajectory
+      Enabled: true
+      Name: tf_filter
+      Value: true
+      color: 255; 0; 0
+      duration: 250
+      frame: estimated_odom_filter
+      line_width: 0.100000001
     - Class: jsk_rviz_plugin/TFTrajectory
       Enabled: true
       Name: tf_rear
@@ -258,27 +342,54 @@ Visualization Manager:
       color: 25; 255; 240
       duration: 250
       frame: odom_gps_rear
-      line_width: 0.5
+      line_width: 0.100000001
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: true
+      Enabled: false
       Name: tf_front
-      Value: true
+      Value: false
       color: 25; 255; 140
       duration: 250
       frame: odom_gps_front
-      line_width: 0.5
+      line_width: 0.100000001
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /bicycle_marker_main
-      Name: marker_main
+      Marker Topic: /bicycle/filter_main
+      Name: m_filter_main
       Namespaces:
         "": true
-      Queue Size: 10
+      Queue Size: 100
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /bicycle_marker_steering
-      Name: marker_steer
+      Marker Topic: /bicycle/filter_steering
+      Name: m_filter_steer
+      Namespaces:
+        "": true
+      Queue Size: 100
+      Value: true
+    - Class: jsk_rviz_plugin/OverlayImage
+      Enabled: true
+      Name: camera
+      Topic: /bicycle/camera_plot
+      Value: true
+      alpha: 1
+      height: 128
+      keep aspect ratio: true
+      left: 30
+      top: 30
+      width: 320
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /bicycle/measurement_main
+      Name: m_measurement_main
+      Namespaces:
+        "": true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /bicycle/measurement_steering
+      Name: m_measurement_steer
       Namespaces:
         "": true
       Queue Size: 100
@@ -301,32 +412,32 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 60.8540764
+      Distance: 9.26995659
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -25.4654961
-        Y: 4.97146702
-        Z: -3.80002189
+        X: -2.1964469
+        Y: -0.620987117
+        Z: 3.11548547e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.664797187
-      Target Frame: odom_gps_rear
+      Pitch: 0.62539953
+      Target Frame: estimated_odom_measurement
       Value: ThirdPersonFollower (rviz)
-      Yaw: 2.63716674
+      Yaw: 3.05538177
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: false
+    collapsed: true
   Height: 1026
-  Hide Left Dock: false
+  Hide Left Dock: true
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd000000040000000000000215000003b7fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006500fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000002b000001d5000000e000fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00630061006d0065007200610100000206000001dc0000001700ffffff000000010000010f000003b7fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000002b000003b7000000b500fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000064f0000003efc0100000002fb0000000800540069006d006500000000000000064f0000035200fffffffb0000000800540069006d0065010000000000000450000000000000000000000434000003b700000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000171000003e2fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006500fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730000000000000003e2000000e000fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00630061006d0065007200610000000326000000bc0000001700ffffff000000010000010f000003e2fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000000000003e2000000b500fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000064f0000003efc0100000002fb0000000800540069006d006500000000000000064f0000035200fffffffb0000000800540069006d006501000000000000045000000000000000000000064f000003e200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730000000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
