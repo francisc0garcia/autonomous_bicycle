@@ -1,3 +1,7 @@
-bool calibrate
+bool load_calibration
+bool set_offset
+bool enable_calibration_status
+bool reset_imu
+bool print_calibration_vector
 ---
-bool is_calibrated
+bool result

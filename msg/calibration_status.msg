@@ -1,0 +1,5 @@
+Header header
+int8 cal_system
+int8 cal_gyroscope
+int8 cal_accelerometer
+int8 cal_magnetometer

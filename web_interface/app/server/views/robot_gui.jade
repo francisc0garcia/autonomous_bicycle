@@ -6,31 +6,71 @@ input(type='hidden', value= user._id)#userId
 #robot-gui-form-container.center-vertical
     form(method="post")#robot-gui.form-horizontal.well
         p
-        div.input-group.input-group-lg
-            span.input-group-addon Filename
-            input(id="file_name_input",
-            type="text",
-            name="file_name_input",
-            placeholder="Please add filename",
-            value="ExperimentBicycle").form-control.input-lg
-        p
-        button(type='button')#btn-start-record.btn.btn-primary.btn-block.btn-lg Start recording
-        p
-        button(type='button')#btn-calibrate.btn.btn-primary.btn-block.btn-lg Calibrate Sensors
-        hr
-        p
-        div.btn-group.btn-group-vertical.btn-group-xs.btn-block
-            a#btn-imu-lean.btn.btn-warning.disabled IMU Lean
-            a#btn-imu-steer.btn.btn-warning.disabled IMU Steer
-            a#btn-gps-front.btn.btn-warning.disabled GPS Front
-            a#btn-gps-rear.btn.btn-warning.disabled GPS Rear
-            a#btn-altimeter.btn.btn-warning.disabled Altimeter
-            a#btn-camera.btn.btn-warning.disabled Camera
+        ul.nav.nav-pill.nav-stacked
+            li.active
+                a(data-toggle="pill" href="#menu_system") System status
+            li
+                a(data-toggle="pill" href="#menu_record") Record sequence
+            li
+                a(data-toggle="pill" href="#menu_calibration") Calibration
         p
         hr
         p
-        button(type='button')#btn-turn-off.btn.btn-danger.btn-block.btn-lg Turn off system
-        hr
+        div.tab-content
+            div.tab-pane.fade.in.active(id="menu_system")
+                p
+                div.btn-group.btn-group-vertical.btn-group-xs.btn-block
+                    a#btn-imu-lean.btn.btn-warning.disabled IMU Lean
+                    a#btn-imu-steer.btn.btn-warning.disabled IMU Steer
+                    a#btn-gps-front.btn.btn-warning.disabled GPS Front
+                    a#btn-gps-rear.btn.btn-warning.disabled GPS Rear
+                    a#btn-altimeter.btn.btn-warning.disabled Altimeter
+                    a#btn-camera.btn.btn-warning.disabled Camera
+                    hr
+                    button(type='button')#btn-turn-off.btn.btn-danger.btn-block.btn-lg Turn off system
+                    p
+            div.tab-pane.fade(id="menu_record")
+                p
+                div.input-group.input-group-lg
+                    span.input-group-addon Filename
+                    input(id="file_name_input",
+                    type="text",
+                    name="file_name_input",
+                    placeholder="Please add filename",
+                    value="ExperimentBicycle").form-control.input-lg
+                p
+                button(type='button')#btn-start-record.btn.btn-primary.btn-block.btn-lg Start recording
+                p
+            div.tab-pane.fade(id="menu_calibration")
+                p
+                button(type='button')#btn-reset-IMU.btn.btn-primary.btn-block 1. Reset IMU
+                button(type='button')#btn-load-calibration.btn.btn-primary.btn-block 2. Load Calibration
+                button(type='button')#btn-set-offset.btn.btn-primary.btn-block 3. Set offset
+                p
+                table.table
+                    thead
+                        tr
+                            th Variable
+                            th Steering
+                            th Lean
+                    tbody
+                        tr
+                            td Accelerometer
+                            td#tb-acc-steer 0
+                            td#tb-acc-lean 0
+                        tr
+                            td Magnetometer
+                            td#tb-mag-steer 0
+                            td#tb-mag-lean 0
+                        tr
+                            td Gyroscope
+                            td#tb-gyr-steer 0
+                            td#tb-gyr-lean 0
+                        tr
+                            td System
+                            td#tb-sys-steer 0
+                            td#tb-sys-lean 0
+                p
 
 
 // display form errors in a custom modal window //

@@ -36,6 +36,7 @@ add_message_files(
         FILES
         EKF_variables.msg
         bicycle_state.msg
+        calibration_status.msg
 )
 
 generate_messages(DEPENDENCIES std_msgs)

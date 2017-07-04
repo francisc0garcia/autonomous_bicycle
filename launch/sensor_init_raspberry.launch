@@ -34,7 +34,8 @@
         <rosparam param="publish_transform">True</rosparam>
         <rosparam param="static_transform">[0.0, 0.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
         <rosparam param="calibration_data">[232, 255, 234, 255, 175, 255, 152, 255, 254, 0, 160, 255, 253, 255, 0, 0, 254, 255, 232, 3, 63, 2]</rosparam>
-        <param name="calibration_service" type="string" value="calibration_imu_1" />
+        <param name="calibration_service" type="string" value="/bicycle/calibration_imu_1" />
+        <param name="calib_topic_name" type="string" value="/bicycle/imu_1_calibration" />
         <param name="serial_port" type="string" value="$(arg IMU_1_port)" />
         <param name="topic_name" type="string" value="/bicycle/imu_1" />
         <param name="fixed_frame" type="string" value="world" />
@@ -63,7 +64,8 @@
         <rosparam param="publish_transform">True</rosparam>
         <rosparam param="static_transform">[1.0, 0.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
         <rosparam param="calibration_data">[222, 255, 15, 0, 3, 0, 173, 255, 100, 0, 168, 253, 253, 255, 254, 255, 3, 0, 232, 3, 116, 2]</rosparam>
-        <param name="calibration_service" type="string" value="calibration_imu_steering" />
+        <param name="calibration_service" type="string" value="/bicycle/calibration_imu_steering" />
+        <param name="calib_topic_name" type="string" value="/bicycle/imu_steer_calibration" />
         <param name="serial_port" type="string" value="$(arg IMU_steer_port)" />
         <param name="topic_name" type="string" value="/bicycle/imu_steering" />
         <param name="fixed_frame" type="string" value="world" />

@@ -8,6 +8,7 @@ from tf.transformations import quaternion_from_euler
 from sensor_msgs.msg import Imu
 from classes.ImuDriver import *
 from autonomous_bicycle.srv import calibration_msg
+from autonomous_bicycle.msg import calibration_status
 
 
 class RobotImuPublisherNode:
@@ -21,6 +22,7 @@ class RobotImuPublisherNode:
         self.static_transform = rospy.get_param('~static_transform', [0, 0, 0, 0, 0, 0])
         self.serial_port = rospy.get_param('~serial_port', "/dev/ttyUSB0")
         self.topic_name = rospy.get_param('~topic_name', "/imu")
+        self.calib_topic_name = rospy.get_param('~calib_topic_name', "/imu_calib")
         self.fixed_frame = rospy.get_param('~fixed_frame', "world")
         self.frame_name = rospy.get_param('~frame_name', "imu")
         self.publish_transform = rospy.get_param('~publish_transform', False)
@@ -35,8 +37,11 @@ class RobotImuPublisherNode:
         self.imu.init_imu()
 
         # Create a publisher for imu message
-        self.pub_imu = rospy.Publisher(self.topic_name, Imu, queue_size=1)
+        self.pub_imu = rospy.Publisher(self.topic_name, Imu, queue_size=10)
         self.odomBroadcaster_imu = TransformBroadcaster()
+
+        # Create a publisher for IMU calibration status
+        self.pub_calib = rospy.Publisher(self.calib_topic_name, calibration_status, queue_size=10)
 
         self.imu_msg = Imu()
         self.imu_msg.orientation_covariance[0] = -1
@@ -48,7 +53,6 @@ class RobotImuPublisherNode:
 
         self.seq = 0
 
-        rospy.on_shutdown(self.shutdown_node)
         rate = rospy.Rate(self.rate)
 
         rospy.loginfo("Ready for publishing imu:" + self.serial_port)
@@ -59,6 +63,7 @@ class RobotImuPublisherNode:
         while not rospy.is_shutdown():
             self.current_time = rospy.get_time()
 
+            # Read IMU
             [status, message] = self.imu.read()
 
             if status:
@@ -79,14 +84,34 @@ class RobotImuPublisherNode:
             else:
                 rospy.loginfo("Imu publisher: " + message)
 
+            # Publish calibration data if flag is active
+            if self.imu.enable_calibration_status_reading:
+                self.publish_calibration_info()
+
             rate.sleep()
 
     def callback_service(self, req):
-        if req.calibrate:
-            rospy.loginfo("Calibrating IMU using: " + self.service_name)
-            self.imu.force_calibration = True
+        self.imu.enable_load_calibration = req.load_calibration
+        self.imu.enable_set_offset = req.set_offset
+        self.imu.enable_calibration_status_reading = req.enable_calibration_status
+        self.imu.enable_print_calibration_vector = req.print_calibration_vector
+        self.imu.enable_reset_imu = req.reset_imu
 
-        return self.imu.is_calibrated
+        return True
+
+    def publish_calibration_info(self):
+        calib_msg = calibration_status()
+        calib_msg.header.stamp = rospy.Time.now()
+        calib_msg.header.frame_id = "calibration_" + self.frame_name
+        calib_msg.cal_accelerometer = self.imu.cal_accel
+        calib_msg.cal_gyroscope = self.imu.cal_gyro
+        calib_msg.cal_magnetometer = self.imu.cal_mag
+        calib_msg.cal_system = self.imu.cal_sys
+
+        self.pub_calib.publish(calib_msg)
+
+        if self.imu.enable_print_calibration_vector:
+            rospy.loginfo("Calibration " + self.frame_name + ": " + str(self.imu.real_calibration_vector))
 
     def publish_info(self, imu):
         self.imu_msg = Imu()
@@ -109,10 +134,6 @@ class RobotImuPublisherNode:
 
         self.pub_imu.publish(self.imu_msg)
         self.seq += 1
-
-    def shutdown_node(self):
-        rospy.loginfo("Turning off node: robot_imu_publisher")
-
 
 # Main function.
 if __name__ == '__main__':

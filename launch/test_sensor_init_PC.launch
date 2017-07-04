@@ -10,16 +10,23 @@
         <param name="rate" type="int" value="200" />
 
         <rosparam param="publish_transform">True</rosparam>
-        <rosparam param="static_transform">[0.0, 0.0, 1.0, 45.0, 0.0, 0.0]</rosparam>
-        <rosparam param="calibration_data">[245, 255, 8, 0, 36, 0, 35, 254, 21, 1, 119, 255, 254, 255, 0, 0, 255, 255, 232, 3, 135, 1]</rosparam>
-        <param name="calibration_service" type="string" value="calibration_imu_1" />
+        <rosparam param="static_transform">[0.0, 0.0, 1.0, 0.0, 0.0, 0.0]</rosparam>
+        <rosparam param="calibration_data">[247, 255, 90, 0, 10, 0, 101, 254, 45, 0, 201, 1, 252, 255, 1, 0, 253, 255, 232, 3, 169, 2]</rosparam>
+        <param name="calibration_service" type="string" value="/bicycle/calibration_imu_1" />
 
         <param name="serial_port" type="string" value="$(arg IMU_1_port)" />
         <param name="topic_name" type="string" value="/bicycle/imu_1" />
+        <param name="calib_topic_name" type="string" value="/bicycle/imu_1_calibration" />
         <param name="fixed_frame" type="string" value="world" />
         <param name="frame_name" type="string" value="imu_1" />
     </node>
 
+    <!-- Start ros bridge server -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="9090"/>
+        <arg name="ssl" default="false" />
+        <arg name="authenticate" default="false" />
+    </include>
 
     <!-- check system state
     <node pkg="autonomous_bicycle" type="ros_state_checker.py" output="screen"

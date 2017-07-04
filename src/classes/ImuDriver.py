@@ -14,16 +14,22 @@ class ImuDriver(object):
         self.string_debug = ''
 
         self.calibration_vector = calibration_vector
-        self.serial_port = serial_port
-        self.is_init_imu = False
-        self.is_init_device = False
-        self.is_init_calibration = False
+        self.real_calibration_vector = []
+        self.counter_calibration = 0
+        self.counter_max_calibration = 10
 
-        self.is_calibrated = False
-        self.force_calibration = False
+        self.serial_port = serial_port
+
         [self.cal_sys, self.cal_gyro, self.cal_accel, self.cal_mag] = [0., 0., 0., 0.]
 
         self.bno = BNO055(serial_port=serial_port)
+
+        # Interface properties
+        self.enable_load_calibration = False
+        self.enable_set_offset = False
+        self.enable_calibration_status_reading = False
+        self.enable_print_calibration_vector = False
+        self.enable_reset_imu = False
 
         # IMU info
         self.linear_acceleration_x = 0.0
@@ -52,50 +58,35 @@ class ImuDriver(object):
 
     def init_imu(self):
         rospy.loginfo("initializing IMU, mode: OPERATION_MODE_NDOF")
-        while not self.is_init_imu:
+        is_init_imu = False
+        while not is_init_imu:
             try:
                 self.bno.begin(mode=OPERATION_MODE_NDOF)
                 # self.bno.begin(mode=OPERATION_MODE_NDOF_FMC_OFF)  # more stable
                 # self.bno.begin(mode=OPERATION_MODE_IMUPLUS)
                 # self.bno.begin(mode=OPERATION_MODE_M4G)
 
-                self.is_init_imu = True
+                is_init_imu = True
                 self.string_debug = 'Connected to BNO055 at port: ' + str(self.serial_port)
-            except:
-                self.string_debug = 'Failed to initialize BNO055 at port: ' + str(self.serial_port)
+            except BaseException as eb:
+                self.string_debug = 'Failed to initialize BNO055 at port: ' \
+                                    + str(self.serial_port) + " Error: " + str(eb)
                 time.sleep(0.1)
             if self.debug:
                 rospy.loginfo(self.string_debug)
 
         rospy.loginfo("initializing Device")
-        while not self.is_init_device:
+        is_init_device = False
+        while not is_init_device:
             status, self_test, error = self.bno.get_system_status(False)
             if error == 0 and status != 0x01:
-                self.is_init_device = True
+                is_init_device = True
             else:
                 self.string_debug = 'Failed to initialize IMU port: ' + str(self.serial_port) + ' error: ' + str(error)
                 time.sleep(0.1)
 
             if self.debug:
                 rospy.loginfo(self.string_debug)
-
-        if not self.is_init_calibration:
-            rospy.loginfo("Loading calibration vector")
-            # Load precomputed calibration values
-            self.load_calibration()
-
-        rospy.loginfo("Checking calibration of IMU")
-        while not self.is_init_calibration:
-            self.get_calibration_status()
-
-            if self.is_calibrated:
-                self.is_init_calibration = True
-            else:
-                self.load_calibration()
-                self.string_debug = "Waiting for IMU calibration: [S %f, G %f, A %f, M %f]" % (
-                    self.cal_sys, self.cal_gyro, self.cal_accel, self.cal_mag)
-
-            rospy.loginfo(self.string_debug)
 
     def load_calibration(self):
         # computed using tutorial:
@@ -106,13 +97,14 @@ class ImuDriver(object):
             self.bno.set_calibration(self.calibration_vector)
             self.bno.serial_attempt_delay = 0.0
             time.sleep(1.5)  # wait for stable measurement
-            self.update_offset()
             return True
-        except:
+        except BaseException as eb:
+            self.string_debug = "load_calibration error" + str(eb)
+            rospy.loginfo(self.string_debug)
             return False
 
     def update_offset(self):
-        time.sleep(1)  # wait for stable measurement of IMU
+        time.sleep(1)  # Wait for stable measurements
         qx, qy, qz, qw = self.bno.read_quaternion()  # Orientation as a quaternion
         (self.offset_roll, self.offset_pitch, self.offset_yaw) = euler_from_quaternion([qx, qy, qz, qw])
 
@@ -121,65 +113,83 @@ class ImuDriver(object):
         rospy.loginfo(self.string_debug)
 
     def get_calibration_status(self):
-        self.cal_sys, self.cal_gyro, self.cal_accel, self.cal_mag = self.bno.get_calibration_status()
-
-        if self.cal_sys > 0 or self.cal_gyro > 0 or self.cal_accel > 0:
-            self.is_calibrated = True
-        else:
-            self.is_calibrated = False
+        try:
+            if self.counter_calibration > self.counter_max_calibration:
+                self.cal_sys, self.cal_gyro, self.cal_accel, self.cal_mag = self.bno.get_calibration_status()
+                self.counter_calibration = 0
+                if self.enable_print_calibration_vector:
+                    self.bno.serial_attempt_delay = 0.5
+                    self.real_calibration_vector = self.bno.get_calibration()
+                    self.bno.serial_attempt_delay = 0.0
+                    time.sleep(0.5)
+            else:
+                self.counter_calibration += 1
+        except BaseException as eb:
+            self.string_debug = "get_calibration_status error" + str(eb)
+            rospy.loginfo(self.string_debug)
 
     def read(self):
         try:
-            if self.is_calibrated and not self.force_calibration:
-                # mx, my, mz = self.bno.read_magnetometer()     # Magnetometer data (in micro-Teslas)
-                # ax, ay, az = self.bno.read_accelerometer()    # Accelerometer data (in meters per second squared)
-                # yaw, roll, pitch = self.bno.read_euler()      # Euler angles for heading, roll, pitch (degrees)
-                # temp = self.bno.read_temp()                   # Temperature in degrees Celsius
-                # Linear acceleration data (i.e. acceleration from movement, not gravity--
-                # returned in meters per second squared)
-                # lx, ly, lz = self.bno.read_linear_acceleration()
-
-                # Gravity acceleration data (i.e. acceleration just from gravity--returned
-                # in meters per second squared):
-                ax, ay, az = self.bno.read_gravity()
-                qx, qy, qz, qw = self.bno.read_quaternion()  # Orientation as a quaternion
-                gx, gy, gz = self.bno.read_gyroscope()  # Gyroscope data (in degrees per second)
-
-                # IMU info
-                self.linear_acceleration_x = ax
-                self.linear_acceleration_y = ay
-                self.linear_acceleration_z = az
-
-                self.angular_velocity_x = gx
-                self.angular_velocity_y = gy
-                self.angular_velocity_z = gz
-
-                # update (fix) initial offset
-                (roll, pitch, yaw) = euler_from_quaternion([qx, qy, qz, qw])
-
-                current_roll = roll - self.offset_roll
-                current_pitch = pitch - self.offset_pitch
-                current_yaw = yaw - self.offset_yaw
-
-                quat = quaternion_from_euler(current_roll, current_pitch, current_yaw)
-
-                self.orientation_x = quat[0]
-                self.orientation_y = quat[1]
-                self.orientation_z = quat[2]
-                self.orientation_w = quat[3]
-
-                return [True, 'ok']
-            else:
-                # self.load_calibration()
-                self.is_init_device = False
-                self.is_init_imu = False
-                self.is_init_calibration = False
+            # reset IMU if flag is active
+            if self.enable_reset_imu:
                 self.init_imu()
-                self.force_calibration = False
-                return [False, 'Calibrating IMU sensor']
-        except:
-            self.is_init_device = False
-            self.is_init_imu = False
-            self.is_init_calibration = False
+                self.enable_reset_imu = False
+                return [False, 'enable_reset_imu']
+
+            # calibrate IMU if flag is active
+            if self.enable_load_calibration:
+                self.load_calibration()
+                self.enable_load_calibration = False
+                return [False, 'enable_load_calibration']
+
+            # Set offset IMU if flag is active
+            if self.enable_set_offset:
+                self.update_offset()
+                self.enable_set_offset = False
+                return [False, 'enable_set_offset']
+
+            # Read calibration status if flag is active (Reduces frame rate!)
+            if self.enable_calibration_status_reading:
+                self.get_calibration_status()
+
+            # mx, my, mz = self.bno.read_magnetometer()     # Magnetometer data (in micro-Teslas)
+            # ax, ay, az = self.bno.read_accelerometer()    # Accelerometer data (in meters per second squared)
+            # yaw, roll, pitch = self.bno.read_euler()      # Euler angles for heading, roll, pitch (degrees)
+            # temp = self.bno.read_temp()                   # Temperature in degrees Celsius
+            # Linear acceleration data (i.e. acceleration from movement, not gravity--
+            # returned in meters per second squared)
+            # lx, ly, lz = self.bno.read_linear_acceleration()
+
+            # Gravity acceleration data (i.e. acceleration just from gravity--returned
+            # in meters per second squared):
+            ax, ay, az = self.bno.read_gravity()
+            qx, qy, qz, qw = self.bno.read_quaternion()  # Orientation as a quaternion
+            gx, gy, gz = self.bno.read_gyroscope()  # Gyroscope data (in degrees per second)
+
+            # IMU info
+            self.linear_acceleration_x = ax
+            self.linear_acceleration_y = ay
+            self.linear_acceleration_z = az
+
+            self.angular_velocity_x = gx
+            self.angular_velocity_y = gy
+            self.angular_velocity_z = gz
+
+            # update (adjust) offset in euler space
+            (roll, pitch, yaw) = euler_from_quaternion([qx, qy, qz, qw])
+
+            current_roll = roll - self.offset_roll
+            current_pitch = pitch - self.offset_pitch
+            current_yaw = yaw - self.offset_yaw
+
+            quat = quaternion_from_euler(current_roll, current_pitch, current_yaw)
+
+            self.orientation_x = quat[0]
+            self.orientation_y = quat[1]
+            self.orientation_z = quat[2]
+            self.orientation_w = quat[3]
+
+            return [True, 'ok']
+        except BaseException as eb:
             self.init_imu()
-            return [False, 'Error while reading IMU sensor: ' + str(sys.exc_info()[0])]
+            return [False, 'Error while reading IMU sensor: ' + str(eb)]
