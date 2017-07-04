@@ -23,10 +23,6 @@ class ImuDriver(object):
         self.force_calibration = False
         [self.cal_sys, self.cal_gyro, self.cal_accel, self.cal_mag] = [0., 0., 0., 0.]
 
-        self.offset_yaw = 0.0
-        self.offset_roll = 0.0
-        self.offset_pitch = 0.0
-
         self.bno = BNO055(serial_port=serial_port)
 
         # IMU info
@@ -48,30 +44,20 @@ class ImuDriver(object):
         self.orientation_w = 0.0
 
         # Offset info
-        self.offset_orientation_x = 0.0
-        self.offset_orientation_y = 0.0
-        self.offset_orientation_z = 0.0
-        self.offset_orientation_w = 0.0
+        self.offset_yaw = 0.0
+        self.offset_roll = 0.0
+        self.offset_pitch = 0.0
 
         self.temperature = 0
-
-    def update_offset(self):
-        time.sleep(1)  # wait for stable measurement of IMU
-        qx, qy, qz, qw = self.bno.read_quaternion()  # Orientation as a quaternion
-        (self.offset_roll, self.offset_pitch, self.offset_yaw) = euler_from_quaternion([qx, qy, qz, qw])
-
-        self.string_debug = "calibration offset: [yaw %f, roll %f, pitch %f]" % (
-            self.offset_yaw, self.offset_roll, self.offset_pitch)
-        rospy.loginfo(self.string_debug)
 
     def init_imu(self):
         rospy.loginfo("initializing IMU, mode: OPERATION_MODE_NDOF")
         while not self.is_init_imu:
             try:
-                #self.bno.begin(mode=OPERATION_MODE_NDOF)
-                self.bno.begin(mode=OPERATION_MODE_NDOF_FMC_OFF)  # more stable
-                #self.bno.begin(mode=OPERATION_MODE_IMUPLUS)
-                #self.bno.begin(mode=OPERATION_MODE_M4G)
+                self.bno.begin(mode=OPERATION_MODE_NDOF)
+                # self.bno.begin(mode=OPERATION_MODE_NDOF_FMC_OFF)  # more stable
+                # self.bno.begin(mode=OPERATION_MODE_IMUPLUS)
+                # self.bno.begin(mode=OPERATION_MODE_M4G)
 
                 self.is_init_imu = True
                 self.string_debug = 'Connected to BNO055 at port: ' + str(self.serial_port)
@@ -119,11 +105,20 @@ class ImuDriver(object):
             self.bno.serial_attempt_delay = 0.3
             self.bno.set_calibration(self.calibration_vector)
             self.bno.serial_attempt_delay = 0.0
-            time.sleep(1)  # wait for stable measurement
+            time.sleep(1.5)  # wait for stable measurement
             self.update_offset()
             return True
         except:
             return False
+
+    def update_offset(self):
+        time.sleep(1)  # wait for stable measurement of IMU
+        qx, qy, qz, qw = self.bno.read_quaternion()  # Orientation as a quaternion
+        (self.offset_roll, self.offset_pitch, self.offset_yaw) = euler_from_quaternion([qx, qy, qz, qw])
+
+        self.string_debug = "calibration offset: [yaw %f, roll %f, pitch %f]" % (
+            self.offset_yaw, self.offset_roll, self.offset_pitch)
+        rospy.loginfo(self.string_debug)
 
     def get_calibration_status(self):
         self.cal_sys, self.cal_gyro, self.cal_accel, self.cal_mag = self.bno.get_calibration_status()

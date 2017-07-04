@@ -2,6 +2,7 @@
 
 import rospy
 import numpy as np
+import math
 import time
 import datetime
 from geometry_msgs.msg import Quaternion, Point, Pose
@@ -296,19 +297,21 @@ class RobotPoseEstimatorReal:
     def publish_estimated_odometry(self, x, current_time, child_frame):
         odom_quat = quaternion_from_euler(0.0, 0.0, 0.0)
 
-        # publish the transform over tf
-        self.estimated_odom_br.sendTransform(
-            (x[0], x[1], x[2]), odom_quat, current_time, child_frame,
-            self.parent_frame
-        )
+        # check if odom is valid
+        if not np.isnan(x[0]) and not np.isnan(x[1]) and not np.isnan(x[2]):
+            # publish the transform over tf
+            self.estimated_odom_br.sendTransform(
+                (x[0], x[1], x[2]), odom_quat, current_time, child_frame,
+                self.parent_frame
+            )
 
-        # publish the odometry message
-        odom = Odometry()
-        odom.header.stamp = current_time
-        odom.header.frame_id = self.parent_frame
-        odom.pose.pose = Pose(Point(x[0], x[1], x[2]), Quaternion(*odom_quat))
-        odom.child_frame_id = child_frame
-        self.pub_estimated_odom.publish(odom)
+            # publish the odometry message
+            odom = Odometry()
+            odom.header.stamp = current_time
+            odom.header.frame_id = self.parent_frame
+            odom.pose.pose = Pose(Point(x[0], x[1], x[2]), Quaternion(*odom_quat))
+            odom.child_frame_id = child_frame
+            self.pub_estimated_odom.publish(odom)
 
     def normalize_angle(self, x):
         x = x % (2 * np.pi)    # force in range [0, 2 pi)

@@ -352,21 +352,21 @@ Visualization Manager:
       frame: odom_gps_front
       line_width: 0.100000001
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /bicycle/filter_main
       Name: m_filter_main
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /bicycle/filter_steering
       Name: m_filter_steer
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: jsk_rviz_plugin/OverlayImage
       Enabled: true
       Name: camera

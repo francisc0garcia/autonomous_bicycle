@@ -21,7 +21,7 @@
     <!-- check system state -->
     <node if="$(arg check_system_state)" pkg="autonomous_bicycle" type="ros_state_checker.py"
           name="ros_state_checker" respawn="$(arg respawn_enable)">
-        <param name="rate" type="double" value="0.5" />
+        <param name="rate" type="double" value="1" />
         <param name="service_turn_off_script" type="string"
                value="$(find autonomous_bicycle)/src/BASH_turn_off_system.sh" />
     </node>
