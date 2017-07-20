@@ -77,3 +77,6 @@ KERNEL=="ttyACM0", MODE="0666"
 KERNEL=="video0", MODE="0666"
 
 add more if it is necessary
+
+For Raspberry pi Cam:
+KERNEL=="vchiq", MODE="0666"

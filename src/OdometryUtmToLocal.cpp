@@ -37,14 +37,17 @@ public:
             global_x =  -msg->pose.pose.position.x;
             global_y =  -msg->pose.pose.position.y;
             global_z =  msg->pose.pose.position.z;
+            // global_z = 0.0; // TODO: Fix z
         }
 
-        global_z = 0.0;
+
 
         if(!is_init){
             initial_x = global_x;
             initial_y = global_y;
             initial_z = global_z;
+            ROS_INFO("Frame: %s -> X=%f Y=%f Z=%f", child_frame_id.c_str(), initial_x, initial_y, initial_z);
+
             is_init = true;
         }else{
             current_x = initial_x - global_x + offset_x;

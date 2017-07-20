@@ -4,6 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /TF1/Frames1
         - /Imu_21/Box properties1
         - /Imu_21/Acceleration properties1
         - /Imu_steering1/Acceleration properties1
@@ -32,7 +33,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.0299999993
         Value: Lines
@@ -45,7 +46,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 100
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /model_marker
@@ -55,19 +56,49 @@ Visualization Manager:
       Queue Size: 20
       Value: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        estimated_odom_filter:
+          Value: false
+        estimated_odom_measurement:
+          Value: false
+        gps_ref:
+          Value: true
+        imu_1:
+          Value: true
+        imu_steering:
+          Value: true
+        odom_gps_front:
+          Value: false
+        odom_gps_rear:
+          Value: true
+        world:
+          Value: true
       Marker Scale: 5
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        world:
+          estimated_odom_filter:
+            {}
+          estimated_odom_measurement:
+            {}
+          gps_ref:
+            {}
+          imu_1:
+            {}
+          imu_steering:
+            {}
+          odom_gps_front:
+            {}
+          odom_gps_rear:
+            {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
@@ -282,7 +313,7 @@ Visualization Manager:
       Enabled: false
       Name: psi
       Show Value: true
-      Topic: /bicycle/psi
+      Topic: /bicycle/bicycle_state_filter/heading_psi
       Value: false
       auto color change: false
       auto scale: true
@@ -379,21 +410,21 @@ Visualization Manager:
       top: 30
       width: 320
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /bicycle/measurement_main
       Name: m_measurement_main
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /bicycle/measurement_steering
       Name: m_measurement_steer
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -412,24 +443,24 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 9.26995659
+      Distance: 53.925808
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -2.1964469
-        Y: -0.620987117
-        Z: 3.11548547e-06
+        X: -8.62296677
+        Y: 3.27882147
+        Z: 5.0936178e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.62539953
-      Target Frame: estimated_odom_measurement
+      Pitch: 0.890399694
+      Target Frame: odom_gps_rear
       Value: ThirdPersonFollower (rviz)
-      Yaw: 3.05538177
+      Yaw: 2.60537887
     Saved: ~
 Window Geometry:
   Displays:

@@ -1,31 +1,43 @@
 <launch>
     <!-- loaf rosbag file -->
     <arg name="load_rosbag" default="false"/>
-    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/test_24_06_2017/"/>
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/08_07_2017/"/>
+    <arg name="rviz_config" default="rviz_demo_bicycle"/>
 
     <param if="$(arg load_rosbag)" name="use_sim_time" value="true" />
 
-    <!-- Folder test_15_06_2017
-    File: ExperimentBicycleUnisport - Offset: [-4 -10]
+    <!-- Folder 15_06_2017
+    File: ExperimentBicycleUnisport - Offset: [0 -3]
     File: ExperimentBicycleParking2 - Offset: [10 -20]
     File: ExperimentBicycleMensa1 - Offset: [10 -25]
     File: ExperimentBicycleBiblio - Offset: [12 -0]
     File: ExperimentBicycleMensa2 - Offset: [15 -27]
 
-    Folder test_24_06_2017
+    Folder 24_06_2017
     File: ExperimentBicycleParkingToMensa - Offset: [3 5]
     File: ExperimentBicycleUnisportToMensa - Offset: [10 0]
-    -->
-    <arg name="bag_file" default="ExperimentBicycleParkingToMensa"/>
-    <arg name="x_offset" value="3" />
-    <arg name="y_offset" value="5" />
 
+    Folder 08_07_2017
+    football_field_external     4/5
+    football_field_line_1       3.5/5
+    football_field_line_3       4/5
+    mensa_to_mensa              3/5
+    mensa_to_parking            3.5/5
+    mensa_to_unisport           3.5/5
+    parking_1                   3/5
+    parking_2                   3/5
+    parking_to_mensa            3.5/5
+    -->
+
+    <arg name="bag_file" default="football_field_external"/>
+    <arg name="x_offset" value="0" />
+    <arg name="y_offset" value="0" />
 
     <node name="static_tf_gps" pkg="tf" type="static_transform_publisher"
           args="$(arg x_offset) $(arg y_offset) 0  0 0 0 1 world gps_ref 100" />
 
     <node if="$(arg load_rosbag)" pkg="rosbag" type="play" name="player" output="screen"
-          args="--clock --loop --rate=1 $(arg bag_path)$(arg bag_file).bag"/>
+          args="--clock --loop --rate=2 $(arg bag_path)$(arg bag_file).bag"/>
 
     <!-- convert IMU to angles for visualization -->
     <node pkg="autonomous_bicycle" type="reference_imu_to_angle.py" name="reference_imu_to_angle" respawn="true" >
@@ -50,7 +62,7 @@
         <param name="child_frame_id" value="odom_global_gps_front" />
     </node>
 
-    <node name="OdometryUtmToLocal_gps_front" pkg="autonomous_bicycle" type="OdometryUtmToLocal">
+    <node name="OdometryUtmToLocal_gps_front" pkg="autonomous_bicycle" type="OdometryUtmToLocal" output="screen">
         <param name="input_topic_UTM" value="/bicycle/odom_utm_global_gps_front" />
         <param name="output_topic_odom" value="/bicycle/odom_gps_front" />
         <param name="frame_id" value="world" />
@@ -70,7 +82,7 @@
         <param name="child_frame_id" value="odom_global_gps_rear" />
     </node>
 
-    <node name="OdometryUtmToLocal_gps_rear" pkg="autonomous_bicycle" type="OdometryUtmToLocal">
+    <node name="OdometryUtmToLocal_gps_rear" pkg="autonomous_bicycle" type="OdometryUtmToLocal" output="screen">
         <param name="input_topic_UTM" value="/bicycle/odom_utm_global_gps_rear" />
         <param name="output_topic_odom" value="/bicycle/odom_gps_rear" />
         <param name="frame_id" value="world" />
@@ -119,6 +131,6 @@
           args="--perspective-file  $(find autonomous_bicycle)/config/rqt_sensor_init.perspective" />
 
     <node name="rviz" pkg="rviz" type="rviz" respawn="true"
-          args="-d $(find autonomous_bicycle)/config/rviz_sensor_init.rviz" />
+          args="-d $(find autonomous_bicycle)/config/$(arg rviz_config).rviz" />
 
 </launch>

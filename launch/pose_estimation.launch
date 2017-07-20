@@ -5,7 +5,7 @@
 
     <!-- Play ROSBAG file -->
     <arg name="bag_path" default="$(find autonomous_bicycle)/bags/" />
-    <arg name="bag_file" default="test_velocity_8_new" />
+    <arg name="bag_file" default="test_velocity_8" />
 
     <node pkg="rosbag" type="play" name="player" output="screen"
           args="--clock --loop $(arg bag_path)$(arg bag_file).bag"/>

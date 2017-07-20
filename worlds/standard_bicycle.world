@@ -1530,6 +1530,18 @@
                 </physics>
             </joint>
 
+            <plugin name="quadrotor_baro_sim" filename="libhector_gazebo_ros_baro.so">
+                <alwaysOn>1</alwaysOn>
+                <updateRate>50.0</updateRate>
+                <bodyName>link_imu_steering</bodyName>
+                <frameId>bikes_design__link_imu_steering</frameId>
+                <topicName>/bicycle/pressure</topicName>
+                <altimeterTopicName>/bicycle/altitude</altimeterTopicName>
+                <offset>0</offset>
+                <drift>5.0</drift>
+                <gaussianNoise>0.1</gaussianNoise>
+            </plugin>
+
             <plugin name='gps_front_sim' filename='libhector_gazebo_ros_gps.so'>
                 <referenceLatitude>49.424774</referenceLatitude>
                 <referenceLongitude>7.754394</referenceLongitude>

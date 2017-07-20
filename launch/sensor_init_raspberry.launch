@@ -2,8 +2,6 @@
 
     <arg name="IMU_1_port" default="/dev/ttyUSB0"/>
     <arg name="IMU_1_enable" default="true"/>
-    <arg name="IMU_2_port" default="/dev/ttyUSB2"/>
-    <arg name="IMU_2_enable" default="false"/>
     <arg name="IMU_steer_port" default="/dev/ttyUSB1"/>
     <arg name="IMU_steer_enable" default="true"/>
 
@@ -33,27 +31,13 @@
 
         <rosparam param="publish_transform">True</rosparam>
         <rosparam param="static_transform">[0.0, 0.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
-        <rosparam param="calibration_data">[232, 255, 234, 255, 175, 255, 152, 255, 254, 0, 160, 255, 253, 255, 0, 0, 254, 255, 232, 3, 63, 2]</rosparam>
+        <rosparam param="calibration_data">[249, 255, 47, 0, 245, 255, 24, 254, 198, 255, 201, 254, 252, 255, 0, 0, 0, 0, 232, 3, 171, 2]</rosparam>
         <param name="calibration_service" type="string" value="/bicycle/calibration_imu_1" />
         <param name="calib_topic_name" type="string" value="/bicycle/imu_1_calibration" />
         <param name="serial_port" type="string" value="$(arg IMU_1_port)" />
         <param name="topic_name" type="string" value="/bicycle/imu_1" />
         <param name="fixed_frame" type="string" value="world" />
         <param name="frame_name" type="string" value="imu_1" />
-    </node>
-
-    <!-- Publish imu 2 data -->
-    <node if="$(arg IMU_2_enable)" pkg="autonomous_bicycle"
-          type="sensor_imu_publisher.py" name="sensor_imu_publisher_2" respawn="$(arg respawn_enable)" >
-        <param name="rate" type="int" value="100" />
-
-        <rosparam param="publish_transform">True</rosparam>
-        <rosparam param="static_transform">[1.0, 1.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
-        <rosparam param="calibration_data">[232, 255, 234, 255, 175, 255, 152, 255, 254, 0, 160, 255, 253, 255, 0, 0, 254, 255, 232, 3, 63, 2]</rosparam>
-        <param name="serial_port" type="string" value="$(arg IMU_2_port)" />
-        <param name="topic_name" type="string" value="/bicycle/imu_2" />
-        <param name="fixed_frame" type="string" value="world" />
-        <param name="frame_name" type="string" value="imu_2" />
     </node>
 
     <!-- Publish imu steering data -->
@@ -63,7 +47,7 @@
 
         <rosparam param="publish_transform">True</rosparam>
         <rosparam param="static_transform">[1.0, 0.0, 0.5, 0.0, 0.0, 0.0]</rosparam>
-        <rosparam param="calibration_data">[222, 255, 15, 0, 3, 0, 173, 255, 100, 0, 168, 253, 253, 255, 254, 255, 3, 0, 232, 3, 116, 2]</rosparam>
+        <rosparam param="calibration_data">[238, 255, 218, 255, 26, 0, 236, 1, 164, 2, 203, 255, 253, 255, 255, 255, 255, 255, 232, 3, 77, 2]</rosparam>
         <param name="calibration_service" type="string" value="/bicycle/calibration_imu_steering" />
         <param name="calib_topic_name" type="string" value="/bicycle/imu_steer_calibration" />
         <param name="serial_port" type="string" value="$(arg IMU_steer_port)" />
