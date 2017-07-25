@@ -79,6 +79,7 @@ class RobotPoseEstimatorReal:
         self.topic_velocity_vector3 = "/bicycle/gps_front_velocity"
         self.topic_velocity_wheel = "/bicycle/velocity"
         self.topic_altitude = "/bicycle/altitude"
+        self.topic_angle_steering = "/bicycle/steering_angle"
 
         self.offset_za = 0.0
 
@@ -99,6 +100,7 @@ class RobotPoseEstimatorReal:
         # self.velocity_twist = TwistHandler(topic_name=self.topic_velocity_twist)
         self.velocity_wheel = FloatHandler(topic_name=self.topic_velocity_wheel)
         self.altitude_bar = FloatHandler(topic_name=self.topic_altitude)
+        self.steering_angle = FloatHandler(topic_name=self.topic_angle_steering)
         self.imu_1 = ImuHandler(topic_name=self.topic_imu_1)
         self.imu_steering = ImuHandler(topic_name=self.topic_imu_steering)
         self.odom_gps_front = OdometryHandler(topic_name=self.topic_gps_front)
@@ -255,7 +257,13 @@ class RobotPoseEstimatorReal:
         imu_1_data = self.imu_1.get_value()
         imu_steering_data = self.imu_steering.get_value()
 
-        delta = imu_steering_data[2] - imu_1_data[2]
+        # Read steering angle from IMU
+        # delta = imu_steering_data[2] - imu_1_data[2]
+
+        # Read steering angle from rotary encoder
+        delta = self.steering_angle.get_value()
+        delta *= degrees2rad
+
         sigma = np.tan(delta) / self.wheel_distance
         # psi = (imu_1_data[2] if imu_1_data[2] >= 0 else -imu_1_data[2])  # yaw
         psi = imu_1_data[2]

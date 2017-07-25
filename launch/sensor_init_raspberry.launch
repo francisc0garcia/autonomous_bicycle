@@ -10,8 +10,9 @@
     <arg name="GPS_rear_port" default="/dev/ttyUSB3"/>
     <arg name="GPS_rear_enable" default="true"/>
 
-    <arg name="arduino_port" default="/dev/ttyACM0"/>
     <arg name="arduino_enable" default="true"/>
+    <arg name="arduino_port" default="/dev/ttyACM0"/>
+    <arg name="rotary_sensor_port" default="/dev/ttyACM1"/>
 
     <arg name="check_system_state" default="true"/>
     <arg name="respawn_enable" default="true"/>
@@ -89,12 +90,18 @@
 
     <!-- Publish Arduino data -->
     <node if="$(arg arduino_enable)" pkg="rosserial_python"
-          type="serial_node.py" name="serial_node" respawn="$(arg respawn_enable)" >
+          type="serial_node.py" name="serial_node_arduino" respawn="$(arg respawn_enable)" >
         <param name="port" type="string" value="$(arg arduino_port)" />
 
         <remap to="/bicycle/altitude"   from="/altitude" />
         <remap to="/bicycle/distance"   from="/distance" />
         <remap to="/bicycle/velocity"   from="/velocity" />
+    </node>
+
+    <node if="$(arg arduino_enable)" pkg="rosserial_python" type="serial_node.py"
+          name="serial_node_steering" respawn="$(arg respawn_enable)" >
+        <param name="port" type="string" value="$(arg rotary_sensor_port)" />
+        <remap to="/bicycle/steering_angle"   from="/steering_angle" />
     </node>
 
     <!-- Start ros bridge server -->
