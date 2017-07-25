@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 
 import time
+
+# ROS dependencies
 import rospy
 import numpy as np
 from visualization_msgs.msg import Marker
 from tf.transformations import quaternion_from_euler
+
+# Project dependencies
 from autonomous_bicycle.msg import bicycle_state
 
 
@@ -34,12 +38,14 @@ class BicyclePoseMarkerPublisherNode:
         # Main while loop.
         while not rospy.is_shutdown():
             self.publish_markers()
-            time.sleep(1.0/self.rate)
+            time.sleep(1.0 / self.rate)
 
     def bicycle_state_callback(self, msg):
         self.bicycle_state = msg
 
     def publish_markers(self):
+        offset_main_psi = -np.pi*0.70
+        offset_steer_psi = -np.pi*0.70
         # create main frame marker
         marker_main_frame = Marker()
         marker_main_frame.header.frame_id = self.tf_steering_frame_name
@@ -49,13 +55,13 @@ class BicyclePoseMarkerPublisherNode:
         marker_main_frame.type = Marker.MESH_RESOURCE
         marker_main_frame.mesh_resource = self.model_main_frame
 
-        marker_main_frame.pose.position.x = 0
-        marker_main_frame.pose.position.y = 0
+        marker_main_frame.pose.position.x = 0.0
+        marker_main_frame.pose.position.y = 0.0
         marker_main_frame.pose.position.z = 0.0
 
         roll = 0.0
-        pitch = self.bicycle_state.lean_phi
-        yaw = self.bicycle_state.heading_psi + 3*np.pi/2
+        pitch = -self.bicycle_state.lean_phi
+        yaw = self.bicycle_state.heading_psi + offset_main_psi
 
         quaternion = quaternion_from_euler(roll, pitch, yaw)
         marker_main_frame.pose.orientation.x = quaternion[0]
@@ -92,8 +98,8 @@ class BicyclePoseMarkerPublisherNode:
         maker_steering_frame.pose.position.z = 0.0
 
         roll = 0.0
-        pitch = self.bicycle_state.lean_phi
-        yaw = self.bicycle_state.steering_delta + 3*np.pi/2
+        pitch = -self.bicycle_state.lean_phi
+        yaw = offset_steer_psi + self.bicycle_state.heading_psi + self.bicycle_state.steering_delta
         quaternion = quaternion_from_euler(roll, pitch, yaw)
 
         maker_steering_frame.pose.orientation.x = quaternion[0]
@@ -107,6 +113,7 @@ class BicyclePoseMarkerPublisherNode:
         maker_steering_frame.color.b = 0.0
 
         self.pub_marker_steering.publish(maker_steering_frame)
+
 
 # Main function.
 if __name__ == '__main__':

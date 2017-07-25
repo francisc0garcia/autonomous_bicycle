@@ -1,11 +1,13 @@
 <launch>
+    <!-- Define path for 3D models (obj, dae)  -->
     <env name="GAZEBO_MODEL_PATH" value="$(find autonomous_bicycle)/models"/>
 
+    <!-- use_sim_time: Take clock from gazebo -->
     <param name="use_sim_time" value="true" />
 
     <!-- Play ROSBAG file -->
-    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/" />
-    <arg name="bag_file" default="test_velocity_8" />
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/simulations/" />
+    <arg name="bag_file" default="velocity_8" />
 
     <node pkg="rosbag" type="play" name="player" output="screen"
           args="--clock --loop $(arg bag_path)$(arg bag_file).bag"/>
@@ -28,7 +30,6 @@
 
     <!-- Pose estimator -->
     <node pkg="autonomous_bicycle" type="pose_estimator.py" name="pose_estimator" respawn="false" output="screen">
-        <param name="rate" value="50"/>
+        <param name="rate" value="100"/>
     </node>
-
 </launch>

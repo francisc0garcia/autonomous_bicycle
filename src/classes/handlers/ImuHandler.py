@@ -4,29 +4,37 @@ import math
 from sensor_msgs.msg import Imu
 from tf.transformations import euler_from_quaternion
 
-rad2degrees = 180.0/math.pi
+rad2degrees = 180.0 / math.pi
 degrees2rad = math.pi / 180.0
 
 
 class ImuHandler(object):
+    """
+    Handler for ROS topics of type: sensor_msgs/imu
+    Args:
+        topic_name: Name of ROS topic to be subscribed
+        buffer_size: Variable buffer, depend on frame rate of topic, default: 500
+        queue_size: Subscriber queue_size
+    """
+
     def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.imu_data = Imu()
         [self.roll, self.pitch, self.yaw,
          self.angular_x, self.angular_y, self.angular_z,
-         self.lin_acc_x, self.lin_acc_y, self.lin_acc_z] = np.zeros((9, 1))*0.0
+         self.lin_acc_x, self.lin_acc_y, self.lin_acc_z] = np.zeros((9, 1)) * 0.0
 
         [self._roll, self._pitch, self._yaw,
          self._angular_x, self._angular_y, self._angular_z,
-         self._lin_acc_x, self._lin_acc_y, self._lin_acc_z] = np.zeros((9, 1))*0.0
+         self._lin_acc_x, self._lin_acc_y, self._lin_acc_z] = np.zeros((9, 1)) * 0.0
 
-        self.topic_odom = topic_name
+        self.topic_imu = topic_name
         self.queue_size = queue_size
         self.buffer_size = buffer_size
         self.counter = 0
 
         self.buffer = np.zeros([self.buffer_size, 9])
 
-        self.sub = rospy.Subscriber(self.topic_odom, Imu, self.callback, queue_size=self.queue_size)
+        self.sub = rospy.Subscriber(self.topic_imu, Imu, self.callback, queue_size=self.queue_size)
 
     def callback(self, msg):
         self.imu_data = msg
@@ -47,9 +55,13 @@ class ImuHandler(object):
         self._lin_acc_y = self.imu_data.linear_acceleration.y
         self._lin_acc_z = self.imu_data.linear_acceleration.z
 
-        self.buffer[self.counter] = [self._roll, self._pitch, self._yaw,
-                                     self._angular_x, self._angular_y, self._angular_z,
-                                     self._lin_acc_x, self._lin_acc_y, self._lin_acc_z]
+        if self.counter < self.buffer_size:
+            self.buffer[self.counter] = [self._roll, self._pitch, self._yaw,
+                                         self._angular_x, self._angular_y, self._angular_z,
+                                         self._lin_acc_x, self._lin_acc_y, self._lin_acc_z]
+        else:
+            rospy.loginfo("ImuHandler for: " + self.topic_imu + " has reached buffer size.")
+
         self.counter += 1
 
     def get_value(self):

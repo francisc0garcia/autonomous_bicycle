@@ -77,7 +77,7 @@
                         <curve_1>
                             <axes>
                                 <x_axis>
-                                    <field>z_x</field>
+                                    <field>z_xf</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -90,7 +90,7 @@
                                     <type>autonomous_bicycle/EKF_variables</type>
                                 </x_axis>
                                 <y_axis>
-                                    <field>z_y</field>
+                                    <field>z_yf</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -123,8 +123,59 @@
                                 <type>0</type>
                             </style>
                             <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>Z</title>
+                            <title>Zf</title>
                         </curve_1>
+                        <curve_2>
+                            <axes>
+                                <x_axis>
+                                    <field>z_xr</field>
+                                    <field_type>0</field_type>
+                                    <scale>
+                                        <absolute_maximum>1000</absolute_maximum>
+                                        <absolute_minimum>0</absolute_minimum>
+                                        <relative_maximum>0</relative_maximum>
+                                        <relative_minimum>-1000</relative_minimum>
+                                        <type>0</type>
+                                    </scale>
+                                    <topic>/bicycle/ekf_data</topic>
+                                    <type>autonomous_bicycle/EKF_variables</type>
+                                </x_axis>
+                                <y_axis>
+                                    <field>z_yr</field>
+                                    <field_type>0</field_type>
+                                    <scale>
+                                        <absolute_maximum>1000</absolute_maximum>
+                                        <absolute_minimum>0</absolute_minimum>
+                                        <relative_maximum>0</relative_maximum>
+                                        <relative_minimum>-1000</relative_minimum>
+                                        <type>0</type>
+                                    </scale>
+                                    <topic>/bicycle/ekf_data</topic>
+                                    <type>autonomous_bicycle/EKF_variables</type>
+                                </y_axis>
+                            </axes>
+                            <color>
+                                <custom_color>#000000</custom_color>
+                                <type>0</type>
+                            </color>
+                            <data>
+                                <circular_buffer_capacity>1000</circular_buffer_capacity>
+                                <time_frame_length>20</time_frame_length>
+                                <type>3</type>
+                            </data>
+                            <style>
+                                <lines_interpolate>false</lines_interpolate>
+                                <pen_style>1</pen_style>
+                                <pen_width>1</pen_width>
+                                <render_antialias>false</render_antialias>
+                                <steps_invert>false</steps_invert>
+                                <sticks_baseline>0</sticks_baseline>
+                                <sticks_orientation>2</sticks_orientation>
+                                <type>0</type>
+                            </style>
+                            <subscriber_queue_size>1</subscriber_queue_size>
+                            <title>Zr</title>
+                        </curve_2>
                     </curves>
                     <legend>
                         <visible>true</visible>
@@ -141,7 +192,7 @@
                                 <title_visible>true</title_visible>
                             </x_axis>
                             <y_axis>
-                                <custom_title>Gain</custom_title>
+                                <custom_title>Rel. altitude</custom_title>
                                 <title_type>1</title_type>
                                 <title_visible>true</title_visible>
                             </y_axis>
@@ -164,7 +215,7 @@
                                     <type>autonomous_bicycle/EKF_variables</type>
                                 </x_axis>
                                 <y_axis>
-                                    <field>k_x</field>
+                                    <field>xs_z</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -197,7 +248,7 @@
                                 <type>0</type>
                             </style>
                             <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>x</title>
+                            <title>xs</title>
                         </curve_0>
                         <curve_1>
                             <axes>
@@ -215,7 +266,7 @@
                                     <type>autonomous_bicycle/EKF_variables</type>
                                 </x_axis>
                                 <y_axis>
-                                    <field>k_y</field>
+                                    <field>z_zf</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -248,7 +299,7 @@
                                 <type>0</type>
                             </style>
                             <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>y</title>
+                            <title>zf</title>
                         </curve_1>
                         <curve_2>
                             <axes>
@@ -266,7 +317,7 @@
                                     <type>autonomous_bicycle/EKF_variables</type>
                                 </x_axis>
                                 <y_axis>
-                                    <field>k_z</field>
+                                    <field>z_zr</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -299,7 +350,7 @@
                                 <type>0</type>
                             </style>
                             <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>z</title>
+                            <title>zr</title>
                         </curve_2>
                         <curve_3>
                             <axes>
@@ -317,7 +368,7 @@
                                     <type>autonomous_bicycle/EKF_variables</type>
                                 </x_axis>
                                 <y_axis>
-                                    <field>k_sigma</field>
+                                    <field>z_za</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -350,116 +401,14 @@
                                 <type>0</type>
                             </style>
                             <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>sigma</title>
+                            <title>za</title>
                         </curve_3>
-                        <curve_4>
-                            <axes>
-                                <x_axis>
-                                    <field>header/stamp</field>
-                                    <field_type>0</field_type>
-                                    <scale>
-                                        <absolute_maximum>1000</absolute_maximum>
-                                        <absolute_minimum>0</absolute_minimum>
-                                        <relative_maximum>0</relative_maximum>
-                                        <relative_minimum>-1000</relative_minimum>
-                                        <type>0</type>
-                                    </scale>
-                                    <topic>/bicycle/ekf_data</topic>
-                                    <type>autonomous_bicycle/EKF_variables</type>
-                                </x_axis>
-                                <y_axis>
-                                    <field>k_psi</field>
-                                    <field_type>0</field_type>
-                                    <scale>
-                                        <absolute_maximum>1000</absolute_maximum>
-                                        <absolute_minimum>0</absolute_minimum>
-                                        <relative_maximum>0</relative_maximum>
-                                        <relative_minimum>-1000</relative_minimum>
-                                        <type>0</type>
-                                    </scale>
-                                    <topic>/bicycle/ekf_data</topic>
-                                    <type>autonomous_bicycle/EKF_variables</type>
-                                </y_axis>
-                            </axes>
-                            <color>
-                                <custom_color>#000000</custom_color>
-                                <type>0</type>
-                            </color>
-                            <data>
-                                <circular_buffer_capacity>1000</circular_buffer_capacity>
-                                <time_frame_length>20</time_frame_length>
-                                <type>3</type>
-                            </data>
-                            <style>
-                                <lines_interpolate>false</lines_interpolate>
-                                <pen_style>1</pen_style>
-                                <pen_width>1</pen_width>
-                                <render_antialias>false</render_antialias>
-                                <steps_invert>false</steps_invert>
-                                <sticks_baseline>0</sticks_baseline>
-                                <sticks_orientation>2</sticks_orientation>
-                                <type>0</type>
-                            </style>
-                            <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>psi</title>
-                        </curve_4>
-                        <curve_5>
-                            <axes>
-                                <x_axis>
-                                    <field>header/stamp</field>
-                                    <field_type>0</field_type>
-                                    <scale>
-                                        <absolute_maximum>1000</absolute_maximum>
-                                        <absolute_minimum>0</absolute_minimum>
-                                        <relative_maximum>0</relative_maximum>
-                                        <relative_minimum>-1000</relative_minimum>
-                                        <type>0</type>
-                                    </scale>
-                                    <topic>/bicycle/ekf_data</topic>
-                                    <type>autonomous_bicycle/EKF_variables</type>
-                                </x_axis>
-                                <y_axis>
-                                    <field>k_phi</field>
-                                    <field_type>0</field_type>
-                                    <scale>
-                                        <absolute_maximum>1000</absolute_maximum>
-                                        <absolute_minimum>0</absolute_minimum>
-                                        <relative_maximum>0</relative_maximum>
-                                        <relative_minimum>-1000</relative_minimum>
-                                        <type>0</type>
-                                    </scale>
-                                    <topic>/bicycle/ekf_data</topic>
-                                    <type>autonomous_bicycle/EKF_variables</type>
-                                </y_axis>
-                            </axes>
-                            <color>
-                                <custom_color>#000000</custom_color>
-                                <type>0</type>
-                            </color>
-                            <data>
-                                <circular_buffer_capacity>1000</circular_buffer_capacity>
-                                <time_frame_length>20</time_frame_length>
-                                <type>3</type>
-                            </data>
-                            <style>
-                                <lines_interpolate>false</lines_interpolate>
-                                <pen_style>1</pen_style>
-                                <pen_width>1</pen_width>
-                                <render_antialias>false</render_antialias>
-                                <steps_invert>false</steps_invert>
-                                <sticks_baseline>0</sticks_baseline>
-                                <sticks_orientation>2</sticks_orientation>
-                                <type>0</type>
-                            </style>
-                            <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>phi</title>
-                        </curve_5>
                     </curves>
                     <legend>
                         <visible>true</visible>
                     </legend>
                     <plot_rate>30</plot_rate>
-                    <title>Kalman Gain</title>
+                    <title>Altitude</title>
                 </column_1>
                 <column_2>
                     <axes>
@@ -1252,7 +1201,7 @@
                                     <type>autonomous_bicycle/EKF_variables</type>
                                 </x_axis>
                                 <y_axis>
-                                    <field>z_x</field>
+                                    <field>z_xf</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -1285,8 +1234,59 @@
                                 <type>0</type>
                             </style>
                             <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>Z</title>
+                            <title>Zf</title>
                         </curve_1>
+                        <curve_2>
+                            <axes>
+                                <x_axis>
+                                    <field>header/stamp</field>
+                                    <field_type>0</field_type>
+                                    <scale>
+                                        <absolute_maximum>1000</absolute_maximum>
+                                        <absolute_minimum>0</absolute_minimum>
+                                        <relative_maximum>0</relative_maximum>
+                                        <relative_minimum>-1000</relative_minimum>
+                                        <type>0</type>
+                                    </scale>
+                                    <topic>/bicycle/ekf_data</topic>
+                                    <type>autonomous_bicycle/EKF_variables</type>
+                                </x_axis>
+                                <y_axis>
+                                    <field>z_xr</field>
+                                    <field_type>0</field_type>
+                                    <scale>
+                                        <absolute_maximum>1000</absolute_maximum>
+                                        <absolute_minimum>0</absolute_minimum>
+                                        <relative_maximum>0</relative_maximum>
+                                        <relative_minimum>-1000</relative_minimum>
+                                        <type>0</type>
+                                    </scale>
+                                    <topic>/bicycle/ekf_data</topic>
+                                    <type>autonomous_bicycle/EKF_variables</type>
+                                </y_axis>
+                            </axes>
+                            <color>
+                                <custom_color>#000000</custom_color>
+                                <type>0</type>
+                            </color>
+                            <data>
+                                <circular_buffer_capacity>1000</circular_buffer_capacity>
+                                <time_frame_length>20</time_frame_length>
+                                <type>3</type>
+                            </data>
+                            <style>
+                                <lines_interpolate>false</lines_interpolate>
+                                <pen_style>1</pen_style>
+                                <pen_width>1</pen_width>
+                                <render_antialias>false</render_antialias>
+                                <steps_invert>false</steps_invert>
+                                <sticks_baseline>0</sticks_baseline>
+                                <sticks_orientation>2</sticks_orientation>
+                                <type>0</type>
+                            </style>
+                            <subscriber_queue_size>1</subscriber_queue_size>
+                            <title>Zr</title>
+                        </curve_2>
                     </curves>
                     <legend>
                         <visible>true</visible>
@@ -1377,7 +1377,7 @@
                                     <type>autonomous_bicycle/EKF_variables</type>
                                 </x_axis>
                                 <y_axis>
-                                    <field>z_y</field>
+                                    <field>z_yf</field>
                                     <field_type>0</field_type>
                                     <scale>
                                         <absolute_maximum>1000</absolute_maximum>
@@ -1410,8 +1410,59 @@
                                 <type>0</type>
                             </style>
                             <subscriber_queue_size>1</subscriber_queue_size>
-                            <title>Z</title>
+                            <title>Zf</title>
                         </curve_1>
+                        <curve_2>
+                            <axes>
+                                <x_axis>
+                                    <field>header/stamp</field>
+                                    <field_type>0</field_type>
+                                    <scale>
+                                        <absolute_maximum>1000</absolute_maximum>
+                                        <absolute_minimum>0</absolute_minimum>
+                                        <relative_maximum>0</relative_maximum>
+                                        <relative_minimum>-1000</relative_minimum>
+                                        <type>0</type>
+                                    </scale>
+                                    <topic>/bicycle/ekf_data</topic>
+                                    <type>autonomous_bicycle/EKF_variables</type>
+                                </x_axis>
+                                <y_axis>
+                                    <field>z_yr</field>
+                                    <field_type>0</field_type>
+                                    <scale>
+                                        <absolute_maximum>1000</absolute_maximum>
+                                        <absolute_minimum>0</absolute_minimum>
+                                        <relative_maximum>0</relative_maximum>
+                                        <relative_minimum>-1000</relative_minimum>
+                                        <type>0</type>
+                                    </scale>
+                                    <topic>/bicycle/ekf_data</topic>
+                                    <type>autonomous_bicycle/EKF_variables</type>
+                                </y_axis>
+                            </axes>
+                            <color>
+                                <custom_color>#000000</custom_color>
+                                <type>0</type>
+                            </color>
+                            <data>
+                                <circular_buffer_capacity>1000</circular_buffer_capacity>
+                                <time_frame_length>20</time_frame_length>
+                                <type>3</type>
+                            </data>
+                            <style>
+                                <lines_interpolate>false</lines_interpolate>
+                                <pen_style>1</pen_style>
+                                <pen_width>1</pen_width>
+                                <render_antialias>false</render_antialias>
+                                <steps_invert>false</steps_invert>
+                                <sticks_baseline>0</sticks_baseline>
+                                <sticks_orientation>2</sticks_orientation>
+                                <type>0</type>
+                            </style>
+                            <subscriber_queue_size>1</subscriber_queue_size>
+                            <title>Zr</title>
+                        </curve_2>
                     </curves>
                     <legend>
                         <visible>true</visible>

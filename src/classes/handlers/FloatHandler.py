@@ -4,6 +4,14 @@ from std_msgs.msg import Float32
 
 
 class FloatHandler(object):
+    """
+    Handler for ROS topics of type: std_msgs/Float32
+    Args:
+        topic_name: Name of ROS topic to be subscribed
+        buffer_size: Variable buffer, depend on frame rate of topic, default: 500
+        queue_size: Subscriber queue_size
+    """
+
     def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.data_msg = Float32()
         self.data = 0.0
@@ -19,7 +27,12 @@ class FloatHandler(object):
 
     def callback(self, msg):
         self.data_msg = msg
-        self.buffer[self.counter] = [self.data_msg.data]
+
+        if self.counter < self.buffer_size:
+            self.buffer[self.counter] = [self.data_msg.data]
+        else:
+            rospy.loginfo("FloatHandler for: " + self.topic_float + " has reach buffer size.")
+
         self.counter += 1
 
     def get_value(self):

@@ -7,13 +7,18 @@ from filterpy.monte_carlo import stratified_resample, multinomial_resample
 
 
 class ParticleFilter_sigma_model(object):
-    """Implements an particle to bicycle model"""
+    """Implements a particle filter to bicycle kinematic model
+    Args:
+        dt: sample time
+        w: Distance between wheels
+    """
+
     def __init__(self, dt=0.25, w=1.02):
         ang = 2 * np.pi
         initial_mean_x = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-        initial_std_x = [0.5, 0.5, 0.05, 0.5*ang, 0.5*ang, 0.5*ang]
-        process_std = [0.3, 0.3, 0.1, 0.005*ang, 0.005*ang, 0.005*ang]
+        initial_std_x = [0.5, 0.5, 0.05, 0.5 * ang, 0.5 * ang, 0.5 * ang]
+        process_std = [0.3, 0.3, 0.1, 0.005 * ang, 0.005 * ang, 0.005 * ang]
 
         self.n_particles = 1000
         self.n_states = 6
@@ -44,14 +49,6 @@ class ParticleFilter_sigma_model(object):
     def get_state(self):
         [mean, var] = self.estimate()
         return mean
-
-    def update_R(self, R_std):
-        # Compatibility only
-        pass
-
-    def update_Q(self, Q_std):
-        # Compatibility only
-        pass
 
     def reset_filter(self):
         self.p = np.zeros((self.n_particles, self.n_states))
@@ -132,7 +129,7 @@ class ParticleFilter_sigma_model(object):
         self.weights /= sum(self.weights)  # normalize
 
         # Resample
-        if self.neff() < self.n_particles/2:
+        if self.neff() < self.n_particles / 2:
             # indexes = residual_resample(self.weights)
             # indexes = stratified_resample(self.weights)
             # indexes = systematic_resample(self.weights)
@@ -174,4 +171,3 @@ class ParticleFilter_sigma_model(object):
         # if x > np.pi:          # move to [-pi, pi)
         #    x -= 2 * np.pi
         return x
-

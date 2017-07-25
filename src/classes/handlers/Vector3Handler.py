@@ -4,6 +4,14 @@ from geometry_msgs.msg import Vector3Stamped
 
 
 class Vector3Handler(object):
+    """
+    Handler for ROS topics of type: geometry_msgs/Vector3Stamped
+    Args:
+        topic_name: Name of ROS topic to be subscribed
+        buffer_size: Variable buffer, depend on frame rate of topic, default: 500
+        queue_size: Subscriber queue_size
+    """
+
     def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.vector_data = Vector3Stamped()
         [self.vector_x, self.vector_y, self.vector_z] = [0.0, 0.0, 0.0]
@@ -21,9 +29,13 @@ class Vector3Handler(object):
     def callback(self, msg):
         self.vector_data = msg
 
-        self.buffer[self.counter] = [self.vector_data.vector.x,
-                                     self.vector_data.vector.y,
-                                     self.vector_data.vector.z]
+        if self.counter < self.buffer_size:
+            self.buffer[self.counter] = [self.vector_data.vector.x,
+                                         self.vector_data.vector.y,
+                                         self.vector_data.vector.z]
+        else:
+            rospy.loginfo("Vector3Handler for: " + self.topic_name + " has reach buffer size.")
+
         self.counter += 1
 
     def get_value(self):

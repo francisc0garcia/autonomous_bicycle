@@ -5,9 +5,13 @@ float32 xs_z
 float32 xs_sigma
 float32 xs_psi
 float32 xs_phi
-float32 z_x
-float32 z_y
-float32 z_z
+float32 z_xf
+float32 z_xr
+float32 z_yf
+float32 z_yr
+float32 z_zf
+float32 z_zr
+float32 z_za
 float32 z_sigma
 float32 z_psi
 float32 z_phi

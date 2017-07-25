@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
+# ROS Dependencies
 import rospy
-import numpy as np
-from visualization_msgs.msg import Marker
-from tf.transformations import euler_from_quaternion, quaternion_from_euler
-from classes.ImuHandler import *
-from classes.OdometryHandler import *
 from std_msgs.msg import Float32
+from visualization_msgs.msg import Marker
+from tf.transformations import quaternion_from_euler
+
+# Project dependencies
+from classes.handlers.ImuHandler import *
+from classes.handlers.OdometryHandler import *
 
 
 class BicycleMarkerGeneratorNode:
@@ -53,8 +55,8 @@ class BicycleMarkerGeneratorNode:
             rate.sleep()
 
     def normalize_angle(self, x):
-        x = x % (2 * np.pi)    # force in range [0, 2 pi)
-        if x > np.pi:          # move to [-pi, pi)
+        x = x % (2 * np.pi)  # force in range [0, 2 pi)
+        if x > np.pi:  # move to [-pi, pi)
             x -= 2 * np.pi
         return x
 
@@ -68,7 +70,7 @@ class BicycleMarkerGeneratorNode:
             self.prev_x = self.gps_data[0]
             self.prev_y = self.gps_data[1]
 
-            self.psi = self.normalize_angle(self.psi) + np.pi/2
+            self.psi = self.normalize_angle(self.psi) + np.pi / 2
 
             msg_data = Float32()
             msg_data.data = self.psi
@@ -90,7 +92,7 @@ class BicycleMarkerGeneratorNode:
         offset_lean_imu1 = 0.35
         offset_lean_steer = -0.4
 
-        lean_avg = -((self.data_imu_lean[1] + offset_lean_imu1) + (self.data_imu_steering[1] + offset_lean_steer))/2
+        lean_avg = -((self.data_imu_lean[1] + offset_lean_imu1) + (self.data_imu_steering[1] + offset_lean_steer)) / 2
 
         # lean_avg = -(self.data_imu_lean[1] + offset_lean_imu1)
 
@@ -129,7 +131,7 @@ class BicycleMarkerGeneratorNode:
 
         roll = 0.0
         pitch = lean_avg
-        yaw = -self.data_imu_steering[2] - 0.2 * np.pi   # 0.0 + 0.8 * np.pi  # self.data_imu_steering[2]
+        yaw = -self.data_imu_steering[2] - 0.2 * np.pi  # 0.0 + 0.8 * np.pi  # self.data_imu_steering[2]
         quaternion = quaternion_from_euler(roll, pitch, yaw)
 
         ellipse.pose.orientation.x = quaternion[0]
@@ -151,6 +153,7 @@ class BicycleMarkerGeneratorNode:
 
     def shutdown_node(self):
         rospy.loginfo("Turning off node: BicycleMarkerGeneratorNode")
+
 
 # Main function.
 if __name__ == '__main__':

@@ -1,16 +1,14 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 125
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /TF1/Frames1
         - /TF1/Tree1
-        - /Imu_21/Box properties1
-        - /Imu_21/Acceleration properties1
         - /Imu_steering1/Acceleration properties1
-      Splitter Ratio: 0.5667575
-    Tree Height: 801
+      Splitter Ratio: 0.580381453
+    Tree Height: 926
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -74,7 +72,7 @@ Visualization Manager:
         odom_gps_front:
           Value: false
         odom_gps_rear:
-          Value: true
+          Value: false
         world:
           Value: true
       Marker Scale: 5
@@ -117,31 +115,9 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu_1
       Topic: /bicycle/imu_1
-      Unreliable: false
-      Value: true
-    - Acceleration properties:
-        Acc. vector alpha: 1
-        Acc. vector color: 255; 0; 0
-        Acc. vector scale: 0.0500000007
-        Derotate acceleration: true
-        Enable acceleration: true
-      Axes properties:
-        Axes scale: 1
-        Enable axes: true
-      Box properties:
-        Box alpha: 1
-        Box color: 255; 0; 0
-        Enable box: true
-        x_scale: 0.0500000007
-        y_scale: 0.0500000007
-        z_scale: 0.0500000007
-      Class: rviz_imu_plugin/Imu
-      Enabled: false
-      Name: Imu_2
-      Topic: /bicycle/imu_2
       Unreliable: false
       Value: false
     - Acceleration properties:
@@ -161,11 +137,11 @@ Visualization Manager:
         y_scale: 0.0500000007
         z_scale: 0.0500000007
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu_steering
       Topic: /bicycle/imu_steering
       Unreliable: false
-      Value: true
+      Value: false
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
       Covariance:
@@ -385,45 +361,45 @@ Visualization Manager:
       Value: true
       Zoom: 19
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: false
+      Enabled: true
       Name: tf_filter
-      Value: false
+      Value: true
       color: 255; 0; 0
       duration: 250
       frame: estimated_odom_filter
-      line_width: 0.100000001
+      line_width: 0.0500000007
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: true
+      Enabled: false
       Name: tf_rear
-      Value: true
+      Value: false
       color: 25; 255; 240
       duration: 250
       frame: odom_gps_rear
-      line_width: 0.100000001
+      line_width: 0.0500000007
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: true
+      Enabled: false
       Name: tf_front
-      Value: true
+      Value: false
       color: 25; 255; 140
       duration: 250
       frame: odom_gps_front
-      line_width: 0.100000001
+      line_width: 0.0500000007
     - Class: rviz/Marker
-      Enabled: false
+      Enabled: true
       Marker Topic: /bicycle/filter_main
       Name: m_filter_main
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: rviz/Marker
-      Enabled: false
+      Enabled: true
       Marker Topic: /bicycle/filter_steering
       Name: m_filter_steer
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: jsk_rviz_plugin/OverlayImage
       Enabled: true
       Name: camera
@@ -436,21 +412,21 @@ Visualization Manager:
       top: 30
       width: 320
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /bicycle/measurement_main
       Name: m_measurement_main
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /bicycle/measurement_steering
       Name: m_measurement_steer
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Buffer length: 300
       Class: jsk_rviz_plugin/Plotter2D
       Enabled: true
@@ -494,7 +470,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 32.4012642
+      Distance: 41.2776222
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -508,10 +484,10 @@ Visualization Manager:
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.514798999
+      Pitch: 0.169799775
       Target Frame: odom_gps_rear
       Value: ThirdPersonFollower (rviz)
-      Yaw: 4.91855907
+      Yaw: 2.5672369
     Saved: ~
 Window Geometry:
   Displays:

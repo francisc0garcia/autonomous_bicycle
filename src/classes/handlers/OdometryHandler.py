@@ -4,6 +4,14 @@ from nav_msgs.msg import Odometry
 
 
 class OdometryHandler(object):
+    """
+    Handler for ROS topics of type: nav_msgs/Odometry
+    Args:
+        topic_name: Name of ROS topic to be subscribed
+        buffer_size: Variable buffer, depend on frame rate of topic, default: 500
+        queue_size: Subscriber queue_size
+    """
+
     def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.odom = Odometry()
         # mean values
@@ -26,7 +34,12 @@ class OdometryHandler(object):
         [self.x_t, self.y_t, self.z_t] = [self.odom.pose.pose.position.x,
                                           self.odom.pose.pose.position.y,
                                           self.odom.pose.pose.position.z]
-        self.buffer[self.counter] = [self.x_t, self.y_t, self.z_t]
+
+        if self.counter < self.buffer_size:
+            self.buffer[self.counter] = [self.x_t, self.y_t, self.z_t]
+        else:
+            rospy.loginfo("OdometryHandler for: " + self.topic_odom + " has reach buffer size.")
+
         self.counter += 1
 
     def get_value(self):

@@ -4,6 +4,14 @@ from geometry_msgs.msg import TwistStamped
 
 
 class TwistHandler(object):
+    """
+    Handler for ROS topics of type: geometry_msgs/TwistStamped
+    Args:
+        topic_name: Name of ROS topic to be subscribed
+        buffer_size: Variable buffer, depend on frame rate of topic, default: 500
+        queue_size: Subscriber queue_size
+    """
+
     def __init__(self, topic_name, buffer_size=500, queue_size=10):
         self.twist_data = TwistStamped()
         [self.twist_x, self.twist_y, self.twist_z] = [0.0, 0.0, 0.0]
@@ -21,9 +29,13 @@ class TwistHandler(object):
     def callback(self, msg):
         self.twist_data = msg
 
-        self.buffer[self.counter] = [self.twist_data.twist.linear.x,
-                                     self.twist_data.twist.linear.y,
-                                     self.twist_data.twist.linear.z]
+        if self.counter < self.buffer_size:
+            self.buffer[self.counter] = [self.twist_data.twist.linear.x,
+                                         self.twist_data.twist.linear.y,
+                                         self.twist_data.twist.linear.z]
+        else:
+            rospy.loginfo("TwistHandler for: " + self.topic_name + " has reach buffer size.")
+
         self.counter += 1
 
     def get_value(self):
