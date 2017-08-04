@@ -906,103 +906,6 @@
                     </surface>
                 </collision>
             </link>
-            <link name='link_imu_2'>
-                <pose frame=''>0 0.49 0.6 0 -0 0</pose>
-                <inertial>
-                    <mass>0.1</mass>
-                    <inertia>
-                        <ixx>0.166667</ixx>
-                        <ixy>0</ixy>
-                        <ixz>0</ixz>
-                        <iyy>0.166667</iyy>
-                        <iyz>0</iyz>
-                        <izz>0.166667</izz>
-                    </inertia>
-                    <pose frame=''>0 0 0 0 -0 0</pose>
-                </inertial>
-                <gravity>1</gravity>
-                <self_collide>0</self_collide>
-                <kinematic>0</kinematic>
-                <visual name='visual'>
-                    <pose frame=''>0 0 0 0 -0 0</pose>
-                    <geometry>
-                        <box>
-                            <size>0.02 0.02 0.02</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <lighting>1</lighting>
-                        <script>
-                            <uri>file://media/materials/scripts/gazebo.material</uri>
-                            <name>Gazebo/Grey</name>
-                        </script>
-                        <ambient>0.8 0 0 1</ambient>
-                        <diffuse>0.7 0.7 0.7 1</diffuse>
-                        <specular>0.01 0.01 0.01 1</specular>
-                        <emissive>0 0 0 1</emissive>
-                        <shader type='vertex'>
-                            <normal_map>__default__</normal_map>
-                        </shader>
-                    </material>
-                    <transparency>0</transparency>
-                    <cast_shadows>1</cast_shadows>
-                </visual>
-                <collision name='collision'>
-                    <laser_retro>0</laser_retro>
-                    <max_contacts>10</max_contacts>
-                    <pose frame=''>0 0 0 0 -0 0</pose>
-                    <geometry>
-                        <box>
-                            <size>0.02 0.02 0.02</size>
-                        </box>
-                    </geometry>
-                    <surface>
-                        <friction>
-                            <ode>
-                                <mu>1</mu>
-                                <mu2>1</mu2>
-                                <fdir1>0 0 0</fdir1>
-                                <slip1>0</slip1>
-                                <slip2>0</slip2>
-                            </ode>
-                            <torsional>
-                                <coefficient>1</coefficient>
-                                <patch_radius>0</patch_radius>
-                                <surface_radius>0</surface_radius>
-                                <use_patch_radius>1</use_patch_radius>
-                                <ode>
-                                    <slip>0</slip>
-                                </ode>
-                            </torsional>
-                        </friction>
-                        <bounce>
-                            <restitution_coefficient>0</restitution_coefficient>
-                            <threshold>1e+06</threshold>
-                        </bounce>
-                        <contact>
-                            <collide_without_contact>0</collide_without_contact>
-                            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-                            <collide_bitmask>1</collide_bitmask>
-                            <ode>
-                                <soft_cfm>0</soft_cfm>
-                                <soft_erp>0.2</soft_erp>
-                                <kp>1e+13</kp>
-                                <kd>1</kd>
-                                <max_vel>0.01</max_vel>
-                                <min_depth>0</min_depth>
-                            </ode>
-                            <bullet>
-                                <split_impulse>1</split_impulse>
-                                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
-                                <soft_cfm>0</soft_cfm>
-                                <soft_erp>0.2</soft_erp>
-                                <kp>1e+13</kp>
-                                <kd>1</kd>
-                            </bullet>
-                        </contact>
-                    </surface>
-                </collision>
-            </link>
             <link name='link_imu_steering'>
                 <pose frame=''>0 1.1 0.98 0 -0 0</pose>
                 <inertial>
@@ -1495,23 +1398,6 @@
                     </ode>
                 </physics>
             </joint>
-            <joint name='main_frame_link_imu_2' type='fixed'>
-                <parent>main_frame</parent>
-                <child>link_imu_2</child>
-                <pose frame=''>0 0 0 0 -0 0</pose>
-                <physics>
-                    <ode>
-                        <limit>
-                            <cfm>0</cfm>
-                            <erp>0.2</erp>
-                        </limit>
-                        <suspension>
-                            <cfm>0</cfm>
-                            <erp>0.2</erp>
-                        </suspension>
-                    </ode>
-                </physics>
-            </joint>
             <joint name='main_frame_link_gps_rear' type='fixed'>
                 <parent>main_frame</parent>
                 <child>link_gps_rear</child>
@@ -1553,9 +1439,9 @@
                 <velocityTopicName>/bicycle/gps_front_velocity</velocityTopicName>
                 <referenceAltitude>0</referenceAltitude>
                 <referenceHeading>0</referenceHeading>
-                <drift>0.2 0.2 0.2</drift>
-                <gaussianNoise>0.2 0.2 0.2</gaussianNoise>
-                <velocityDrift>0 0 0</velocityDrift>
+                <drift>0.0 0.0 0.0</drift>
+                <gaussianNoise>0.5 0.5 0.1</gaussianNoise>
+                <velocityDrift>0.0 0.0 0.0</velocityDrift>
                 <velocityGaussianNoise>0.01 0.01 0.01</velocityGaussianNoise>
             </plugin>
             <plugin name='gps_rear_sim' filename='libhector_gazebo_ros_gps.so'>
@@ -1569,9 +1455,9 @@
                 <velocityTopicName>/bicycle/gps_rear_velocity</velocityTopicName>
                 <referenceAltitude>0</referenceAltitude>
                 <referenceHeading>0</referenceHeading>
-                <drift>0.2 0.2 0.2</drift>
-                <gaussianNoise>0.2 0.2 0.2</gaussianNoise>
-                <velocityDrift>0 0 0</velocityDrift>
+                <drift>0.0 0.0 0.0</drift>
+                <gaussianNoise>0.5 0.5 0.1</gaussianNoise>
+                <velocityDrift>0.0 0.0 0.0</velocityDrift>
                 <velocityGaussianNoise>0.01 0.01 0.01</velocityGaussianNoise>
             </plugin>
 
@@ -1581,29 +1467,6 @@
                 <bodyName>link_imu_1</bodyName>
                 <frameId>bikes_design__link_imu_1</frameId>
                 <topicName>/bicycle/imu_1</topicName>
-                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
-                <gaussianNoise>0</gaussianNoise>
-                <accelDrift>0.0 0.0 0.0</accelDrift>
-                <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
-                <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
-                <headingDrift>0.0</headingDrift>
-                <headingGaussianNoise>0.0</headingGaussianNoise>
-            </plugin>
-            <plugin name='imu_2_sim' filename='libhector_gazebo_ros_imu.so'>
-                <alwaysOn>true</alwaysOn>
-                <updateRate>80.0</updateRate>
-                <bodyName>link_imu_2</bodyName>
-                <frameId>bikes_design__link_imu_2</frameId>
-                <topicName>/bicycle/imu_2</topicName>
-                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
-                <gaussianNoise>0</gaussianNoise>
-                <accelDrift>0.0 0.0 0.0</accelDrift>
-                <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
-                <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
-                <headingDrift>0.0</headingDrift>
-                <headingGaussianNoise>0.0</headingGaussianNoise>
             </plugin>
             <plugin name='imu_steering_sim' filename='libhector_gazebo_ros_imu.so'>
                 <alwaysOn>true</alwaysOn>
@@ -1611,14 +1474,6 @@
                 <bodyName>link_imu_steering</bodyName>
                 <frameId>bikes_design__link_imu_steering</frameId>
                 <topicName>/bicycle/imu_steering</topicName>
-                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
-                <gaussianNoise>0</gaussianNoise>
-                <accelDrift>0.0 0.0 0.0</accelDrift>
-                <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
-                <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
-                <headingDrift>0.0</headingDrift>
-                <headingGaussianNoise>0.0</headingGaussianNoise>
             </plugin>
 
             <plugin name='imu_1_noise' filename='libhector_gazebo_ros_imu.so'>
@@ -1629,27 +1484,6 @@
                 <topicName>/bicycle/imu_1_noise</topicName>
                 <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
                 <gaussianNoise>5.5</gaussianNoise>
-                <accelDrift>0.5 0.5 0.5</accelDrift>
-                <accelGaussianNoise>0.35 0.35 0.35</accelGaussianNoise>
-                <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.2 0.2 0.2</rateGaussianNoise>
-                <headingDrift>0.01</headingDrift>
-                <headingGaussianNoise>0.01</headingGaussianNoise>
-            </plugin>
-            <plugin name='imu_2_noise' filename='libhector_gazebo_ros_imu.so'>
-                <alwaysOn>true</alwaysOn>
-                <updateRate>80.0</updateRate>
-                <bodyName>link_imu_2</bodyName>
-                <frameId>bikes_design__link_imu_2</frameId>
-                <topicName>/bicycle/imu_2_noise</topicName>
-                <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
-                <gaussianNoise>5.5</gaussianNoise>
-                <accelDrift>0.5 0.5 0.5</accelDrift>
-                <accelGaussianNoise>0.35 0.35 0.35</accelGaussianNoise>
-                <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.2 0.2 0.2</rateGaussianNoise>
-                <headingDrift>0.01</headingDrift>
-                <headingGaussianNoise>0.01</headingGaussianNoise>
             </plugin>
             <plugin name='imu_steering_noise' filename='libhector_gazebo_ros_imu.so'>
                 <alwaysOn>true</alwaysOn>
@@ -1659,12 +1493,6 @@
                 <topicName>/bicycle/imu_steering_noise</topicName>
                 <rpyOffsets>0.0 0.0 0.0</rpyOffsets>
                 <gaussianNoise>5.5</gaussianNoise>
-                <accelDrift>0.5 0.5 0.5</accelDrift>
-                <accelGaussianNoise>0.35 0.35 0.35</accelGaussianNoise>
-                <rateDrift>0.0 0.0 0.0</rateDrift>
-                <rateGaussianNoise>0.2 0.2 0.2</rateGaussianNoise>
-                <headingDrift>0.01</headingDrift>
-                <headingGaussianNoise>0.01</headingGaussianNoise>
             </plugin>
 
             <plugin name='bicycle_interaction' filename='libbicycle_interaction.so'>

@@ -11,7 +11,7 @@
           args="-O $(arg bag_path)$(arg bag_file)
           /bicycle/gps_front /bicycle/gps_front_velocity /bicycle/odom_gps_front
           /bicycle/gps_rear /bicycle/gps_rear_velocity /bicycle/odom_gps_rear
-          /bicycle/imu_1 /bicycle/imu_2 /bicycle/imu_steering
+          /bicycle/imu_1 /bicycle/imu_steering
           /gazebo/link_states /gazebo/model_states /tf
           /bicycle/odom_main_frame /bicycle/odom_rear_wheel
           /imu_lean/pitch /imu_lean/roll /imu_lean/yaw

@@ -65,7 +65,8 @@ namespace gazebo {
             tf::Vector3 rot_angle(0, 0, 1);
             qt.setRotation(rot_angle, offset_rotation_yaw);
 
-            tf::Vector3 vt (pose.pos.x, pose.pos.y, pose.pos.z);
+            // Fix Z value = 0.
+            tf::Vector3 vt (pose.pos.x, pose.pos.y, 0.0 /*pose.pos.z*/);
 
             temp_x = vt.x();
             temp_y = vt.y();

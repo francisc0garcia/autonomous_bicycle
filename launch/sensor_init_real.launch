@@ -130,7 +130,7 @@
     <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" respawn="true"
           args="--perspective-file  $(find autonomous_bicycle)/config/rqt_sensor_init.perspective" />
 
-    <node name="rviz" pkg="rviz" type="rviz" respawn="true"
+    <node name="rviz" pkg="rviz" type="rviz" respawn="false"
           args="-d $(find autonomous_bicycle)/config/$(arg rviz_config).rviz" />
 
 </launch>

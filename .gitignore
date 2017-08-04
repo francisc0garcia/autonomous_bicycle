@@ -136,3 +136,4 @@ ENV/
 .ropeproject
 
 /bags/
+/docs/python_notebooks/.ipynb_checkpoints/

@@ -1,4 +1,9 @@
-<launch>
+<launch>xtended Kalman Filter design}
+\label{sec:Extended_Kalman_Filter_design}
+
+- EKF design
+- EFK simulation with theoretical model
+- EFK simulation with "realistic
     <env name="GAZEBO_MODEL_PATH" value="$(find autonomous_bicycle)/models"/>
 
     <param name="use_sim_time" value="true" />
@@ -11,7 +16,7 @@
 
     <!-- Launch RQT and RVIZ -->
     <node name="custom_rqt_perspective" pkg="rqt_gui" type="rqt_gui" required="false" output="log"
-          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_bicycle_recorded.perspective" />
+          args="--perspective-file  $(find autonomous_bicycle)/config/rqt_simulation.perspective" />
 
     <node name="rviz" pkg="rviz" type="rviz" required="false"
           args="-d $(find autonomous_bicycle)/config/rviz_bicycle_recorded.rviz"     />
