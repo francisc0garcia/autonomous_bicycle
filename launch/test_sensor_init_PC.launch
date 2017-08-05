@@ -3,7 +3,7 @@
     <arg name="IMU_1_port" default="/dev/ttyUSB0"/>
     <arg name="respawn_enable" default="false"/>
 
-    <!-- Publish imu 1 data -->
+    <!-- Publish imu 1 data
     <node pkg="autonomous_bicycle" output="screen"
           type="sensor_imu_publisher.py" name="sensor_imu_publisher_1" respawn="$(arg respawn_enable)">
 
@@ -20,14 +20,22 @@
         <param name="fixed_frame" type="string" value="world" />
         <param name="frame_name" type="string" value="imu_1" />
     </node>
-
-    <!-- Start ros bridge server -->
+-->
+    <!-- Start ros bridge server
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
         <arg name="port" value="9090"/>
         <arg name="ssl" default="false" />
         <arg name="authenticate" default="false" />
     </include>
-
+-->
+    <!--
+    <node  pkg="rosserial_python" type="serial_node.py" name="serial_node_arduino">
+        <param name="port" type="string" value="/dev/ttyACM0" />
+        <remap to="/bicycle/altitude"   from="/altitude" />
+        <remap to="/bicycle/distance"   from="/distance" />
+        <remap to="/bicycle/velocity"   from="/velocity" />
+    </node>
+-->
     <!-- check system state
     <node pkg="autonomous_bicycle" type="ros_state_checker.py" output="screen"
           name="ros_state_checker" respawn="$(arg respawn_enable)">
@@ -36,4 +44,11 @@
                value="$(find autonomous_bicycle)/src/BASH_turn_off_system.sh" />
     </node>
     -->
+
+
+    <node pkg="rosserial_python" type="serial_node.py"     name="serial_node_steering" >
+        <param name="port" type="string" value="/dev/ttyACM0" />
+        <remap to="/bicycle/steering_angle"   from="/steering_angle" />
+    </node>
+
 </launch>

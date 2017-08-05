@@ -136,3 +136,6 @@ ENV/
 .ropeproject
 
 /bags/
+/docs/python_notebooks/.ipynb_checkpoints/
+/docs/python_notebooks/simulations/multibody_sim/
+/docs/python_notebooks/simulations/math_model/

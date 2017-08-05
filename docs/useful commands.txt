@@ -80,3 +80,6 @@ add more if it is necessary
 
 For Raspberry pi Cam:
 KERNEL=="vchiq", MODE="0666"
+
+- Latex - convert sgv into pdf for latex
+inkscape -D -z --file=image.svg --export-pdf=image.pdf --export-latex

@@ -1,0 +1,17 @@
+
+Create SVG - PDF Files
+
+inkscape -D -z --file=x_y.svg --export-pdf=x_y.pdf --export-latex
+inkscape -D -z --file=z.svg --export-pdf=z.pdf --export-latex
+inkscape -D -z --file=delta.svg --export-pdf=delta.pdf --export-latex
+inkscape -D -z --file=psi.svg --export-pdf=psi.pdf --export-latex
+inkscape -D -z --file=phi.svg --export-pdf=phi.pdf --export-latex
+
+inkscape -D -z --file=x.svg --export-pdf=x.pdf --export-latex
+inkscape -D -z --file=y.svg --export-pdf=y.pdf --export-latex
+inkscape -D -z --file=KU.svg --export-pdf=KU.pdf --export-latex
+inkscape -D -z --file=PU.svg --export-pdf=PU.pdf --export-latex
+
+
+
+

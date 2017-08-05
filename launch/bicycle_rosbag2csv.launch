@@ -6,7 +6,7 @@
     <param name="use_sim_time" value="true" />
 
     <arg name="bag_file" />
-    <arg name="output_preprocessed_file_name" default="$(arg bag_file).csv" />
+    <arg name="output_preprocessed_file_name" default="$(arg bag_file)_preprocessed.csv" />
     <arg name="local_path" default="bags/experiments/" />
     <arg name="bag_path" default="$(find autonomous_bicycle)/$(arg local_path)" />
     <arg name="csv_path" default="$(find autonomous_bicycle)/$(arg local_path)csv/" />
@@ -17,7 +17,8 @@
         <param name="input_path" type="string" value="$(arg bag_path)" />
         <param name="output_path" type="string" value="$(arg csv_path)" />
         <param name="output_processed_filename" type="string"
-          value="$(find autonomous_bicycle)/bags/preprocessed/$(arg output_preprocessed_file_name)" />
+          value="$(arg csv_path)$(arg bag_file)/$(arg output_preprocessed_file_name)" />
+        <param name="input_format" type="string" value="gazebo" /> <!-- gazebo or real_data -->
     </node>
 </launch>
 

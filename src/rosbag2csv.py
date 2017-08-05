@@ -3,13 +3,19 @@
 """
 Based on project: https://github.com/AtsushiSakai/rosbag_to_csv
 """
+import glob
+import os, sys
+from datetime import datetime
+
 import rosbag
 import rospy
-from datetime import datetime
-import pandas as pd
-import glob
-import os
-from classes.notebooks.RealDatasetImporter import *
+
+# Add project into path to get acces to classes located outside of this scope
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(CURRENT_DIR))
+
+from docs.python_notebooks.DatasetImporter import *
+from docs.python_notebooks.RealDatasetImporter import *
 
 
 class Rosbag2csv:
@@ -18,6 +24,7 @@ class Rosbag2csv:
         self.input_path = rospy.get_param('~input_path', '/tmp')
         self.output_path = rospy.get_param('~output_path', '/tmp')
         self.output_processed_filename = rospy.get_param('~output_processed_filename', 'processed.csv')
+        self.input_format = rospy.get_param('~input_format', 'gazebo')  # gazebo or real_data
 
         self.include_header = rospy.get_param('~include_header', True)
         self.filename_merge_csv = ''
@@ -189,9 +196,15 @@ class Rosbag2csv:
 
     def preprocess_data(self, input_file_name, output_file_name):
         rospy.loginfo("Preprocessing merged file: " + input_file_name)
-        di = RealDatasetImporter(input_file_name)
+
+        if self.input_format == 'gazebo':
+            di = DatasetImporter(input_file_name, fill_na=True)
+        else:
+            di = RealDatasetImporter(input_file_name)
+
         di.data.to_csv(output_file_name)
         rospy.loginfo("Finished: preprocessed file saved to: " + output_file_name)
+
 
 if __name__ == '__main__':
     rospy.init_node('rosbag_to_csv', anonymous=True)

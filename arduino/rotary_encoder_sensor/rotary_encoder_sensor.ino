@@ -17,15 +17,14 @@ long publisher_timer = 0;
 int period = 10; // ms
 
 // Connection with sensor
-int pinMOSI = 6;  // pin DAT
-int pinSCK = 5;   // pin CLK
+int pinMOSI = 2;  // pin DAT
+int pinSCK = 3;   // pin CLK
 int pinSS = 4;    // pin CS
 
 int value;
 double offset = 207.4;
 double angle = 0; 
 
-Metro mlxMetro = Metro(5);
 MLX90316 mlx_1  = MLX90316();
 
 void setup(){
@@ -42,15 +41,13 @@ void setup(){
 
 void loop() {
   if (millis() > publisher_timer) {
-    if (mlxMetro.check() == 1) {
-      value = mlx_1.readAngle();
-      angle = (value / 10) - offset;
+    value = mlx_1.readAngle();
+    angle = (value / 10) - offset;
   
-      // Publish ROS messages
-      angle_msg.data = angle;
-      pub_steering_angle.publish(&angle_msg);
-    }
-
+    // Publish ROS messages
+    angle_msg.data = angle;
+    pub_steering_angle.publish(&angle_msg);
+  
     publisher_timer = millis() + period;
   }
 
