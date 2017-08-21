@@ -77,7 +77,7 @@ class RealDatasetImporter(object):
         # compute variables
         self.data = self.data.apply(self.compute_variables, axis=1)
 
-        # Set time as index in dataset
+        # Set time as index in datasetreal_v_gps
         self.data['time_index'] = pd.to_datetime(self.data['time'])
         self.data = self.data.set_index('time_index', drop=True, verify_integrity=True)
         self.data['time'] = self.data.index

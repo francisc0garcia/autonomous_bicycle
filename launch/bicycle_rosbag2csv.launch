@@ -4,6 +4,7 @@
     Additionally merge all data-sets into one file $(arg bag_file).csv for further processing
      -->
     <param name="use_sim_time" value="true" />
+    <param name="input_format" value="gazebo" />  <!-- gazebo or real_data -->
 
     <arg name="bag_file" />
     <arg name="output_preprocessed_file_name" default="$(arg bag_file)_preprocessed.csv" />
@@ -18,7 +19,7 @@
         <param name="output_path" type="string" value="$(arg csv_path)" />
         <param name="output_processed_filename" type="string"
           value="$(arg csv_path)$(arg bag_file)/$(arg output_preprocessed_file_name)" />
-        <param name="input_format" type="string" value="gazebo" /> <!-- gazebo or real_data -->
+        <param name="input_format" type="string" value="$(arg input_format)" />
     </node>
 </launch>
 

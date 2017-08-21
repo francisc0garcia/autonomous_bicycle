@@ -1,9 +1,5 @@
-<launch>xtended Kalman Filter design}
-\label{sec:Extended_Kalman_Filter_design}
+<launch>
 
-- EKF design
-- EFK simulation with theoretical model
-- EFK simulation with "realistic
     <env name="GAZEBO_MODEL_PATH" value="$(find autonomous_bicycle)/models"/>
 
     <param name="use_sim_time" value="true" />

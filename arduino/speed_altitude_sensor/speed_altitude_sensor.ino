@@ -70,7 +70,7 @@ void setup() {
     pinMode(reed_pin, INPUT);
 
     Timer1.initialize(1000);
-    Timer1.attachInterrupt(compute_velocity); // blinkLED to run every 0.15 seconds
+    Timer1.attachInterrupt(compute_velocity);
 
     delay(50);
 }

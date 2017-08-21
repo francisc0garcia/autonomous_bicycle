@@ -18,6 +18,7 @@ dpi = 100
 [fig_x, fig_y] = [10, 6]
 [legend_frameon, legend_shadow] = [True, False]
 [color_gt, color_prediction, color_noise_1, color_noise_2, color_noise_3] = ['red', 'blue', 'black', 'gray', 'silver']
+[color_prediction_ekf, color_prediction_ukf] = ['darkorange', 'darkviolet']
 
 params = {'legend.fontsize': 'xx-small',
           'figure.figsize': (fig_x, fig_y),

@@ -330,7 +330,7 @@ def plot_filter_results(xs, gt, sim, time, file_name, filter_name, scale_max=1.0
     plt.show()
 
 
-def plot_EKF_gain_covariance(time, KU, PU, file_name, autoscale_axis=False):
+def plot_EKF_gain_covariance(time, KU, PU, file_name, autoscale_axis=False, format_file="svg"):
     # Kalman gain --------------------------------------------------------------------------
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
     file_name_sp_ku = file_name + "KU"
@@ -351,7 +351,7 @@ def plot_EKF_gain_covariance(time, KU, PU, file_name, autoscale_axis=False):
     plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon,
                bbox_to_anchor=(-0.01, 0.85, 1., .06), ncol=9, borderaxespad=0., prop={'size': 14})
 
-    plt.savefig(file_name_sp_ku + ".svg", dpi=dpi, transparent=True)
+    plt.savefig(file_name_sp_ku + "." + format_file, dpi=dpi, transparent=True)
 
     # Process covariance ---------------------------------------------------------------------
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
@@ -373,6 +373,303 @@ def plot_EKF_gain_covariance(time, KU, PU, file_name, autoscale_axis=False):
     plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon,
                bbox_to_anchor=(-0.01, 0.85, 1., .06), ncol=9, borderaxespad=0., prop={'size': 14})
 
-    plt.savefig(file_name_sp_pu + ".svg", dpi=dpi, transparent=True)
+    plt.savefig(file_name_sp_pu + "." + format_file, dpi=dpi, transparent=True)
+
+    plt.show()
+
+
+def plot_real_data_state_variables(U, sim, time, file_name, dpi, format='png'):
+    [xmin, xmax, ymin, ymax] = [None, None, None, None]
+
+    # Path x-y ------------------------------------------------------------------------
+    file_name_sp_xy = file_name + "x_y"
+    fig_xy = plt.figure(figsize=(fig_x, fig_y))
+    sp_xy = plt.subplot(111)
+    sp_xy = set_format_subplot(sp_xy, title="Path $x$ - $y$", xlabel="$x$ [m]", ylabel="$y$ [m]",
+                               xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_xy.plot(sim[:, 0], sim[:, 2], label='GPS Front', linewidth=2.0)
+    sp_xy.plot(sim[:, 1], sim[:, 3], label='GPS Rear', linewidth=2.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_xy + "." + format, dpi=dpi, transparent=True)
+
+    # Altitude Z --------------------------------------------------------------------------
+    file_name_sp_z = file_name + "z"
+    fig_z = plt.figure(figsize=(fig_x, fig_y))
+    sp_z = plt.subplot(111)
+
+    sp_z = set_format_subplot(sp_z, title="Altitude $z$", xlabel="time [s]", ylabel="$z$ [m]",
+                              xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_z.plot(time, sim[:, 4], label='GPS Front', linewidth=2.0)
+    sp_z.plot(time, sim[:, 5], label='GPS Rear', linewidth=2.0)
+    sp_z.plot(time, sim[:, 6], label='Altimeter', linewidth=2.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_z + "." + format, dpi=dpi, transparent=True)
+
+    # Angles --------------------------------------------------------------------------
+    file_name_sp_angles = file_name + "angles"
+    fig_angles = plt.figure(figsize=(fig_x, fig_y))
+    sp_angles = plt.subplot(111)
+
+    sp_angles = set_format_subplot(sp_angles, title="Angles", xlabel="time [s]",
+                                  ylabel="Angle [rad]",
+                                  xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_angles.plot(time, sim[:, 7], label='Imu $\delta$', linewidth=2.0)
+    sp_angles.plot(time, sim[:, 8], label='Imu $\psi$', linewidth=2.0)
+    sp_angles.plot(time, sim[:, 9], label='Imu $\phi$', linewidth=2.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_angles + "." + format, dpi=dpi, transparent=True)
+
+    # Inputs --------------------------------------------------------------------------
+    file_name_sp_inputs = file_name + "inputs"
+    fig_inputs, axes = plt.subplots(nrows=1, ncols=2, figsize=(fig_x*2.0, fig_y))
+
+    axes[0] = set_format_subplot(axes[0], title="Input velocity", xlabel="time [s]",
+                                   ylabel="Speed [m/s]",
+                                   xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    axes[0].plot(time, U[:, 0], label='Velocity $v$', linewidth=2.0)
+
+    axes[1] = set_format_subplot(axes[1], title="Input $\dot \delta$ and $\dot \phi$", xlabel="time [s]",
+                                 ylabel="Angle [rad]",
+                                 xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    axes[1].plot(time, U[:, 1], label='$\dot \delta$', linewidth=1.0)
+    axes[1].plot(time, U[:, 2], label='$\dot \phi$', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_inputs + "." + format, dpi=dpi, transparent=True)
+
+    plt.show()
+
+
+def plot_filter_results_real_data(xs, sim, time, file_name, filter_name, format='png', dpi=100):
+    [xmin, xmax, ymin, ymax] = [None, None, None, None]
+
+    # Path x-y ------------------------------------------------------------------------
+    file_name_sp_xy = file_name + "x_y"
+    fig_xy = plt.figure(figsize=(fig_x, fig_y))
+    sp_xy = plt.subplot(111)
+    sp_xy = set_format_subplot(sp_xy, title="Path $x$ - $y$", xlabel="$x$ [m]", ylabel="$y$ [m]",
+                               xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_xy.plot(xs[:, 0], xs[:, 1], color=color_prediction, label=filter_name, linewidth=2.0)
+    sp_xy.plot(sim[:, 0], sim[:, 2], color=color_noise_1, label='GPS Front', linewidth=1.0)
+    sp_xy.plot(sim[:, 1], sim[:, 3], color=color_noise_2, label='GPS Rear', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_xy + "." + format, dpi=dpi, transparent=True)
+
+    # Position X --------------------------------------------------------------------------
+    file_name_sp_x = file_name + "x"
+    fig_xp = plt.figure(figsize=(fig_x, fig_y))
+    sp_x = plt.subplot(111)
+
+    sp_x = set_format_subplot(sp_x, title="Position $x$", xlabel="time [s]", ylabel="$x$ [m]",
+                              xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_x.plot(time, xs[:, 0], color=color_prediction, label=filter_name, linewidth=2.0)
+    sp_x.plot(time, sim[:, 0], color=color_noise_1, label='GPS Front', linewidth=1.0)
+    sp_x.plot(time, sim[:, 1], color=color_noise_2, label='GPS Rear', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_x + "." + format, dpi=dpi, transparent=True)
+
+    # Position Y --------------------------------------------------------------------------
+    file_name_sp_y = file_name + "y"
+    fig_yp = plt.figure(figsize=(fig_x, fig_y))
+    sp_y = plt.subplot(111)
+
+    sp_y = set_format_subplot(sp_y, title="Position $y$", xlabel="time [s]", ylabel="$y$ [m]",
+                              xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_y.plot(time, xs[:, 1], color=color_prediction, label=filter_name, linewidth=2.0)
+    sp_y.plot(time, sim[:, 2], color=color_noise_1, label='GPS Front', linewidth=1.0)
+    sp_y.plot(time, sim[:, 3], color=color_noise_2, label='GPS Rear', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_y + "." + format, dpi=dpi, transparent=True)
+
+    # Altitude Z --------------------------------------------------------------------------
+    file_name_sp_z = file_name + "z"
+    fig_z = plt.figure(figsize=(fig_x, fig_y))
+    sp_z = plt.subplot(111)
+
+    sp_z = set_format_subplot(sp_z, title="Altitude $z$", xlabel="time [s]", ylabel="$z$ [m]",
+                              xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_z.plot(time, xs[:, 2], color=color_prediction, label=filter_name, linewidth=2.0)
+    sp_z.plot(time, sim[:, 4], color=color_noise_1, label='GPS Front', linewidth=2.0)
+    sp_z.plot(time, sim[:, 5], color=color_noise_2, label='GPS Rear', linewidth=2.0)
+    sp_z.plot(time, sim[:, 6], color=color_noise_3, label='Altimeter', linewidth=2.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_z + "." + format, dpi=dpi, transparent=True)
+
+    # Steering delta --------------------------------------------------------------------------
+    file_name_sp_delta = file_name + "delta"
+    fig_delta = plt.figure(figsize=(fig_x, fig_y))
+    sp_delta = plt.subplot(111)
+
+    sp_delta = set_format_subplot(sp_delta, title="Effective steering $\delta$", xlabel="time [s]",
+                                  ylabel="Angle [rad]",
+                                  xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_delta.plot(time, xs[:, 3], color=color_prediction, label=filter_name, linewidth=2.0)
+    sp_delta.plot(time, sim[:, 7], color=color_noise_1, label='Imu $\delta$', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_delta + "." + format, dpi=dpi, transparent=True)
+
+    # Orientation psi --------------------------------------------------------------------------
+    file_name_sp_psi = file_name + "psi"
+    fig_psi = plt.figure(figsize=(fig_x, fig_y))
+    sp_psi = plt.subplot(111)
+
+    sp_psi = set_format_subplot(sp_psi, title="Orientation $\psi$", xlabel="time [s]", ylabel="Angle [rad]",
+                                xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_psi.plot(time, xs[:, 4], color=color_prediction, label=filter_name, linewidth=2.0)
+    sp_psi.plot(time, sim[:, 8], color=color_noise_1, label='Imu $\psi$', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_psi + "." + format, dpi=dpi, transparent=True)
+
+    # Lean phi --------------------------------------------------------------------------
+    file_name_sp_phi = file_name + "phi"
+    fig_phi = plt.figure(figsize=(fig_x, fig_y))
+    sp_phi = plt.subplot(111)
+
+    sp_phi = set_format_subplot(sp_phi, title="Lean $\phi$", xlabel="time [s]", ylabel="Angle [rad]",
+                                xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_phi.plot(time, xs[:, 5], color=color_prediction, label=filter_name, linewidth=2.0)
+    sp_phi.plot(time, sim[:, 9], color=color_noise_1, label='Imu $\phi$', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_phi + "." + format, dpi=dpi, transparent=True)
+    # --------------------------------------------------------------------------
+
+    plt.show()
+
+
+def plot_comparison_real_data(xs_ekf, xs_ukf, sim, time, file_name, format='png', dpi=100):
+    [xmin, xmax, ymin, ymax] = [None, None, None, None]
+
+    # Path x-y ------------------------------------------------------------------------
+    file_name_sp_xy = file_name + "x_y"
+    fig_xy = plt.figure(figsize=(fig_x, fig_y))
+    sp_xy = plt.subplot(111)
+    sp_xy = set_format_subplot(sp_xy, title="Path $x$ - $y$", xlabel="$x$ [m]", ylabel="$y$ [m]",
+                               xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_xy.plot(xs_ekf[:, 0], xs_ekf[:, 1], color=color_prediction_ekf, label='EKF', linewidth=1.0)
+    sp_xy.plot(xs_ukf[:, 0], xs_ukf[:, 1], color=color_prediction_ukf, label='UKF', linewidth=1.0)
+    sp_xy.plot(sim[:, 0], sim[:, 2], color=color_noise_1, label='GPS Front', linewidth=1.0)
+    sp_xy.plot(sim[:, 1], sim[:, 3], color=color_noise_2, label='GPS Rear', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_xy + "." + format, dpi=dpi, transparent=True)
+
+    # Position X --------------------------------------------------------------------------
+    file_name_sp_x = file_name + "x"
+    fig_xp = plt.figure(figsize=(fig_x, fig_y))
+    sp_x = plt.subplot(111)
+
+    sp_x = set_format_subplot(sp_x, title="Position $x$", xlabel="time [s]", ylabel="$x$ [m]",
+                              xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_x.plot(time, xs_ekf[:, 0], color=color_prediction_ekf, label='EKF', linewidth=1.0)
+    sp_x.plot(time, xs_ukf[:, 0], color=color_prediction_ukf, label='UKF', linewidth=1.0)
+    sp_x.plot(time, sim[:, 0], color=color_noise_1, label='GPS Front', linewidth=1.0)
+    sp_x.plot(time, sim[:, 1], color=color_noise_2, label='GPS Rear', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_x + "." + format, dpi=dpi, transparent=True)
+
+    # Position Y --------------------------------------------------------------------------
+    file_name_sp_y = file_name + "y"
+    fig_yp = plt.figure(figsize=(fig_x, fig_y))
+    sp_y = plt.subplot(111)
+
+    sp_y = set_format_subplot(sp_y, title="Position $y$", xlabel="time [s]", ylabel="$y$ [m]",
+                              xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_y.plot(time, xs_ekf[:, 1], color=color_prediction_ekf, label='EKF', linewidth=1.0)
+    sp_y.plot(time, xs_ukf[:, 1], color=color_prediction_ukf, label='UKF', linewidth=1.0)
+    sp_y.plot(time, sim[:, 2], color=color_noise_1, label='GPS Front', linewidth=1.0)
+    sp_y.plot(time, sim[:, 3], color=color_noise_2, label='GPS Rear', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_y + "." + format, dpi=dpi, transparent=True)
+
+    # Altitude Z --------------------------------------------------------------------------
+    file_name_sp_z = file_name + "z"
+    fig_z = plt.figure(figsize=(fig_x, fig_y))
+    sp_z = plt.subplot(111)
+
+    sp_z = set_format_subplot(sp_z, title="Altitude $z$", xlabel="time [s]", ylabel="$z$ [m]",
+                              xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_z.plot(time, xs_ekf[:, 2], color=color_prediction_ekf, label='EKF', linewidth=1.0)
+    sp_z.plot(time, xs_ukf[:, 2], color=color_prediction_ukf, label='UKF', linewidth=1.0)
+    sp_z.plot(time, sim[:, 4], color=color_noise_1, label='GPS Front', linewidth=2.0)
+    sp_z.plot(time, sim[:, 5], color=color_noise_2, label='GPS Rear', linewidth=2.0)
+    sp_z.plot(time, sim[:, 6], color=color_noise_3, label='Altimeter', linewidth=2.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_z + "." + format, dpi=dpi, transparent=True)
+
+    # Steering delta --------------------------------------------------------------------------
+    file_name_sp_delta = file_name + "delta"
+    fig_delta = plt.figure(figsize=(fig_x, fig_y))
+    sp_delta = plt.subplot(111)
+
+    sp_delta = set_format_subplot(sp_delta, title="Effective steering $\delta$", xlabel="time [s]",
+                                  ylabel="Angle [rad]",
+                                  xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_delta.plot(time, xs_ekf[:, 3], color=color_prediction_ekf, label='EKF', linewidth=1.0)
+    sp_delta.plot(time, xs_ukf[:, 3], color=color_prediction_ukf, label='UKF', linewidth=1.0)
+    sp_delta.plot(time, sim[:, 7], color=color_noise_1, label='Imu $\delta$', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_delta + "." + format, dpi=dpi, transparent=True)
+
+    # Orientation psi --------------------------------------------------------------------------
+    file_name_sp_psi = file_name + "psi"
+    fig_psi = plt.figure(figsize=(fig_x, fig_y))
+    sp_psi = plt.subplot(111)
+
+    sp_psi = set_format_subplot(sp_psi, title="Orientation $\psi$", xlabel="time [s]", ylabel="Angle [rad]",
+                                xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_psi.plot(time, xs_ekf[:, 4], color=color_prediction_ekf, label='EKF', linewidth=1.0)
+    sp_psi.plot(time, xs_ukf[:, 4], color=color_prediction_ukf, label='UKF', linewidth=1.0)
+    sp_psi.plot(time, sim[:, 8], color=color_noise_1, label='Imu $\psi$', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_psi + "." + format, dpi=dpi, transparent=True)
+
+    # Lean phi --------------------------------------------------------------------------
+    file_name_sp_phi = file_name + "phi"
+    fig_phi = plt.figure(figsize=(fig_x, fig_y))
+    sp_phi = plt.subplot(111)
+
+    sp_phi = set_format_subplot(sp_phi, title="Lean $\phi$", xlabel="time [s]", ylabel="Angle [rad]",
+                                xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_phi.plot(time, xs_ekf[:, 5], color=color_prediction_ekf, label='EKF', linewidth=1.0)
+    sp_phi.plot(time, xs_ukf[:, 5], color=color_prediction_ukf, label='UKF', linewidth=1.0)
+    sp_phi.plot(time, sim[:, 9], color=color_noise_1, label='Imu $\phi$', linewidth=1.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_phi + "." + format, dpi=dpi, transparent=True)
+    # --------------------------------------------------------------------------
 
     plt.show()
