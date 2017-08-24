@@ -46,6 +46,7 @@ class BicyclePoseMarkerPublisherNode:
     def publish_markers(self):
         offset_main_psi = -np.pi*0.70
         offset_steer_psi = -np.pi*0.70
+
         # create main frame marker
         marker_main_frame = Marker()
         marker_main_frame.header.frame_id = self.tf_steering_frame_name

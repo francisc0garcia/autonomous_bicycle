@@ -3,16 +3,16 @@
     <arg name="IMU_1_port" default="/dev/ttyUSB0"/>
     <arg name="IMU_1_enable" default="true"/>
     <arg name="IMU_steer_port" default="/dev/ttyUSB1"/>
-    <arg name="IMU_steer_enable" default="false"/>
+    <arg name="IMU_steer_enable" default="true"/>
 
-    <arg name="GPS_front_port" default="/dev/ttyUSB1"/>
-    <arg name="GPS_front_enable" default="false"/>
-    <arg name="GPS_rear_port" default="/dev/ttyUSB2"/>
-    <arg name="GPS_rear_enable" default="false"/>
+    <arg name="GPS_front_port" default="/dev/ttyUSB2"/>
+    <arg name="GPS_front_enable" default="true"/>
+    <arg name="GPS_rear_port" default="/dev/ttyUSB3"/>
+    <arg name="GPS_rear_enable" default="true"/>
 
     <arg name="arduino_enable" default="true"/>
-    <arg name="arduino_port" default="/dev/ttyACM1"/>
-    <arg name="rotary_sensor_port" default="/dev/ttyACM0"/>
+    <arg name="arduino_port" default="/dev/ttyACM0"/>
+    <arg name="rotary_sensor_port" default="/dev/ttyACM1"/>
 
     <arg name="check_system_state" default="true"/>
     <arg name="respawn_enable" default="true"/>
@@ -97,13 +97,13 @@
         <remap to="/bicycle/distance"   from="/distance" />
         <remap to="/bicycle/velocity"   from="/velocity" />
     </node>
-
+<!--
     <node if="$(arg arduino_enable)" pkg="rosserial_python" type="serial_node.py"
           name="serial_node_steering" respawn="$(arg respawn_enable)" >
         <param name="port" type="string" value="$(arg rotary_sensor_port)" />
         <remap to="/bicycle/steering_angle"   from="/steering_angle" />
     </node>
-
+-->
     <!-- Start ros bridge server -->
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
         <arg name="port" value="9090"/>
@@ -120,8 +120,6 @@
     </node>
 
     <!--  start image streaming -->
-
-<!--
     <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" respawn="$(arg respawn_enable)" >
         <param name="video_device" value="/dev/video0" />
         <param name="framerate" value="10" />
@@ -136,7 +134,6 @@
         <remap to="/bicycle/camera_info"    from="/usb_cam/camera_info" />
         <remap to="/bicycle/image_raw"      from="/usb_cam/image_raw" />
     </node>
--->
 
     <!-- Launch nodeJS app -->
     <node pkg="autonomous_bicycle" type="BASH_launch_node_js_app.sh" name="load_node_js" output="log" />

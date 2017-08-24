@@ -135,8 +135,8 @@ class RobotPoseEstimatorReal:
             self.filter.H = self.H
 
             # Prediction step
-            for i in range(3):
-                self.filter.prediction(self.U)
+            # for i in range(5):
+            self.filter.prediction(self.U)
 
             # Update step
             self.filter.update(self.Z)
@@ -258,17 +258,17 @@ class RobotPoseEstimatorReal:
         imu_steering_data = self.imu_steering.get_value()
 
         # Read steering angle from IMU
-        # delta = imu_steering_data[2] - imu_1_data[2]
+        delta = imu_steering_data[2] - imu_1_data[2]
 
         # Read steering angle from rotary encoder
-        delta = self.steering_angle.get_value()
-        delta *= degrees2rad
+        # delta = self.steering_angle.get_value()
+        # delta *= degrees2rad
 
         sigma = np.tan(delta) / self.wheel_distance
         # psi = (imu_1_data[2] if imu_1_data[2] >= 0 else -imu_1_data[2])  # yaw
         psi = imu_1_data[2]
-        phi = (imu_1_data[1] if imu_1_data[2] >= 0 else -imu_1_data[1])  # pitch
-        # phi = imu_1_data[1]  # pitch
+        # phi = (imu_1_data[1] if imu_1_data[2] >= 0 else -imu_1_data[1])  # pitch
+        phi = imu_1_data[1]  # pitch
 
         angular_vel_phi = imu_1_data[4]  # angular_y
         angular_vel_delta = imu_steering_data[4]  # angular_y
