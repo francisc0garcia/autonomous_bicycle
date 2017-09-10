@@ -7,11 +7,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import os
 from BicycleUtils import *
 from FormatUtils import *
 
 
+def check_directory(input_dir):
+    if not os.path.exists(input_dir):
+        os.makedirs(input_dir)
+
+
 def plot_simulate_state_variables(gt, sim, time, file_name, scale_max=1.02, autoscale_axis=False):
+    check_directory(file_name)  # Check if a directory exists and create one if not
+
     # Path x-y ------------------------------------------------------------------------
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
     file_name_sp_xy = file_name + "x_y"
@@ -195,6 +203,8 @@ def plot_results(xs, zs_sim, gt_sim, time, plot_xs=True, plot_all=True, convert_
 
 
 def plot_filter_results(xs, gt, sim, time, file_name, filter_name, scale_max=1.02, autoscale_axis=False):
+    check_directory(file_name)  # Check if a directory exists and create one if not
+
     # Path x-y ------------------------------------------------------------------------
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
     file_name_sp_xy = file_name + "x_y"
@@ -331,6 +341,8 @@ def plot_filter_results(xs, gt, sim, time, file_name, filter_name, scale_max=1.0
 
 
 def plot_EKF_gain_covariance(time, KU, PU, file_name, autoscale_axis=False, format_file="svg"):
+    check_directory(file_name)  # Check if a directory exists and create one if not
+
     # Kalman gain --------------------------------------------------------------------------
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
     file_name_sp_ku = file_name + "KU"
@@ -379,6 +391,8 @@ def plot_EKF_gain_covariance(time, KU, PU, file_name, autoscale_axis=False, form
 
 
 def plot_real_data_state_variables(U, sim, time, file_name, dpi, format='png'):
+    check_directory(file_name)  # Check if a directory exists and create one if not
+
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
 
     # Path x-y ------------------------------------------------------------------------
@@ -449,6 +463,8 @@ def plot_real_data_state_variables(U, sim, time, file_name, dpi, format='png'):
 
 
 def plot_filter_results_real_data(xs, sim, time, file_name, filter_name, format='png', dpi=100):
+    check_directory(file_name)  # Check if a directory exists and create one if not
+
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
 
     # Path x-y ------------------------------------------------------------------------
@@ -559,6 +575,8 @@ def plot_filter_results_real_data(xs, sim, time, file_name, filter_name, format=
 
 
 def plot_comparison_real_data(xs_ekf, xs_ukf, sim, time, file_name, format='png', dpi=100):
+    check_directory(file_name)  # Check if a directory exists and create one if not
+
     [xmin, xmax, ymin, ymax] = [None, None, None, None]
 
     # Path x-y ------------------------------------------------------------------------

@@ -32,14 +32,16 @@ class BagRecorder:
         self.topics = [
             '/bicycle/image_raw/compressed', '/bicycle/camera_info', '/bicycle/state_system',
             '/bicycle/altitude', '/bicycle/distance', '/bicycle/velocity', '/tf',
-            '/bicycle/imu_1', '/bicycle/imu_2', '/bicycle/imu_steering',
+            '/bicycle/imu_1', '/bicycle/imu_2', '/bicycle/imu_steering', '/bicycle/steering_angle',
             '/bicycle/gps_front', '/bicycle/gps_front_velocity', '/bicycle/odom_gps_front',
             '/bicycle/gps_rear', '/bicycle/gps_rear_velocity', '/bicycle/odom_gps_rear',
             '/bicycle/odom_main_frame', '/bicycle/odom_rear_wheel',
             '/imu_lean/pitch', '/imu_lean/roll', '/imu_lean/yaw',
             '/imu_lean_noise/pitch', '/imu_lean_noise/roll', '/imu_lean_noise/yaw',
             '/imu_steering/pitch', '/imu_steering/roll', '/imu_steering/yaw',
-            '/imu_steering_noise/pitch', '/imu_steering_noise/roll', '/imu_steering_noise/yaw']
+            '/imu_steering_noise/pitch', '/imu_steering_noise/roll', '/imu_steering_noise/yaw',
+            '/bicycle/imu_steer_calibration', '/bicycle/imu_1_calibration'
+        ]
 
         self.rate_timer = rospy.Rate(self.rate)
         while not rospy.is_shutdown():

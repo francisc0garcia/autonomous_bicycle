@@ -6,6 +6,9 @@
     <param name="use_sim_time" value="true" />
     <param name="input_format" value="gazebo" />  <!-- gazebo or real_data -->
 
+    <!-- down/up sampling data: [S] sec, [L] ms, [U] us -->
+    <arg name="resampling" default="50L" />
+
     <arg name="bag_file" />
     <arg name="output_preprocessed_file_name" default="$(arg bag_file)_preprocessed.csv" />
     <arg name="local_path" default="bags/experiments/" />
@@ -20,6 +23,7 @@
         <param name="output_processed_filename" type="string"
           value="$(arg csv_path)$(arg bag_file)/$(arg output_preprocessed_file_name)" />
         <param name="input_format" type="string" value="$(arg input_format)" />
+        <param name="resampling" type="string" value="$(arg resampling)" />
     </node>
 </launch>
 

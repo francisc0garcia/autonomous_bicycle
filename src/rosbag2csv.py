@@ -4,8 +4,10 @@
 Based on project: https://github.com/AtsushiSakai/rosbag_to_csv
 """
 import glob
-import os, sys
+import os
+import sys
 from datetime import datetime
+import scipy.io as sp_io
 
 import rosbag
 import rospy
@@ -25,13 +27,14 @@ class Rosbag2csv:
         self.output_path = rospy.get_param('~output_path', '/tmp')
         self.output_processed_filename = rospy.get_param('~output_processed_filename', 'processed.csv')
         self.input_format = rospy.get_param('~input_format', 'gazebo')  # gazebo or real_data
+        self.resampling = rospy.get_param('~resampling', '')  # 3S -> 3 seconds or 30L -> 30 milli-seconds
 
         self.include_header = rospy.get_param('~include_header', True)
         self.filename_merge_csv = ''
 
         # List of desired topics to be recorded
         self.topic_names = [
-            '/bicycle/imu_1', '/bicycle/imu_2', '/bicycle/imu_steering',
+            '/bicycle/imu_1', '/bicycle/imu_2', '/bicycle/imu_steering', '/bicycle/steering_angle',
             '/bicycle/gps_front', '/bicycle/gps_front_velocity', '/bicycle/odom_gps_front',
             '/bicycle/gps_rear', '/bicycle/gps_rear_velocity', '/bicycle/odom_gps_rear',
             '/bicycle/odom_main_frame', '/bicycle/odom_rear_wheel',
@@ -39,7 +42,9 @@ class Rosbag2csv:
             '/imu_lean_noise/pitch', '/imu_lean_noise/roll', '/imu_lean_noise/yaw',
             '/imu_steering/pitch', '/imu_steering/roll', '/imu_steering/yaw',
             '/imu_steering_noise/pitch', '/imu_steering_noise/roll', '/imu_steering_noise/yaw',
-            '/bicycle/altitude', '/bicycle/velocity']
+            '/bicycle/altitude', '/bicycle/velocity',
+            '/bicycle/imu_steer_calibration', '/bicycle/imu_1_calibration'
+        ]
 
         # list of fields to be merge
         self.field_names = [
@@ -200,11 +205,21 @@ class Rosbag2csv:
         if self.input_format == 'gazebo':
             di = DatasetImporter(input_file_name, fill_na=True)
         else:
-            di = RealDatasetImporter(input_file_name)
+            di = RealDatasetImporter(input_file_name, resampling=self.resampling)
 
         di.data.to_csv(output_file_name)
         rospy.loginfo("Finished: preprocessed file saved to: " + output_file_name)
 
+        # Export to Mat file ----------------------------------------------------------------------
+
+        # rename columns
+        di.data.rename(columns=lambda x: 'D_' + x.replace('.', '_').replace('_bicycle_', '').replace('pose', '')[-28:],
+                       inplace=True)
+        # Create dictionary and export as .mat
+        a_dict = {col_name: di.data[col_name].values for col_name in di.data.columns.values}
+        sp_io.savemat(output_file_name + '.mat', {'bicycle_data': a_dict})
+        rospy.loginfo("Finished: file saved in Matlab format: " + output_file_name + '.mat')
+        # ------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     rospy.init_node('rosbag_to_csv', anonymous=True)

@@ -13,18 +13,19 @@ from autonomous_bicycle.srv import turn_off_msg
 class RosStateChecker:
     def __init__(self):
         # Get values from launch file
-        self.rate = rospy.get_param('~rate', 1.0)
-        self.qz = 10
+        self.rate = rospy.get_param('~rate', 1.0)  # update rate
+
+        self.qz = 10  # queue_size
 
         self.topic_imu_1 = '/bicycle/imu_1'
-        self.topic_imu_steering = '/bicycle/imu_steering'
+        self.topic_steering = '/bicycle/steering_angle'
         self.topic_camera = '/bicycle/image_raw/compressed'
         self.topic_altitude = '/bicycle/altitude'
         self.topic_gps_front = '/bicycle/gps_front'
         self.topic_gps_rear = '/bicycle/gps_rear'
 
         self.imu_1_counter = 0
-        self.imu_steering_counter = 0
+        self.steering_counter = 0
         self.camera_counter = 0
         self.altitude_counter = 0
         self.gps_front_counter = 0
@@ -44,7 +45,7 @@ class RosStateChecker:
 
         # create subscribers
         self.sub_imu_1 = rospy.Subscriber(self.topic_imu_1, Imu, self.callback_imu_1, queue_size=self.qz)
-        self.sub_steer = rospy.Subscriber(self.topic_imu_steering, Imu, self.callback_imu_steering, queue_size=self.qz)
+        self.sub_steer = rospy.Subscriber(self.topic_steering, Float32, self.callback_steering, queue_size=self.qz)
         self.sub_camera = rospy.Subscriber(self.topic_camera, CompressedImage, self.callback_camera, queue_size=self.qz)
         self.sub_altitude = rospy.Subscriber(self.topic_altitude, Float32, self.callback_altitude, queue_size=self.qz)
         self.sub_gps_f = rospy.Subscriber(self.topic_gps_front, NavSatFix, self.callback_gps_front, queue_size=self.qz)
@@ -73,14 +74,14 @@ class RosStateChecker:
 
         # Check if new message were received
         imu_1_active = 1 if self.imu_1_counter > 0 else 0
-        imu_steering_active = 1 if self.imu_steering_counter > 0 else 0
+        steering_active = 1 if self.steering_counter > 0 else 0
         camera_active = 1 if self.camera_counter > 0 else 0
         altitude_active = 1 if self.altitude_counter > 0 else 0
         gps_front_active = 1 if self.gps_front_counter > 0 else 0
         gps_rear_active = 1 if self.gps_rear_counter > 0 else 0
 
         self.state_vector.append(imu_1_active)  # IMU Lean
-        self.state_vector.append(imu_steering_active)  # IMU Steering
+        self.state_vector.append(steering_active)  # IMU Steering
         self.state_vector.append(camera_active)  # Camera
         self.state_vector.append(altitude_active)  # Altimeter
         self.state_vector.append(gps_front_active)  # GPS front
@@ -91,7 +92,7 @@ class RosStateChecker:
 
         # clean counters
         self.imu_1_counter = 0
-        self.imu_steering_counter = 0
+        self.steering_counter = 0
         self.camera_counter = 0
         self.altitude_counter = 0
         self.gps_front_counter = 0
@@ -100,8 +101,8 @@ class RosStateChecker:
     def callback_imu_1(self, msg):
         self.imu_1_counter += 1
 
-    def callback_imu_steering(self, msg):
-        self.imu_steering_counter += 1
+    def callback_steering(self, msg):
+        self.steering_counter += 1
 
     def callback_camera(self, msg):
         self.camera_counter += 1

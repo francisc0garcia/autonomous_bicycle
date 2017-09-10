@@ -9,9 +9,6 @@ Panels:
         - /Imu_21/Box properties1
         - /Imu_21/Acceleration properties1
         - /Imu_steering1/Acceleration properties1
-        - /steer1
-        - /lean1
-        - /camera2
       Splitter Ratio: 0.5667575
     Tree Height: 801
   - Class: rviz/Selection
@@ -209,11 +206,11 @@ Visualization Manager:
       Value: false
     - Buffer length: 100
       Class: jsk_rviz_plugin/Plotter2D
-      Enabled: false
+      Enabled: true
       Name: steer
       Show Value: true
-      Topic: /imu_steering/yaw
-      Value: false
+      Topic: /bicycle/steering_angle
+      Value: true
       auto color change: false
       auto scale: true
       background color: 0; 0; 0
@@ -424,17 +421,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -2.89333153
-        Y: -1.69019914
-        Z: 6.04729212e-06
+        X: -1.3622551
+        Y: 1.17475843
+        Z: 7.95464075e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
+      Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.934797287
+      Pitch: 0.474797249
       Target Frame: odom_gps_rear
       Value: ThirdPersonFollower (rviz)
-      Yaw: 3.2203846
+      Yaw: 2.78536749
     Saved: ~
 Window Geometry:
   Displays:

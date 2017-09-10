@@ -98,7 +98,8 @@ class RealDatasetHelper(object):
         self.real_psi_gps = 'real_psi_gps'
         self.real_psi = '_imu_lean_yaw.data'
         self.real_phi = '_imu_lean_pitch.data'
-        self.real_delta = '_imu_steering_yaw.data'
+        self.real_delta = 'real_steering_delta'
+        self.real_delta_imu = '_imu_steering_yaw.data'
 
         self.imu_lean_x = '_bicycle_imu_1.orientation.x'
         self.imu_lean_y = '_bicycle_imu_1.orientation.y'

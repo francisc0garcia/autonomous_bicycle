@@ -1,7 +1,7 @@
 <launch>
     <!-- loaf rosbag file -->
     <arg name="load_rosbag" default="false"/>
-    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/test_15_06_2017/"/>
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/"/>
     <arg name="bag_file" default="ExperimentBicycleParking2"/>
 
     <param name="use_sim_time" value="false" />
@@ -59,7 +59,7 @@
         <param name="offset_x" value="0.0" />
         <param name="offset_y" value="0.0" />
         <param name="offset_z" value="0.0" />
-        <param name="orientation" value="1.571" />
+        <param name="orientation" value="0.0" />
     </node>
 
     <!-- Launch RQT and RVIZ -->

@@ -1,7 +1,7 @@
 <launch>
     <!-- loaf rosbag file -->
     <arg name="load_rosbag" default="false"/>
-    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/08_07_2017/"/>
+    <arg name="bag_path" default="$(find autonomous_bicycle)/bags/experiments/"/>
     <arg name="rviz_config" default="rviz_demo_bicycle"/>
 
     <param if="$(arg load_rosbag)" name="use_sim_time" value="true" />

@@ -18,6 +18,7 @@
           /imu_lean_noise/pitch /imu_lean_noise/roll /imu_lean_noise/yaw
           /imu_steering/pitch /imu_steering/roll /imu_steering/yaw
           /imu_steering_noise/pitch /imu_steering_noise/roll /imu_steering_noise/yaw
-          /bicycle/altitude /bicycle/velocity
+          /bicycle/altitude /bicycle/velocity /bicycle/steering_angle
+          /bicycle/imu_steer_calibration /bicycle/imu_1_calibration
         "/>
 </launch>
