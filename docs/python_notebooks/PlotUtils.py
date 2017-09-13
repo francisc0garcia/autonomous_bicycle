@@ -691,3 +691,26 @@ def plot_comparison_real_data(xs_ekf, xs_ukf, sim, time, file_name, format='png'
     # --------------------------------------------------------------------------
 
     plt.show()
+
+
+def plot_real_data_delta_comparison(sim_rotatory, sim_imu, time, file_name, dpi, format='png'):
+    check_directory(file_name)  # Check if a directory exists and create one if not
+
+    [xmin, xmax, ymin, ymax] = [None, None, None, None]
+
+    # Angles --------------------------------------------------------------------------
+    file_name_sp_angles = file_name + "imu_vs_rotatory"
+    fig_angles = plt.figure(figsize=(fig_x, fig_y))
+    sp_angles = plt.subplot(111)
+
+    sp_angles = set_format_subplot(sp_angles, title="IMU vs Rotatory delta", xlabel="time [s]",
+                                   ylabel="Angle [rad]",
+                                   xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+    sp_angles.plot(time, sim_imu[:, 7], label='Imu $\delta$', linewidth=2.0)
+    sp_angles.plot(time, sim_rotatory[:, 7], label='Rotatory $\delta$', linewidth=2.0)
+
+    plt.legend(loc='best', shadow=legend_shadow, frameon=legend_frameon)
+    plt.savefig(file_name_sp_angles + "." + format, dpi=dpi, transparent=True)
+
+    plt.show()
