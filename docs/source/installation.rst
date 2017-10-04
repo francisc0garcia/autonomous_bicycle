@@ -60,7 +60,7 @@ First we need to install some dependencies and ROS packages:
 
     sudo apt-get install libqwt-dev ros-kinetic-teleop-twist-joy  ros-kinetic-rviz-imu-plugin python-smbus ros-kinetic-rqt-multiplot git
     sudo apt-get install ros-kinetic-gps* ros-kinetic-jsk-rqt-plugins ros-kinetic-jsk-rviz-plugins ros-kinetic-rviz-imu-plugin
-
+    sudo apt-get install ros-kinetic-hector-gazebo* ros-kinetic-mapviz*
 
 Finally we create a workspace for project, clone github repositories, install dependencies and compile all:
 

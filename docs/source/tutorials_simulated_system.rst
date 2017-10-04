@@ -15,7 +15,7 @@ First, change the folder path, then, source the command window and finally run t
 
     cd ~/autonomous_bicycle_ws
     source devel/setup.bash
-    roslaunch autonomous_bicycle
+    roslaunch autonomous_bicycle autonomous_bicycle.launch
 
 A RVIZ-window with the 3D model of the bicycle and a RQT-window with plugins will be open.
 Using the Dynamic reconfigure plugin in RQT-window, it is possible to change the rear wheel velocity
@@ -40,6 +40,14 @@ Open a new command-line console, source it and run the recorder by typing:
 
 To define the file name, use the argument **bag_file**.
 
+You might need to create the following folders inside your autonomous_bicycle folder:
+
+.. code-block:: none
+
+    /bags/simulations/
+    /bags/experiments/
+    /bags/preprocessed/
+
 For stop recording, please press simultaneously **[Ctrl + C]** on the command-line console.
 
 By default, the recorder saves new data-sets on folder: **/bags/simulations/**
@@ -56,6 +64,8 @@ It is also possible to define an absolute path for storing the recorded file, by
 
 How to play recorded simulated data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Before playing ROSBAG files, please stop all *roslaunch/roscore* instances.
 
 Once the simulated experiments have been recorded, it is possible to reproduce them as follows:
 
