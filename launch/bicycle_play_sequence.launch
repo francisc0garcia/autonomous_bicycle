@@ -1,8 +1,11 @@
 <launch>
 
     <env name="GAZEBO_MODEL_PATH" value="$(find autonomous_bicycle)/models"/>
+    <env name="MESH_WORKSPACE_PATH" value="$(find autonomous_bicycle)"/>
 
     <param name="use_sim_time" value="true" />
+
+    <arg name="bag_file" />
 
     <!-- Play ROSBAG file -->
     <arg name="bag_path" default="$(find autonomous_bicycle)/bags/simulations/" />
