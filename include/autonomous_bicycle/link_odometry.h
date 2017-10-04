@@ -21,7 +21,6 @@
 #include <geometry_msgs/Pose2D.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/JointState.h>
-#include "mavros_msgs/RCOut.h"
 
 // Custom Callback Queue
 #include <ros/callback_queue.h>
