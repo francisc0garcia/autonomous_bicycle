@@ -17,6 +17,9 @@
     File: ExperimentBicycleParkingToMensa - Offset: [3 5]
     File: ExperimentBicycleUnisportToMensa - Offset: [10 0]
 
+    Folder 10_09_2017
+    park_to_mensa_optical - Offset: [10 -10.0]
+
     Folder 08_07_2017
     football_field_external     4/5
     football_field_line_1       3.5/5
@@ -27,17 +30,18 @@
     parking_1                   3/5
     parking_2                   3/5
     parking_to_mensa            3.5/5
+
     -->
 
     <arg name="bag_file" default="football_field_external"/>
-    <arg name="x_offset" value="0" />
-    <arg name="y_offset" value="0" />
+    <arg name="x_offset" value="0.0" />
+    <arg name="y_offset" value="0.0" />
 
     <node name="static_tf_gps" pkg="tf" type="static_transform_publisher"
           args="$(arg x_offset) $(arg y_offset) 0  0 0 0 1 world gps_ref 100" />
 
     <node if="$(arg load_rosbag)" pkg="rosbag" type="play" name="player" output="screen"
-          args="--clock --loop --rate=2 $(arg bag_path)$(arg bag_file).bag"/>
+          args="--clock --loop --rate=4 $(arg bag_path)$(arg bag_file).bag"/>
 
     <!-- convert IMU to angles for visualization -->
     <node pkg="autonomous_bicycle" type="reference_imu_to_angle.py" name="reference_imu_to_angle" respawn="true" >

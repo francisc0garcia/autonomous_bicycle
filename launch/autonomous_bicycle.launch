@@ -9,7 +9,7 @@
         <arg name="world_name" value="$(find autonomous_bicycle)/worlds/standard_bicycle.world"/>
         <arg name="paused" value="false"/>
         <arg name="use_sim_time" value="false"/>
-        <arg name="gui" value="false"/>
+        <arg name="gui" value="true"/>
         <arg name="headless" value="false"/>
         <arg name="debug" value="false"/>
         <arg name="physics" default="ode"/>
