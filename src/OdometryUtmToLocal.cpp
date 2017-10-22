@@ -37,7 +37,7 @@ public:
             global_x =  -msg->pose.pose.position.x;
             global_y =  -msg->pose.pose.position.y;
             global_z =  msg->pose.pose.position.z;
-            // global_z = 0.0; // TODO: Fix z
+            global_z = 0.0; // TODO: Fix z
         }
 
 

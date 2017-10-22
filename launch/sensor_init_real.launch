@@ -41,7 +41,7 @@
           args="$(arg x_offset) $(arg y_offset) 0  0 0 0 1 world gps_ref 100" />
 
     <node if="$(arg load_rosbag)" pkg="rosbag" type="play" name="player" output="screen"
-          args="--clock --loop --rate=4 $(arg bag_path)$(arg bag_file).bag"/>
+          args="--clock --loop --rate=2 $(arg bag_path)$(arg bag_file).bag"/>
 
     <!-- convert IMU to angles for visualization -->
     <node pkg="autonomous_bicycle" type="reference_imu_to_angle.py" name="reference_imu_to_angle" respawn="true" >

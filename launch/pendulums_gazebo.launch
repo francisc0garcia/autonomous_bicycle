@@ -1,0 +1,16 @@
+<launch>
+
+    <!-- Launch Gazebo simulator -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+        <arg name="world_name" value="$(find autonomous_bicycle)/tutorials/pendulum.world"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="false"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+        <arg name="physics" default="ode"/>
+        <arg name="respawn_gazebo" default="false"/>
+        <arg name="verbose" default="false"/>
+    </include>
+
+</launch>

@@ -106,27 +106,28 @@ class RealDatasetImporter(object):
 
     def compute_variables(self, row):
         # Convert GPS into UTM --------------------------------------------------
-        if not np.isnan(row[self.real_lat_f]) and not np.isnan(row[self.real_lon_f]):
-            utm_front = utm.from_latlon(row[self.real_lat_f], row[self.real_lon_f])
-            row[self.real_xf] = utm_front[0]
-            row[self.real_yf] = utm_front[1]
-            row[self.gps_zone_number] = utm_front[2]
-            row[self.gps_zone_letter] = utm_front[3]
-        else:
-            row[self.real_xf] = 0.0
-            row[self.real_yf] = 0.0
-            row[self.real_zf] = 0.0
-            row[self.gps_zone_number] = 0.0
-            row[self.gps_zone_letter] = 0.0
+        if self.real_lat_f in self.data.columns:
+            if not np.isnan(row[self.real_lat_f]) and not np.isnan(row[self.real_lon_f]):
+                utm_front = utm.from_latlon(row[self.real_lat_f], row[self.real_lon_f])
+                row[self.real_xf] = utm_front[0]
+                row[self.real_yf] = utm_front[1]
+                row[self.gps_zone_number] = utm_front[2]
+                row[self.gps_zone_letter] = utm_front[3]
+            else:
+                row[self.real_xf] = 0.0
+                row[self.real_yf] = 0.0
+                row[self.real_zf] = 0.0
+                row[self.gps_zone_number] = 0.0
+                row[self.gps_zone_letter] = 0.0
 
-        if not np.isnan(row[self.real_lat_r]) and not np.isnan(row[self.real_lon_r]):
-            utm_rear = utm.from_latlon(row[self.real_lat_r], row[self.real_lon_r])
-            row[self.real_xr] = utm_rear[0]
-            row[self.real_yr] = utm_rear[1]
-        else:
-            row[self.real_xr] = 0.0
-            row[self.real_yr] = 0.0
-            row[self.real_zr] = 0.0
+            if not np.isnan(row[self.real_lat_r]) and not np.isnan(row[self.real_lon_r]):
+                utm_rear = utm.from_latlon(row[self.real_lat_r], row[self.real_lon_r])
+                row[self.real_xr] = utm_rear[0]
+                row[self.real_yr] = utm_rear[1]
+            else:
+                row[self.real_xr] = 0.0
+                row[self.real_yr] = 0.0
+                row[self.real_zr] = 0.0
         # ------------------------------------------------------------------------
 
         # Update linear acceleration

@@ -14,5 +14,4 @@
         <param name="port" type="string" value="$(arg GPS_rear_port)" />
         <param name="baud" type="int" value="$(arg init_baud)" />
     </node>
-
 </launch>

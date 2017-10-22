@@ -32,7 +32,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: false
+      Enabled: true
       Line Style:
         Line Width: 0.0299999993
         Value: Lines
@@ -45,7 +45,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 100
       Reference Frame: <Fixed Frame>
-      Value: false
+      Value: true
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /model_marker
@@ -55,45 +55,19 @@ Visualization Manager:
       Queue Size: 20
       Value: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        estimated_odom_filter:
-          Value: false
-        estimated_odom_measurement:
-          Value: false
-        gps_ref:
-          Value: true
-        imu_1:
-          Value: true
-        odom_gps_front:
-          Value: false
-        odom_gps_rear:
-          Value: false
-        world:
-          Value: true
       Marker Scale: 5
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        world:
-          estimated_odom_filter:
-            {}
-          estimated_odom_measurement:
-            {}
-          gps_ref:
-            {}
-          imu_1:
-            {}
-          odom_gps_front:
-            {}
-          odom_gps_rear:
-            {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
@@ -209,31 +183,6 @@ Visualization Manager:
     - Buffer length: 100
       Class: jsk_rviz_plugin/Plotter2D
       Enabled: false
-      Name: steering
-      Show Value: true
-      Topic: /imu_steering/yaw
-      Value: false
-      auto color change: false
-      auto scale: true
-      background color: 0; 0; 0
-      backround alpha: 0
-      border: true
-      foreground alpha: 0.699999988
-      foreground color: 25; 255; 240
-      height: 100
-      left: 50
-      linewidth: 1
-      max color: 255; 0; 0
-      max value: 1
-      min value: -1
-      show caption: true
-      text size: 12
-      top: 50
-      update interval: 0.0399999991
-      width: 100
-    - Buffer length: 100
-      Class: jsk_rviz_plugin/Plotter2D
-      Enabled: false
       Name: lean_steer
       Show Value: true
       Topic: /imu_steering/pitch
@@ -306,7 +255,7 @@ Visualization Manager:
       top: 350
       update interval: 0.0399999991
       width: 100
-    - Buffer length: 300
+    - Buffer length: 350
       Class: jsk_rviz_plugin/Plotter2D
       Enabled: true
       Name: altitude
@@ -320,17 +269,67 @@ Visualization Manager:
       border: true
       foreground alpha: 0.699999988
       foreground color: 25; 255; 240
-      height: 128
+      height: 150
       left: 30
       linewidth: 1
       max color: 255; 0; 0
       max value: 1
       min value: -1
       show caption: true
-      text size: 15
+      text size: 20
       top: 300
       update interval: 0.0399999991
-      width: 250
+      width: 320
+    - Buffer length: 350
+      Class: jsk_rviz_plugin/Plotter2D
+      Enabled: true
+      Name: velocity
+      Show Value: true
+      Topic: /bicycle/velocity
+      Value: true
+      auto color change: false
+      auto scale: true
+      background color: 0; 0; 0
+      backround alpha: 0.699999988
+      border: true
+      foreground alpha: 0.699999988
+      foreground color: 25; 255; 240
+      height: 150
+      left: 30
+      linewidth: 1
+      max color: 255; 0; 0
+      max value: 1
+      min value: -1
+      show caption: true
+      text size: 20
+      top: 500
+      update interval: 0.0399999991
+      width: 320
+    - Buffer length: 350
+      Class: jsk_rviz_plugin/Plotter2D
+      Enabled: true
+      Name: steering
+      Show Value: true
+      Topic: /bicycle/steering_angle
+      Value: true
+      auto color change: false
+      auto scale: true
+      background color: 0; 0; 0
+      backround alpha: 0.699999988
+      border: true
+      foreground alpha: 0.699999988
+      foreground color: 25; 255; 240
+      height: 150
+      left: 30
+      linewidth: 1
+      max color: 255; 0; 0
+      max value: 1
+      min value: -1
+      show caption: true
+      text size: 20
+      top: 700
+      update interval: 0.0399999991
+      width: 320
     - Class: rviz/Image
       Enabled: false
       Image Topic: /bicycle/image_raw
@@ -365,17 +364,17 @@ Visualization Manager:
       frame: estimated_odom_filter
       line_width: 0.0500000007
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: true
+      Enabled: false
       Name: tf_rear
-      Value: true
+      Value: false
       color: 25; 255; 240
       duration: 250
       frame: odom_gps_rear
       line_width: 0.0500000007
     - Class: jsk_rviz_plugin/TFTrajectory
-      Enabled: true
+      Enabled: false
       Name: tf_front
-      Value: true
+      Value: false
       color: 25; 255; 140
       duration: 250
       frame: odom_gps_front
@@ -423,31 +422,6 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: false
-    - Buffer length: 300
-      Class: jsk_rviz_plugin/Plotter2D
-      Enabled: true
-      Name: velocity
-      Show Value: true
-      Topic: /bicycle/velocity
-      Value: true
-      auto color change: false
-      auto scale: true
-      background color: 0; 0; 0
-      backround alpha: 0.699999988
-      border: true
-      foreground alpha: 0.699999988
-      foreground color: 25; 255; 240
-      height: 128
-      left: 30
-      linewidth: 1
-      max color: 255; 0; 0
-      max value: 1
-      min value: -1
-      show caption: true
-      text size: 15
-      top: 500
-      update interval: 0.0399999991
-      width: 250
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -466,25 +440,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 180.114609
+      Distance: 8.53971481
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 3.32894993
-        Y: -1.88579178
-        Z: 1.08524355e-05
+        X: -3.05017471
+        Y: 1.41125917
+        Z: 6.43981366e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.804799378
+      Pitch: 0.429796994
       Target Frame: odom_gps_rear
       Value: ThirdPersonFollower (rviz)
-      Yaw: 0.292234302
+      Yaw: 2.04904652
     Saved: ~
 Window Geometry:
   Displays:

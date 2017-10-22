@@ -14,7 +14,6 @@ Contents:
     Tutorials: Simulated system <tutorials_simulated_system.rst>
     Tutorials: Real system <tutorials_real_system.rst>
     Tutorials: Configuration <tutorials_configuration.rst>
-    Tutorials: Web interface <tutorials_web_interface.rst>
     Frequent questions <questions.rst>
     Contact <contact.rst>
 
