@@ -4,6 +4,14 @@ Autonomous bicycle documentation
 This documentation file supports the development and implementation of a measurement system and filtering
 for pose estimation and localization of an autonomous bicycle.
 
+Source code is available on:
+
+https://github.com/francisc0garcia/autonomous_bicycle
+
+Datasets (ROSBAG format) available on:
+
+https://mega.nz/#!vE8yFTYJ!27gElzD7oP932YaYf8IzvjRpLM7Jg32eFM5P8taXh-Q
+
 Contents:
 ^^^^^^^^^
 

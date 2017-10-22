@@ -4,9 +4,11 @@ ROS package for localization and pose estimation of an autonomous bicycle.
 
 More information and documentation on:
 
+https://autonomous-bicycle.readthedocs.io
 
-Dataset (ROSBAG) available on:
+Datasets (ROSBAG format) available on:
 
+https://mega.nz/#!vE8yFTYJ!27gElzD7oP932YaYf8IzvjRpLM7Jg32eFM5P8taXh-Q
 
 
 On-going results:
