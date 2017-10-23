@@ -14,7 +14,7 @@ Please check before that both GPSs are available on ports *GPS_front_port* and *
 
 .. code-block:: none
 
-    cd ~/autonomous_bicycle_ws
+    cd ~/Documents/code/autonomous_bicycle
     source devel/setup.bash
     roslaunch autonomous_bicycle config_GPS_sensors.launch
 

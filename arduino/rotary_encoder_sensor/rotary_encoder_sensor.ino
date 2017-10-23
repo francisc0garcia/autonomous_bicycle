@@ -23,7 +23,7 @@ int pinSS = 4;    // pin CS
 
 int value;
 double offset = 207.4;
-double angle = 0; 
+double angle = 0.0;
 
 MLX90316 mlx_1  = MLX90316();
 
@@ -42,7 +42,7 @@ void setup(){
 void loop() {
   if (millis() > publisher_timer) {
     value = mlx_1.readAngle();
-    angle = (value / 10) - offset;
+    angle = (value / 10.0) - offset;
   
     // Publish ROS messages
     angle_msg.data = angle;

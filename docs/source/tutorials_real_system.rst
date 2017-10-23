@@ -71,7 +71,7 @@ How to play previously recorded experiments
 
 The first step is to copy the ROSBAG from Raspberry into a PC running linux.
 You can transfer them using a standard SFTP application, such Filezilla,
-and searching into the folder **Documents/code/autonomous_bicycle** using the same SSH credentials.
+and searching into the folder **Documents/code/autonomous_bicycle** using the same SSH credentials (Files located on autonomous_bicycle/data).
 
 Once you have copied them, **open a new command-line window** and type:
 
